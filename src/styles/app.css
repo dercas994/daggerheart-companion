@@ -1212,3 +1212,18 @@ button.dcard:hover { transform: translateY(-2px); }
   .pips-stress.full .pip::after, .ash-burst, .rs-star { display: none; }
   .vitals.stress-full .track-stress, .party-card.stress-full { animation: none; }
 }
+
+/* ── Carte giocabili ── */
+.card-play { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.card-flow { position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 0.9rem); translate: -50% 0; z-index: 60;
+  width: min(30rem, calc(100vw - 1.5rem)); padding: 0.8rem 0.9rem; border-radius: var(--r-m);
+  background: color-mix(in srgb, var(--dusk) 94%, transparent); backdrop-filter: blur(10px);
+  border: 1px solid color-mix(in srgb, var(--hope) 50%, var(--line)); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  animation: cf-dock-in 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2); }
+@keyframes cf-dock-in { from { opacity: 0; transform: translateY(16px); } }
+.card-flow header { display: flex; justify-content: space-between; align-items: baseline; gap: 0.6rem; margin-bottom: 0.3rem; }
+.card-flow header b { font-family: var(--f-display); font-size: 1.15rem; color: var(--hope-glow); }
+.card-flow .hint { margin: 0.35rem 0 0; }
+.cf-outcome { margin: 0.2rem 0 0.5rem; }
+.cf-outcome.tone-fear b { color: #C59BEA; } .cf-outcome.tone-hope b, .cf-outcome.tone-crit b { color: var(--hope-glow); }
+.cf-actions { display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center; }

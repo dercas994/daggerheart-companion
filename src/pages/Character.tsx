@@ -3,7 +3,7 @@ import { useApp } from '../App'
 import type { Character, Roll, TraitKey } from '../lib/types'
 import { useCampaignLive } from '../lib/live'
 import { className, getAncestry, getCommunity, getSubclass } from '../data'
-import { evasion, hopeMax, thresholds, massiveThreshold } from '../lib/rules'
+import { evasion, hopeMax, thresholds, massiveThreshold, spellcastTrait } from '../lib/rules'
 import { ErrorLine, Pips, Spinner, useToast } from '../components/ui'
 import { TopBar } from '../components/TopBar'
 import { DiceOverlay, outcomeText, rollTone } from '../components/Dice'
@@ -17,6 +17,8 @@ import { TagTeamFlow } from '../components/TagTeam'
 import { Countdowns } from '../components/Countdowns'
 import { FearAura, HopeAura } from '../components/FearAura'
 import { DeathCrack, LongRestSky, useRise } from '../components/Effects'
+import { CardFlowDock, type CardFlow } from '../components/CardPlay'
+import { cardDamageSpec, cannotUse, type CardAction } from '../lib/cardEffects'
 import { FearTrack, ownerName, PartyCard, RollLog } from '../components/Party'
 import { SheetTab } from '../components/SheetTab'
 import { CardsTab } from '../components/CardsTab'
@@ -43,6 +45,7 @@ export function CharacterPage({ id }: { id: string }) {
   const [pending, setPending] = useState<PendingBonus | null>(null)
   const [diceNote, setDiceNote] = useState(false)
   const [restRun, setRestRun] = useState(0)
+  const [cardFlow, setCardFlow] = useState<CardFlow | null>(null)
   const [dawn, setDawn] = useState(false)
 
   // ricavo la campagna dal PG, poi uso lo stato live della campagna
@@ -86,6 +89,35 @@ export function CharacterPage({ id }: { id: string }) {
     setRollPreset(p ? { extra: p.roll ?? 0, label: '', note: `${bonusText({ roll: p.roll, adv: p.adv })} da ${p.src}`, adv: p.adv ? 1 : 0 } : { extra: 0, label: '' })
     setRollOpen(true)
   }
+  /** Usa una carta dominio: tiro (se serve), costo, poi il pannello con danni e promemoria. */
+  function playCard(card: { id: string; name: string }, a: CardAction) {
+    if (!c) return
+    const why = cannotUse(a, c)
+    if (why) { toast({ text: why, tone: 'error' }); return }
+    if (a.roll) {
+      const trait = a.roll === 'spellcast' ? spellcastTrait(c.data) : a.roll
+      setCardFlow({ card, action: a, paid: false })
+      setPreset(trait)
+      setRollPreset({ extra: 0, label: card.name })
+      setRollOpen(true)
+      return
+    }
+    patch({
+      ...(a.hope ? { hope: c.hope - a.hope } : {}),
+      ...(a.stress || a.self?.stress_marked ? { stress_marked: Math.max(0, Math.min(c.stress_max, c.stress_marked + (a.stress ?? 0) + (a.self?.stress_marked ?? 0))) } : {}),
+      ...(a.self?.hp_marked ? { hp_marked: Math.max(0, Math.min(c.hp_max, c.hp_marked + a.self.hp_marked)) } : {}),
+      ...(a.self?.armor_marked ? { armor_marked: Math.max(0, c.armor_marked + a.self.armor_marked) } : {}),
+    })
+    if (a.bonus) setPending({ src: card.name, ...a.bonus })
+    if (a.damage || a.note) setCardFlow({ card, action: a, paid: true })
+    else toast({ text: `${card.name}: usata`, tone: 'hope' })
+  }
+  function cardDamage(dice: string, prof: boolean | undefined, type: 'mag' | 'phy', label: string) {
+    if (!c) return
+    const s = cardDamageSpec(dice, c.data.proficiency ?? 1, prof)
+    if (s) openDice({ label, groups: s.groups, bonus: s.bonus, type })
+  }
+
   /** Segna lo Stress di una capacità e, se compra un bonus, lo tiene pronto per il prossimo tiro. */
   function markStress(u: StressUse, src: string) {
     if (!c) return
@@ -99,8 +131,17 @@ export function CharacterPage({ id }: { id: string }) {
     if (!c || !campaignId || rolling) return
     setRollOpen(false); setRolling(true)
     try {
-      if (choice.hopeSpent > 0) await live.patchCharacter(c.id, { hope: Math.max(0, c.hope - choice.hopeSpent) })
+      // il costo di una carta si paga quando si tira davvero
+      const cost = cardFlow && !cardFlow.paid ? cardFlow.action : null
+      const hopeOut = choice.hopeSpent + (cost?.hope ?? 0)
+      if (hopeOut > 0 || cost?.stress) {
+        await live.patchCharacter(c.id, {
+          ...(hopeOut > 0 ? { hope: Math.max(0, c.hope - hopeOut) } : {}),
+          ...(cost?.stress ? { stress_marked: Math.min(c.stress_max, c.stress_marked + cost.stress) } : {}),
+        })
+      }
       const r = await be.roll(campaignId, c.id, { modifier: choice.modifier, label: choice.label, advantage: choice.advantage, manual: choice.manual, reaction: choice.reaction })
+      if (cost) setCardFlow(f => (f && !f.paid ? { ...f, roll: r, paid: true } : f))
       if (rollPreset.note) setPending(p => p && (p.dmg || p.prof) ? { src: p.src, dmg: p.dmg, prof: p.prof } : null)
       live.addRoll(r)
       setOverlay({ roll: r, own: true })
@@ -227,7 +268,7 @@ export function CharacterPage({ id }: { id: string }) {
         {tab === 'scheda' && <SheetTab c={c} canEdit={canEdit} patch={patch} onRoll={openRoll} onDamage={openDice} allies={allies} onStress={markStress}
           afterGear={canEdit && <GroupMoves c={c} allies={allies} onHelp={help} onTagTeam={proposeTagTeam}
             onGroupAction={(m, l) => { setPreset(null); setRollPreset({ extra: m, label: l }); setRollOpen(true) }} />} />}
-        {tab === 'carte' && <CardsTab c={c} canEdit={canEdit} patch={patch} onStress={markStress} />}
+        {tab === 'carte' && <CardsTab c={c} canEdit={canEdit} patch={patch} onStress={markStress} onPlayCard={playCard} />}
         {tab === 'gruppo' && (
           <>
             <section className="panel"><FearTrack value={live.campaign.fear} /></section>
@@ -245,7 +286,8 @@ export function CharacterPage({ id }: { id: string }) {
         </button>
       )}
 
-      <RollSheet open={rollOpen} onClose={() => setRollOpen(false)} character={c} presetTrait={preset} presetExtra={rollPreset.extra} presetLabel={rollPreset.label} presetNote={rollPreset.note} presetAdv={rollPreset.adv ?? 0} onRoll={doRoll} onOtherDice={() => openDice(null)} />
+      <RollSheet open={rollOpen} onClose={() => { setRollOpen(false); setCardFlow(f => (f && !f.paid ? null : f)) }} character={c} presetTrait={preset} presetExtra={rollPreset.extra} presetLabel={rollPreset.label} presetNote={rollPreset.note} presetAdv={rollPreset.adv ?? 0} onRoll={doRoll} onOtherDice={() => openDice(null)} />
+      {cardFlow && !rollOpen && !diceOpen && <CardFlowDock flow={cardFlow} c={c} onDamage={cardDamage} onClose={() => setCardFlow(null)} />}
       <FearAura fear={live.campaign.fear} enabled />
       <HopeAura hope={c.hope} enabled={c.owner_id === user.id} wait={!!overlay} />
       <TagTeamFlow tag={live.tag} characters={live.characters} rolls={live.rolls} isGm={live.campaign.gm_id === user.id} onRollAdded={live.addRoll} />
