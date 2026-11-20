@@ -16,6 +16,7 @@ import { MiniPlayer, Music, usePlayer } from '../components/Music'
 import { DiceSheet } from '../components/DiceSheet'
 import { FearAura } from '../components/FearAura'
 import { TagTeamFlow } from '../components/TagTeam'
+import { Countdowns } from '../components/Countdowns'
 
 const TAB_LABEL: Record<CampaignTab, string> = { tavolo: 'Tavolo', storia: 'Storia', galleria: 'Galleria', musica: 'Musica' }
 
@@ -60,6 +61,7 @@ export function CampaignPage({ id, tab }: { id: string; tab: CampaignTab }) {
             <section className="panel fear-panel">
               <FearTrack big value={campaign.fear} onChange={n => live.patchCampaign({ fear: n }).catch(e => toast({ text: e.message, tone: 'error' }))} />
             </section>
+            <div className="panel cd-panel"><Countdowns campaignId={id} isGm /></div>
             <section className="panel invite">
               <p>Codice invito per i giocatori</p>
               <InviteCode code={campaign.invite_code} />
@@ -101,6 +103,7 @@ export function CampaignPage({ id, tab }: { id: string; tab: CampaignTab }) {
               <button className="btn btn-primary" onClick={() => go(`/c/${id}/nuovo`)}>Crea un personaggio</button>
             </section>
             <section className="panel"><FearTrack value={campaign.fear} /></section>
+            <Countdowns campaignId={id} isGm={false} />
             <section>
               <h2>Compagni</h2>
               {others.length === 0 && <p className="empty">Gli altri personaggi del gruppo compariranno qui.</p>}

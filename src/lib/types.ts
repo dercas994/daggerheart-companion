@@ -134,6 +134,24 @@ export interface Roll {
   created_at: string
 }
 
+export interface Countdown {
+  id: string
+  campaign_id: string
+  name: string
+  note: string
+  max: number
+  value: number
+  /** progress = avanzamento dei PG, consequence = minaccia */
+  kind: 'progress' | 'consequence'
+  visible: boolean
+  auto_tick: boolean
+  loop: boolean
+  sort: number
+  created_at: string
+  updated_at: string
+}
+export type CountdownInput = Partial<Pick<Countdown, 'id' | 'name' | 'note' | 'max' | 'value' | 'kind' | 'visible' | 'auto_tick' | 'loop' | 'sort'>>
+
 export interface TagTeam {
   id: string
   campaign_id: string
@@ -208,6 +226,7 @@ export interface RealtimeHandlers {
   onRollUpdate?: (r: Roll) => void
   onMembers?: () => void
   onTag?: (t: TagTeam) => void
+  onCountdowns?: () => void
   onRecaps?: () => void
   onMedia?: () => void
 }
@@ -238,6 +257,10 @@ export interface Backend {
   deletePortrait(url: string): Promise<void>
   roll(campaignId: string, characterId: string | null, req: RollRequest): Promise<Roll>
   rollDice(campaignId: string, characterId: string | null, req: DiceRequest): Promise<Roll>
+  listCountdowns(campaignId: string): Promise<Countdown[]>
+  saveCountdown(campaignId: string, c: CountdownInput): Promise<Countdown>
+  deleteCountdown(id: string): Promise<void>
+
   /** Tiro Combinato su invito */
   getActiveTag(campaignId: string): Promise<TagTeam | null>
   tagOpen(characterId: string): Promise<TagTeam>

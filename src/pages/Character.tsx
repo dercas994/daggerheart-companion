@@ -12,6 +12,7 @@ import { DiceSheet, type DicePreset } from '../components/DiceSheet'
 import type { DiceRequest } from '../lib/types'
 import { GroupMoves } from '../components/GroupMoves'
 import { TagTeamFlow } from '../components/TagTeam'
+import { Countdowns } from '../components/Countdowns'
 import { FearAura } from '../components/FearAura'
 import { FearTrack, ownerName, PartyCard, RollLog } from '../components/Party'
 import { SheetTab } from '../components/SheetTab'
@@ -119,6 +120,8 @@ export function CharacterPage({ id }: { id: string }) {
         </p>
         <p className="char-line dim">{[anc, getCommunity(c.data.community_id)?.name].filter(Boolean).join(', ')}</p>
       </header>
+
+      {campaignId && <Countdowns campaignId={campaignId} isGm={live.campaign.gm_id === user.id} compact />}
 
       <section className="vitals panel">
         <div className="defense">

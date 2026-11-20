@@ -1038,3 +1038,55 @@ grant execute on function public.tag_cancel(uuid) to authenticated;
 grant execute on function public.tag_set_difficulty(uuid, int) to authenticated;
 grant execute on function public.tag_roll(uuid, uuid, int, text, int, int) to authenticated;
 grant execute on function public.tag_resolve(uuid, uuid) to authenticated;
+
+-- ---------------------------------------------------------------------
+--  Migrazione 10: Conti alla rovescia.
+--  Il master li crea e li muove; i giocatori vedono quelli visibili.
+--  "auto_tick": scende di 1 a ogni tiro di Dualità dei giocatori.
+-- ---------------------------------------------------------------------
+create table if not exists public.countdowns (
+  id          uuid primary key default gen_random_uuid(),
+  campaign_id uuid not null references public.campaigns(id) on delete cascade,
+  name        text not null default '' check (char_length(name) <= 80),
+  note        text not null default '' check (char_length(note) <= 400),
+  max         int  not null default 4 check (max between 1 and 20),
+  value       int  not null default 4 check (value between 0 and 20),
+  kind        text not null default 'consequence' check (kind in ('progress','consequence')),
+  visible     boolean not null default true,
+  auto_tick   boolean not null default false,
+  loop        boolean not null default false,
+  sort        int not null default 0,
+  created_at  timestamptz not null default now(),
+  updated_at  timestamptz not null default now()
+);
+create index if not exists countdowns_campaign on public.countdowns(campaign_id, sort);
+alter table public.countdowns enable row level security;
+grant select, insert, update, delete on public.countdowns to authenticated;
+drop policy if exists "countdowns read"  on public.countdowns;
+drop policy if exists "countdowns write" on public.countdowns;
+create policy "countdowns read"  on public.countdowns for select to authenticated
+  using (is_gm(campaign_id) or (visible and is_member(campaign_id)));
+create policy "countdowns write" on public.countdowns for all to authenticated
+  using (is_gm(campaign_id)) with check (is_gm(campaign_id));
+alter table public.countdowns replica identity full;
+do $$ begin
+  if not exists (select 1 from pg_publication_tables where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'countdowns') then
+    alter publication supabase_realtime add table public.countdowns;
+  end if;
+end $$;
+
+-- ogni tiro di Dualità di un PG (non di reazione, non combinato) fa scendere i conti automatici
+create or replace function public.countdowns_on_roll()
+returns trigger language plpgsql security definer set search_path = public as $$
+begin
+  if new.kind = 'duality' and new.character_id is not null and not new.reaction and new.group_id is null then
+    update countdowns
+       set value = case when value - 1 <= 0 and loop then max else greatest(value - 1, 0) end,
+           updated_at = now()
+     where campaign_id = new.campaign_id and auto_tick and value > 0;
+  end if;
+  return new;
+end $$;
+drop trigger if exists rolls_tick_countdowns on public.rolls;
+create trigger rolls_tick_countdowns after insert on public.rolls
+  for each row execute function public.countdowns_on_roll();

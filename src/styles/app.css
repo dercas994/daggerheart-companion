@@ -276,8 +276,8 @@ button.pip:active { transform: scale(0.9); }
 .premise { font-family: var(--f-serif); font-style: italic; color: var(--muted); font-size: 1.05rem; margin-top: 0.6rem; }
 .gm-grid { display: grid; gap: 1rem; margin-top: 0.6rem; }
 @media (min-width: 900px) {
-  .gm-grid { grid-template-columns: 1.6fr 1fr; grid-template-areas: 'fear invite' 'party log'; align-items: start; }
-  .fear-panel { grid-area: fear; } .invite { grid-area: invite; } .gm-party { grid-area: party; } .gm-log { grid-area: log; }
+  .gm-grid { grid-template-columns: 1.6fr 1fr; grid-template-areas: 'fear invite' 'cd cd' 'party log'; align-items: start; }
+  .fear-panel { grid-area: fear; } .invite { grid-area: invite; } .gm-party { grid-area: party; } .gm-log { grid-area: log; } .cd-panel { grid-area: cd; }
   .gm-party h2, .gm-log h2 { margin-top: 0.4rem; }
 }
 .fear-panel { border-color: rgba(154, 107, 224, 0.4); background: radial-gradient(500px 200px at 20% 0%, rgba(154, 107, 224, 0.16), transparent), var(--dusk); }
@@ -893,3 +893,39 @@ button.dcard:hover { transform: translateY(-2px); }
 .pips-hp, .pips-armor { flex-direction: row-reverse; justify-content: flex-end; }
 .trait-mods { margin: 0.4rem 0 0.8rem; }
 .trait-mods summary { cursor: pointer; color: var(--muted); font-size: 0.9rem; padding: 0.3rem 0; }
+
+/* ---------- Conti alla rovescia ---------- */
+.countdowns .section-head h2 { margin: 0; }
+.cd-grid { display: grid; gap: 0.6rem; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+.cd-card { display: flex; gap: 0.8rem; align-items: center; padding: 0.7rem 0.8rem; border-radius: var(--r-m); border: 1px solid var(--line); background: var(--night);
+  transition: border-color 0.3s; }
+.cd-card.k-progress { border-left: 3px solid var(--hope); }
+.cd-card.k-consequence { border-left: 3px solid #C8473E; }
+.cd-card.hidden-cd { border-style: dashed; opacity: 0.8; }
+.cd-card.zero.k-consequence { background: radial-gradient(120% 120% at 0% 50%, rgba(200, 71, 62, 0.18), transparent 70%), var(--night); }
+.cd-card.zero.k-progress { background: radial-gradient(120% 120% at 0% 50%, rgba(233, 185, 73, 0.18), transparent 70%), var(--night); }
+.cd-card.fired, .cd-mini.fired { animation: cd-fire 0.7s ease-out 3; }
+@keyframes cd-fire { 0% { transform: scale(1); } 30% { transform: scale(1.04) rotate(-0.6deg); } 60% { transform: scale(1) rotate(0.6deg); } 100% { transform: none; } }
+.cd-body { min-width: 0; flex: 1; }
+.cd-body h3 { margin: 0; font-family: var(--f-display); font-size: 1.15rem; }
+.cd-meta { margin: 0.1rem 0 0; color: var(--muted); font-size: 0.8rem; }
+.cd-fire { margin: 0.2rem 0 0; font-weight: 700; }
+.k-consequence .cd-fire { color: #F09A90; } .k-progress .cd-fire { color: var(--hope-glow); }
+.cd-note { margin: 0.25rem 0 0; font-family: var(--f-serif); font-size: 0.92rem; color: #E8DCC3; }
+.cd-ctrl { display: flex; gap: 0.35rem; align-items: center; margin-top: 0.4rem; flex-wrap: wrap; }
+.dial { flex: none; overflow: visible; }
+.dial path { fill: none; stroke-width: 11; stroke-linecap: butt; transition: stroke 0.4s, opacity 0.4s; }
+.dial .off { stroke: rgba(255, 255, 255, 0.08); }
+.dial.k-progress .on { stroke: var(--hope); filter: drop-shadow(0 0 3px rgba(233, 185, 73, 0.5)); }
+.dial.k-consequence .on { stroke: #D2564B; filter: drop-shadow(0 0 3px rgba(210, 86, 75, 0.5)); }
+.dial-n { font-family: var(--f-display); font-size: 34px; fill: var(--parchment); text-anchor: middle; dominant-baseline: central; }
+.dial.zero .dial-n { fill: #F09A90; }
+.dial.zero.k-progress .dial-n { fill: var(--hope-glow); }
+.dial.fired { animation: dial-flash 0.6s ease-out 4; }
+@keyframes dial-flash { 50% { filter: drop-shadow(0 0 12px rgba(255, 210, 150, 0.9)); } }
+.cd-strip { display: flex; gap: 0.5rem; overflow-x: auto; padding: 0.2rem 0 0.6rem; scrollbar-width: none; }
+.cd-mini { flex: none; display: flex; align-items: center; gap: 0.4rem; padding: 0.25rem 0.7rem 0.25rem 0.3rem; border-radius: 999px; border: 1px solid var(--line); background: var(--night); font-size: 0.85rem; }
+.cd-mini.k-consequence { border-color: rgba(210, 86, 75, 0.45); } .cd-mini.k-progress { border-color: rgba(233, 185, 73, 0.45); }
+.cd-mini .dial-n { font-size: 40px; }
+.cd-mini .dial path { stroke-width: 13; }
+@media (prefers-reduced-motion: reduce) { .cd-card.fired, .cd-mini.fired, .dial.fired { animation: none; } }

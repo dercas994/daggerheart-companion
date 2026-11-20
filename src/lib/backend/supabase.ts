@@ -1,5 +1,5 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
-import type { Backend, Campaign, CampaignWithRole, Character, Media, Member, Recap, Roll, TagTeam, User } from '../types'
+import type { Backend, Campaign, CampaignWithRole, Character, Countdown, Media, Member, Recap, Roll, TagTeam, User } from '../types'
 
 function fail(error: { message: string } | null) {
   if (error) throw new Error(translate(error.message))
@@ -140,6 +140,24 @@ export function createSupabaseBackend(url: string, key: string): Backend {
       fail(error)
       return data as Roll
     },
+    async listCountdowns(campaignId) {
+      const { data, error } = await sb.from('countdowns').select('*').eq('campaign_id', campaignId).order('sort').order('created_at')
+      fail(error)
+      return (data ?? []) as Countdown[]
+    },
+    async saveCountdown(campaignId, c) {
+      const { id, ...row } = c
+      const q = id
+        ? sb.from('countdowns').update({ ...row, updated_at: new Date().toISOString() }).eq('id', id)
+        : sb.from('countdowns').insert({ ...row, campaign_id: campaignId })
+      const { data, error } = await q.select().single()
+      fail(error)
+      return data as Countdown
+    },
+    async deleteCountdown(id) {
+      const { error } = await sb.from('countdowns').delete().eq('id', id)
+      fail(error)
+    },
     async getActiveTag(campaignId) {
       const since = new Date(Date.now() - 3 * 3600_000).toISOString()
       const { data, error } = await sb.from('tag_teams').select('*').eq('campaign_id', campaignId).gte('created_at', since)
@@ -230,6 +248,8 @@ export function createSupabaseBackend(url: string, key: string): Backend {
         .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'campaigns', filter: `id=eq.${campaignId}` }, (p: any) => h.onCampaign?.(p.new as Campaign))
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'rolls', filter: `campaign_id=eq.${campaignId}` }, (p: any) => h.onRoll?.(p.new as Roll))
         // le DELETE non si possono filtrare: arriva solo l'id, lo cerco nella lista locale
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'countdowns', filter: `campaign_id=eq.${campaignId}` }, () => h.onCountdowns?.())
+        .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'countdowns' }, () => h.onCountdowns?.())
         .on('postgres_changes', { event: '*', schema: 'public', table: 'tag_teams', filter: `campaign_id=eq.${campaignId}` }, (p: any) => p.new?.id && h.onTag?.(p.new as TagTeam))
         .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'rolls', filter: `campaign_id=eq.${campaignId}` }, (p: any) => h.onRollUpdate?.(p.new as Roll))
         .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'rolls' }, (p: any) => p.old?.id && h.onRollDelete?.(p.old.id))

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import type { Backend, RealtimeHandlers } from './types'
 
 /** Lista di una campagna (recap, media) ricaricata quando qualcuno la modifica. */
-export function useLiveList<T>(be: Backend, campaignId: string, load: (id: string) => Promise<T[]>, event: keyof Pick<RealtimeHandlers, 'onRecaps' | 'onMedia'>) {
+export function useLiveList<T>(be: Backend, campaignId: string, load: (id: string) => Promise<T[]>, event: keyof Pick<RealtimeHandlers, 'onRecaps' | 'onMedia' | 'onCountdowns'>, pollMs = 0) {
   const [items, setItems] = useState<T[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -15,7 +15,8 @@ export function useLiveList<T>(be: Backend, campaignId: string, load: (id: strin
     const unsub = be.subscribe(campaignId, { [event]: () => { clearTimeout(t); t = setTimeout(reload, 250) } })
     const onVis = () => document.visibilityState === 'visible' && reload()
     document.addEventListener('visibilitychange', onVis)
-    return () => { unsub(); clearTimeout(t); document.removeEventListener('visibilitychange', onVis) }
-  }, [be, campaignId, event, reload])
+    const poll = pollMs ? setInterval(() => document.visibilityState === 'visible' && reload(), pollMs) : undefined
+    return () => { unsub(); clearTimeout(t); clearInterval(poll); document.removeEventListener('visibilitychange', onVis) }
+  }, [be, campaignId, event, reload, pollMs])
   return { items, setItems, loading, error, reload }
 }
