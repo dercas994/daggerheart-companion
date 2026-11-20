@@ -10,10 +10,9 @@ import { DiceOverlay, outcomeText, rollTone } from '../components/Dice'
 import { RollSheet, type RollChoice } from '../components/RollSheet'
 import { DiceSheet, type DicePreset } from '../components/DiceSheet'
 import type { DiceRequest } from '../lib/types'
-import { GroupMoves, TagTeamChoice } from '../components/GroupMoves'
+import { GroupMoves } from '../components/GroupMoves'
+import { TagTeamFlow } from '../components/TagTeam'
 import { FearAura } from '../components/FearAura'
-import { traitValue } from '../lib/rules'
-import { IT } from '../data'
 import { FearTrack, ownerName, PartyCard, RollLog } from '../components/Party'
 import { SheetTab } from '../components/SheetTab'
 import { CardsTab } from '../components/CardsTab'
@@ -96,18 +95,12 @@ export function CharacterPage({ id }: { id: string }) {
     const r = await be.rollDice(campaignId, c.id, { label: `Aiuta ${ally.name}`, groups: [{ n: 1, sides: 6 }], bonus: 0, kind: 'dice' })
     live.addRoll(r); setOverlay({ roll: r, own: true })
   }
-  async function tagTeam(ally: Character, mine: { trait: TraitKey | null; extra: number }, theirs: { trait: TraitKey | null; extra: number }) {
-    if (!c || !campaignId) return
-    const rs = await be.tagTeam(campaignId,
-      { id: c.id, modifier: (mine.trait ? traitValue(c.data, mine.trait) : 0) + mine.extra, label: mine.trait ? IT.traits[mine.trait] : '' },
-      { id: ally.id, modifier: (theirs.trait ? traitValue(ally.data, theirs.trait) : 0) + theirs.extra, label: theirs.trait ? IT.traits[theirs.trait] : '' })
-    live.replaceRolls(rs)
+  async function proposeTagTeam() {
+    if (!c) return
+    const t = await be.tagOpen(c.id)
+    live.setTag(t)
     be.getCharacter(c.id).then(x => live.setCharacters(xs => xs.map(y => (y.id === x.id ? x : y)))).catch(() => {})
   }
-  // Tiro Combinato in attesa che riguarda uno dei miei personaggi
-  const myChars = new Set(live.characters.filter(x => x.owner_id === user.id).map(x => x.id))
-  const pendingGroup = live.rolls.find(r => r.pending && r.group_id && (r.user_id === user.id || live.rolls.some(o => o.group_id === r.group_id && o.character_id && myChars.has(o.character_id))))?.group_id
-  const pendingRolls = pendingGroup ? live.rolls.filter(r => r.group_id === pendingGroup).sort((a, b) => a.created_at.localeCompare(b.created_at)) : []
 
   const others = live.characters.filter(x => x.id !== c.id)
 
@@ -161,7 +154,7 @@ export function CharacterPage({ id }: { id: string }) {
 
       <main className="page tab-page">
         {tab === 'scheda' && <SheetTab c={c} canEdit={canEdit} patch={patch} onRoll={openRoll} onDamage={openDice} allies={allies}
-          afterGear={canEdit && <GroupMoves c={c} allies={allies} onHelp={help} onTagTeam={tagTeam}
+          afterGear={canEdit && <GroupMoves c={c} allies={allies} onHelp={help} onTagTeam={proposeTagTeam}
             onGroupAction={(m, l) => { setPreset(null); setRollPreset({ extra: m, label: l }); setRollOpen(true) }} />} />}
         {tab === 'carte' && <CardsTab c={c} canEdit={canEdit} patch={patch} />}
         {tab === 'gruppo' && (
@@ -182,13 +175,8 @@ export function CharacterPage({ id }: { id: string }) {
       )}
 
       <RollSheet open={rollOpen} onClose={() => setRollOpen(false)} character={c} presetTrait={preset} presetExtra={rollPreset.extra} presetLabel={rollPreset.label} onRoll={doRoll} onOtherDice={() => openDice(null)} />
-      {pendingRolls.length >= 2 && !overlay && <TagTeamChoice key={pendingGroup} rolls={pendingRolls} onChoose={async (g, id) => {
-        const r = await be.resolveTagTeam(g, id)
-        live.replaceRolls([r], g)
-        setOverlay({ roll: r, own: true })
-        be.listCharacters(r.campaign_id).then(live.setCharacters).catch(() => {})
-      }} />}
       <FearAura fear={live.campaign.fear} enabled={live.campaign.gm_id !== user.id} />
+      <TagTeamFlow tag={live.tag} characters={live.characters} rolls={live.rolls} isGm={live.campaign.gm_id === user.id} onRollAdded={live.addRoll} />
       <DiceSheet open={diceOpen} onClose={() => setDiceOpen(false)} character={c} preset={dicePreset} onRoll={doDice} />
       {overlay && <DiceOverlay roll={overlay.roll} ownRoll={overlay.own} onClose={() => setOverlay(null)} />}
       <DamageSheet open={sheet === 'damage'} onClose={() => setSheet(null)} c={c} patch={patch} />

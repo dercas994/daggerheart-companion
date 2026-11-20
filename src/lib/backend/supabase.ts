@@ -1,5 +1,5 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
-import type { Backend, Campaign, CampaignWithRole, Character, Media, Member, Recap, Roll, User } from '../types'
+import type { Backend, Campaign, CampaignWithRole, Character, Media, Member, Recap, Roll, TagTeam, User } from '../types'
 
 function fail(error: { message: string } | null) {
   if (error) throw new Error(translate(error.message))
@@ -135,23 +135,27 @@ export function createSupabaseBackend(url: string, key: string): Backend {
     async rollDice(campaignId, characterId, req) {
       const { data, error } = await sb.rpc('roll_dice', {
         p_campaign: campaignId, p_character: characterId, p_label: req.label, p_groups: req.groups, p_bonus: req.bonus,
-        p_kind: req.kind, p_type: req.kind === 'damage' ? (req.type ?? 'phy') : null, p_crit: !!req.crit, p_manual: req.manualSum ?? null,
+        p_kind: req.kind, p_type: req.kind === 'damage' ? (req.type ?? 'phy') : null, p_crit: !!req.crit, p_manual: req.manualSum ?? null, p_group: req.groupId ?? null,
       })
       fail(error)
       return data as Roll
     },
-    async tagTeam(campaignId, a, b) {
-      const { data, error } = await sb.rpc('roll_tag_team', {
-        p_campaign: campaignId, p_a: a.id, p_mod_a: a.modifier, p_label_a: a.label, p_b: b.id, p_mod_b: b.modifier, p_label_b: b.label,
-      })
+    async getActiveTag(campaignId) {
+      const since = new Date(Date.now() - 3 * 3600_000).toISOString()
+      const { data, error } = await sb.from('tag_teams').select('*').eq('campaign_id', campaignId).gte('created_at', since)
+        .order('created_at', { ascending: false }).limit(1)
       fail(error)
-      return (data ?? []) as Roll[]
+      return (data?.[0] as TagTeam) ?? null
     },
-    async resolveTagTeam(groupId, chosen) {
-      const { data, error } = await sb.rpc('resolve_tag_team', { p_group: groupId, p_chosen: chosen })
-      fail(error)
-      return data as Roll
+    async tagOpen(characterId) { const { data, error } = await sb.rpc('tag_open', { p_char: characterId }); fail(error); return data as TagTeam },
+    async tagJoin(tagId, characterId) { const { data, error } = await sb.rpc('tag_join', { p_tag: tagId, p_char: characterId }); fail(error); return data as TagTeam },
+    async tagCancel(tagId) { const { error } = await sb.rpc('tag_cancel', { p_tag: tagId }); fail(error) },
+    async tagSetDifficulty(tagId, difficulty) { const { error } = await sb.rpc('tag_set_difficulty', { p_tag: tagId, p_difficulty: difficulty }); fail(error) },
+    async tagRoll(tagId, characterId, modifier, label, manual) {
+      const { data, error } = await sb.rpc('tag_roll', { p_tag: tagId, p_char: characterId, p_modifier: modifier, p_label: label, p_hope: manual?.hope ?? null, p_fear: manual?.fear ?? null })
+      fail(error); return data as Roll
     },
+    async tagResolve(tagId, rollId) { const { data, error } = await sb.rpc('tag_resolve', { p_tag: tagId, p_roll: rollId }); fail(error); return data as TagTeam },
     async protectLife(fromId, toId) {
       const { error } = await sb.rpc('protect_life', { p_from: fromId, p_to: toId })
       fail(error)
@@ -226,6 +230,7 @@ export function createSupabaseBackend(url: string, key: string): Backend {
         .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'campaigns', filter: `id=eq.${campaignId}` }, (p: any) => h.onCampaign?.(p.new as Campaign))
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'rolls', filter: `campaign_id=eq.${campaignId}` }, (p: any) => h.onRoll?.(p.new as Roll))
         // le DELETE non si possono filtrare: arriva solo l'id, lo cerco nella lista locale
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'tag_teams', filter: `campaign_id=eq.${campaignId}` }, (p: any) => p.new?.id && h.onTag?.(p.new as TagTeam))
         .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'rolls', filter: `campaign_id=eq.${campaignId}` }, (p: any) => h.onRollUpdate?.(p.new as Roll))
         .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'rolls' }, (p: any) => p.old?.id && h.onRollDelete?.(p.old.id))
         .on('postgres_changes', { event: '*', schema: 'public', table: 'campaign_members', filter: `campaign_id=eq.${campaignId}` }, () => h.onMembers?.())

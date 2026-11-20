@@ -134,6 +134,21 @@ export interface Roll {
   created_at: string
 }
 
+export interface TagTeam {
+  id: string
+  campaign_id: string
+  initiator_char: string
+  initiator_user: string
+  partner_char: string | null
+  partner_user: string | null
+  difficulty: number | null
+  status: 'open' | 'joined' | 'resolved' | 'cancelled'
+  chosen_roll: string | null
+  success: boolean | null
+  created_at: string
+  updated_at: string
+}
+
 export type RollKind = 'duality' | 'damage' | 'dice'
 export interface DiceRequest {
   label: string
@@ -144,6 +159,8 @@ export interface DiceRequest {
   crit?: boolean
   /** dadi fisici: somma dei dadi letta sul tavolo */
   manualSum?: number
+  /** danni di un Tiro Combinato */
+  groupId?: string
 }
 
 export interface RollRequest {
@@ -190,6 +207,7 @@ export interface RealtimeHandlers {
   onRollDelete?: (id: string) => void
   onRollUpdate?: (r: Roll) => void
   onMembers?: () => void
+  onTag?: (t: TagTeam) => void
   onRecaps?: () => void
   onMedia?: () => void
 }
@@ -220,9 +238,14 @@ export interface Backend {
   deletePortrait(url: string): Promise<void>
   roll(campaignId: string, characterId: string | null, req: RollRequest): Promise<Roll>
   rollDice(campaignId: string, characterId: string | null, req: DiceRequest): Promise<Roll>
-  /** Tiro Combinato: spende 3 Speranza di A, tira per entrambi; poi resolveTagTeam sceglie il risultato */
-  tagTeam(campaignId: string, a: { id: string; modifier: number; label: string }, b: { id: string; modifier: number; label: string }): Promise<Roll[]>
-  resolveTagTeam(groupId: string, chosenRollId: string): Promise<Roll>
+  /** Tiro Combinato su invito */
+  getActiveTag(campaignId: string): Promise<TagTeam | null>
+  tagOpen(characterId: string): Promise<TagTeam>
+  tagJoin(tagId: string, characterId: string): Promise<TagTeam>
+  tagCancel(tagId: string): Promise<void>
+  tagSetDifficulty(tagId: string, difficulty: number): Promise<void>
+  tagRoll(tagId: string, characterId: string, modifier: number, label: string, manual?: { hope: number; fear: number }): Promise<Roll>
+  tagResolve(tagId: string, rollId: string): Promise<TagTeam>
   /** Serafino: 3 Speranza per togliere 1 PF a un alleato */
   protectLife(fromId: string, toId: string): Promise<void>
   listRolls(campaignId: string, limit?: number): Promise<Roll[]>

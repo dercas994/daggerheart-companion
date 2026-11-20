@@ -804,3 +804,237 @@ begin
   update characters set hp_marked = greatest(hp_marked - 1, 0) where id = b.id;
 end $$;
 grant execute on function public.protect_life(uuid, uuid) to authenticated;
+
+-- ---------------------------------------------------------------------
+--  Migrazione 9: Tiro Combinato su invito.
+--  Chi lo propone spende 3 Speranza; gli altri giocatori ricevono l'invito,
+--  il primo che accetta partecipa; ognuno tira i propri dadi; il master fissa
+--  la Difficoltà; si sceglie un risultato che vale per entrambi; se riesce si tirano i danni.
+-- ---------------------------------------------------------------------
+create table if not exists public.tag_teams (
+  id             uuid primary key default gen_random_uuid(),
+  campaign_id    uuid not null references public.campaigns(id) on delete cascade,
+  initiator_char uuid not null references public.characters(id) on delete cascade,
+  initiator_user uuid not null references auth.users(id) on delete cascade,
+  partner_char   uuid references public.characters(id) on delete cascade,
+  partner_user   uuid references auth.users(id) on delete cascade,
+  difficulty     int check (difficulty between 1 and 40),
+  status         text not null default 'open' check (status in ('open','joined','resolved','cancelled')),
+  chosen_roll    uuid,
+  success        boolean,
+  created_at     timestamptz not null default now(),
+  updated_at     timestamptz not null default now()
+);
+create index if not exists tag_teams_campaign on public.tag_teams(campaign_id, created_at desc);
+alter table public.tag_teams enable row level security;
+grant select on public.tag_teams to authenticated;
+drop policy if exists "tag read" on public.tag_teams;
+create policy "tag read" on public.tag_teams for select to authenticated using (is_member(campaign_id));
+alter table public.tag_teams replica identity full;
+do $$ begin
+  if not exists (select 1 from pg_publication_tables where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'tag_teams') then
+    alter publication supabase_realtime add table public.tag_teams;
+  end if;
+end $$;
+
+-- i danni del Tiro Combinato si legano al tiro con group_id
+drop function if exists public.roll_dice(uuid, uuid, text, jsonb, int, text, text, boolean, int);
+create or replace function public.roll_dice(
+  p_campaign  uuid,
+  p_character uuid,
+  p_label     text,
+  p_groups    jsonb,             -- [{"n":2,"sides":10}, ...]
+  p_bonus     int  default 0,
+  p_kind      text default 'damage',
+  p_type      text default null, -- 'phy' | 'mag'
+  p_crit      boolean default false,
+  p_manual    int  default null, -- dadi fisici: somma dei dadi letta sul tavolo
+  p_group     uuid default null  -- danni di un Tiro Combinato
+) returns public.rolls language plpgsql security definer set search_path = public as $$
+declare
+  ch characters;
+  r rolls;
+  who text;
+  g jsonb;
+  n int; s int; v int; i int;
+  rolls_arr int[];
+  out_groups jsonb := '[]'::jsonb;
+  dice_sum int := 0;
+  crit_bonus int := 0;
+  count_all int := 0;
+begin
+  if not is_member(p_campaign) then raise exception 'Non fai parte di questa campagna'; end if;
+  if p_kind not in ('damage','dice') then raise exception 'Tipo di tiro non valido'; end if;
+  if p_type is not null and p_type not in ('phy','mag') then raise exception 'Tipo di danno non valido'; end if;
+
+  if p_character is not null then
+    select * into ch from characters where id = p_character and campaign_id = p_campaign;
+    if not found then raise exception 'Personaggio non trovato'; end if;
+    if ch.owner_id <> auth.uid() and not is_gm(p_campaign) then
+      raise exception 'Non puoi tirare per questo personaggio';
+    end if;
+    who := ch.name;
+  else
+    select display_name into who from profiles where id = auth.uid();
+  end if;
+
+  if jsonb_typeof(p_groups) <> 'array' or jsonb_array_length(p_groups) = 0 then
+    raise exception 'Scegli almeno un dado';
+  end if;
+
+  for g in select * from jsonb_array_elements(p_groups) loop
+    n := (g->>'n')::int; s := (g->>'sides')::int;
+    if n is null or n < 1 or s not in (4,6,8,10,12,20,100) then raise exception 'Dadi non validi'; end if;
+    count_all := count_all + n;
+    if count_all > 40 then raise exception 'Massimo 40 dadi per tiro'; end if;
+    rolls_arr := '{}';
+    if p_manual is null then
+      for i in 1..n loop
+        v := 1 + floor(random() * s)::int;
+        rolls_arr := rolls_arr || v;
+        dice_sum := dice_sum + v;
+      end loop;
+    end if;
+    if p_crit then crit_bonus := crit_bonus + n * s; end if;
+    out_groups := out_groups || jsonb_build_object('sides', s, 'n', n, 'rolls', to_jsonb(rolls_arr));
+  end loop;
+
+  if p_manual is not null then
+    if p_manual < count_all then raise exception 'La somma dei dadi è troppo bassa'; end if;
+    dice_sum := p_manual;
+  end if;
+
+  insert into rolls (campaign_id, character_id, user_id, roller_name, label,
+                     hope_die, fear_die, adv_die, modifier, total, outcome, manual,
+                     kind, dice, damage_type, crit, group_id)
+  values (p_campaign, p_character, auth.uid(), coalesce(who,''), coalesce(p_label,''),
+          0, 0, 0, coalesce(p_bonus,0), dice_sum + crit_bonus + coalesce(p_bonus,0), null, p_manual is not null,
+          p_kind, jsonb_build_object('groups', out_groups, 'bonus', coalesce(p_bonus,0), 'crit_bonus', crit_bonus),
+          case when p_kind = 'damage' then coalesce(p_type, 'phy') end, p_crit, p_group)
+  returning * into r;
+  return r;
+end $$;
+grant execute on function public.roll_dice(uuid, uuid, text, jsonb, int, text, text, boolean, int, uuid) to authenticated;
+
+create or replace function public.tag_open(p_char uuid)
+returns public.tag_teams language plpgsql security definer set search_path = public as $$
+declare c characters; t tag_teams;
+begin
+  select * into c from characters where id = p_char;
+  if not found then raise exception 'Personaggio non trovato'; end if;
+  if c.owner_id <> auth.uid() and not is_gm(c.campaign_id) then raise exception 'Non puoi usare questo personaggio'; end if;
+  if exists (select 1 from tag_teams where campaign_id = c.campaign_id and status in ('open','joined') and created_at > now() - interval '2 hours') then
+    raise exception 'C''è già un Tiro Combinato in corso';
+  end if;
+  if c.hope < 3 then raise exception 'Servono 3 Speranza per il Tiro Combinato'; end if;
+  update characters set hope = hope - 3 where id = c.id;
+  insert into tag_teams (campaign_id, initiator_char, initiator_user) values (c.campaign_id, c.id, auth.uid()) returning * into t;
+  return t;
+end $$;
+
+create or replace function public.tag_join(p_tag uuid, p_char uuid)
+returns public.tag_teams language plpgsql security definer set search_path = public as $$
+declare c characters; t tag_teams;
+begin
+  select * into c from characters where id = p_char;
+  if not found or c.owner_id <> auth.uid() then raise exception 'Personaggio non valido'; end if;
+  update tag_teams set partner_char = c.id, partner_user = auth.uid(), status = 'joined', updated_at = now()
+   where id = p_tag and status = 'open' and campaign_id = c.campaign_id and initiator_char <> c.id
+  returning * into t;
+  if not found then raise exception 'Qualcun altro ha già accettato, o il tiro è stato annullato'; end if;
+  return t;
+end $$;
+
+create or replace function public.tag_cancel(p_tag uuid)
+returns void language plpgsql security definer set search_path = public as $$
+declare t tag_teams;
+begin
+  select * into t from tag_teams where id = p_tag for update;
+  if not found or t.status not in ('open','joined') then return; end if;
+  if t.initiator_user <> auth.uid() and not is_gm(t.campaign_id) then raise exception 'Solo chi l''ha proposto o il master può annullarlo'; end if;
+  update characters set hope = least(hope + 3, coalesce((data->>'hope_max')::int, 6)) where id = t.initiator_char;
+  delete from rolls where group_id = t.id;
+  update tag_teams set status = 'cancelled', updated_at = now() where id = t.id;
+end $$;
+
+create or replace function public.tag_set_difficulty(p_tag uuid, p_difficulty int)
+returns void language plpgsql security definer set search_path = public as $$
+declare t tag_teams;
+begin
+  select * into t from tag_teams where id = p_tag;
+  if not found or not is_gm(t.campaign_id) then raise exception 'Solo il master fissa la Difficoltà'; end if;
+  if t.status not in ('open','joined') then raise exception 'Il tiro è già concluso'; end if;
+  update tag_teams set difficulty = p_difficulty, updated_at = now() where id = p_tag;
+end $$;
+
+create or replace function public.tag_roll(p_tag uuid, p_char uuid, p_modifier int, p_label text,
+                                           p_hope int default null, p_fear int default null)
+returns public.rolls language plpgsql security definer set search_path = public as $$
+declare t tag_teams; c characters; r rolls; h int; f int; res text;
+begin
+  select * into t from tag_teams where id = p_tag;
+  if not found or t.status <> 'joined' then raise exception 'Il Tiro Combinato non è pronto'; end if;
+  if p_char not in (t.initiator_char, t.partner_char) then raise exception 'Questo personaggio non partecipa'; end if;
+  select * into c from characters where id = p_char;
+  if c.owner_id <> auth.uid() and not is_gm(t.campaign_id) then raise exception 'Non puoi tirare per questo personaggio'; end if;
+  if exists (select 1 from rolls where group_id = t.id and character_id = p_char and kind = 'duality') then raise exception 'Hai già tirato'; end if;
+  if p_hope is not null or p_fear is not null then
+    if p_hope not between 1 and 12 or p_fear not between 1 and 12 then raise exception 'I dadi vanno da 1 a 12'; end if;
+    h := p_hope; f := p_fear;
+  else
+    h := 1 + floor(random() * 12)::int; f := 1 + floor(random() * 12)::int;
+  end if;
+  res := case when h = f then 'crit' when h > f then 'hope' else 'fear' end;
+  insert into rolls (campaign_id, character_id, user_id, roller_name, label, hope_die, fear_die, adv_die,
+                     modifier, total, outcome, group_id, pending, manual)
+  values (t.campaign_id, c.id, auth.uid(), c.name, trim('Tiro Combinato ' || coalesce(p_label, '')), h, f, 0,
+          coalesce(p_modifier, 0), h + f + coalesce(p_modifier, 0), res, t.id, true, p_hope is not null)
+  returning * into r;
+  update tag_teams set updated_at = now() where id = t.id;
+  return r;
+end $$;
+
+create or replace function public.tag_resolve(p_tag uuid, p_roll uuid)
+returns public.tag_teams language plpgsql security definer set search_path = public as $$
+declare t tag_teams; r rolls; eff jsonb; cid uuid; nh int; ns int; fb int; ids uuid[];
+begin
+  select * into t from tag_teams where id = p_tag for update;
+  if not found or t.status <> 'joined' then raise exception 'Il Tiro Combinato non è pronto'; end if;
+  if auth.uid() not in (t.initiator_user, t.partner_user) and not is_gm(t.campaign_id) then raise exception 'Non partecipi a questo tiro'; end if;
+  if t.difficulty is null then raise exception 'Il master non ha ancora fissato la Difficoltà'; end if;
+  if (select count(*) from rolls where group_id = t.id and kind = 'duality') < 2 then raise exception 'Mancano ancora dei tiri'; end if;
+  select * into r from rolls where id = p_roll and group_id = t.id and kind = 'duality';
+  if not found then raise exception 'Tiro non valido'; end if;
+  ids := array[t.initiator_char, t.partner_char];
+  if r.outcome = 'fear' then
+    select fear into fb from campaigns where id = t.campaign_id for update;
+    update campaigns set fear = least(fb + 2, 12) where id = t.campaign_id;
+    eff := jsonb_build_object('fear', least(fb + 2, 12) - fb);
+  else
+    eff := jsonb_build_object('hope', '{}'::jsonb, 'stress', '{}'::jsonb);
+    foreach cid in array ids loop
+      select hope, stress_marked into nh, ns from characters where id = cid for update;
+      update characters
+         set hope = least(hope + 1, coalesce((data->>'hope_max')::int, 6)),
+             stress_marked = case when r.outcome = 'crit' then greatest(stress_marked - 1, 0) else stress_marked end
+       where id = cid;
+      eff := jsonb_set(eff, array['hope', cid::text], to_jsonb((select hope from characters where id = cid) - nh));
+      eff := jsonb_set(eff, array['stress', cid::text], to_jsonb(ns - (select stress_marked from characters where id = cid)));
+    end loop;
+  end if;
+  delete from rolls where group_id = t.id and kind = 'duality' and id <> r.id;
+  update rolls set pending = false, effects = eff,
+         label = trim(label || case when r.outcome = 'crit' or r.total >= t.difficulty then ' (riuscito)' else ' (fallito)' end)
+   where id = r.id;
+  update tag_teams set status = 'resolved', chosen_roll = r.id,
+         success = (r.outcome = 'crit' or r.total >= t.difficulty), updated_at = now()
+   where id = t.id returning * into t;
+  return t;
+end $$;
+
+grant execute on function public.tag_open(uuid) to authenticated;
+grant execute on function public.tag_join(uuid, uuid) to authenticated;
+grant execute on function public.tag_cancel(uuid) to authenticated;
+grant execute on function public.tag_set_difficulty(uuid, int) to authenticated;
+grant execute on function public.tag_roll(uuid, uuid, int, text, int, int) to authenticated;
+grant execute on function public.tag_resolve(uuid, uuid) to authenticated;

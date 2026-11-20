@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import type { Backend, Campaign, Character, Member, Roll } from './types'
+import type { Backend, Campaign, Character, Member, Roll, TagTeam } from './types'
 
 /** Stato di una campagna sincronizzato in tempo reale (PG, Paura, tiri, membri). */
 export function useCampaignLive(be: Backend, campaignId: string | undefined, userId: string | undefined, onForeignRoll?: (r: Roll) => void) {
@@ -7,6 +7,7 @@ export function useCampaignLive(be: Backend, campaignId: string | undefined, use
   const [characters, setCharacters] = useState<Character[]>([])
   const [members, setMembers] = useState<Member[]>([])
   const [rolls, setRolls] = useState<Roll[]>([])
+  const [tag, setTag] = useState<TagTeam | null>(null)
   const rollsRef = useRef<Roll[]>([])
   rollsRef.current = rolls
   const [error, setError] = useState<string | null>(null)
@@ -28,6 +29,7 @@ export function useCampaignLive(be: Backend, campaignId: string | undefined, use
       .then(([c, ch, m, r]) => { if (!alive) return; setCampaign(c); setCharacters(ch); setMembers(m); setRolls(r) })
       .catch(e => alive && setError(e.message))
       .finally(() => alive && setLoading(false))
+    be.getActiveTag(campaignId).then(t => alive && setTag(t)).catch(() => {})
 
     const unsub = be.subscribe(campaignId, {
       onCampaign: c => setCampaign(prev => ({ ...(prev ?? c), ...c })),
@@ -49,12 +51,15 @@ export function useCampaignLive(be: Backend, campaignId: string | undefined, use
       },
       onRollDelete: id => setRolls(xs => xs.filter(x => x.id !== id)),
       onMembers: reloadMembers,
+      onTag: t => setTag(prev => (!prev || t.created_at >= prev.created_at ? t : prev)),
     })
     // al ritorno in primo piano (telefono in tasca) ricarico tutto
     const onVis = () => {
       if (document.visibilityState !== 'visible') return
       be.getCampaign(campaignId).then(setCampaign).catch(() => {})
       be.listCharacters(campaignId).then(setCharacters).catch(() => {})
+      be.listRolls(campaignId).then(setRolls).catch(() => {})
+      be.getActiveTag(campaignId).then(setTag).catch(() => {})
     }
     document.addEventListener('visibilitychange', onVis)
     return () => { alive = false; unsub(); document.removeEventListener('visibilitychange', onVis) }
@@ -87,5 +92,5 @@ export function useCampaignLive(be: Backend, campaignId: string | undefined, use
   const removeRoll = (id: string) => setRolls(xs => xs.filter(x => x.id !== id))
   const addRoll = (r: Roll) => setRolls(xs => (xs.some(x => x.id === r.id) ? xs : [r, ...xs].slice(0, 50)))
 
-  return { campaign, characters, members, rolls, error, loading, patchCharacter, patchCampaign, addRoll, removeRoll, replaceRolls, setCharacters, setCampaign }
+  return { campaign, characters, members, rolls, error, loading, patchCharacter, patchCampaign, addRoll, removeRoll, replaceRolls, tag, setTag, setCharacters, setCampaign }
 }

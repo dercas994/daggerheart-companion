@@ -15,6 +15,7 @@ import { Gallery } from '../components/Gallery'
 import { MiniPlayer, Music, usePlayer } from '../components/Music'
 import { DiceSheet } from '../components/DiceSheet'
 import { FearAura } from '../components/FearAura'
+import { TagTeamFlow } from '../components/TagTeam'
 
 const TAB_LABEL: Record<CampaignTab, string> = { tavolo: 'Tavolo', storia: 'Storia', galleria: 'Galleria', musica: 'Musica' }
 
@@ -114,6 +115,7 @@ export function CampaignPage({ id, tab }: { id: string; tab: CampaignTab }) {
       </main>
 
       <FearAura fear={campaign.fear} enabled={!isGm} />
+      <TagTeamFlow tag={live.tag} characters={characters} rolls={rolls} isGm={isGm} onRollAdded={live.addRoll} />
       {tab !== 'musica' && <MiniPlayer p={player} onOpen={() => go(`/c/${id}/musica`)} />}
       {isGm && <UndoRollSheet key={undoing?.id} roll={undoing} onClose={() => setUndoing(null)} onConfirm={async revert => {
         await be.undoRoll(undoing!.id, revert)

@@ -843,3 +843,49 @@ button.dcard:hover { transform: translateY(-2px); }
   .party-card.critical, .party-card.critical .pips-hp .pip .ic { animation: none; box-shadow: 0 0 0 2px rgba(224, 103, 92, 0.8); }
   .fa-puff { display: none; }
 }
+
+/* ---------- Tiro Combinato su invito ---------- */
+.tt-modal { position: fixed; inset: 0; z-index: 96; display: grid; place-items: center; padding: 1rem; background: rgba(10, 6, 18, 0.9); animation: fade 0.3s; overflow-y: auto; }
+.tt-card { width: min(560px, 100%); background: var(--dusk); border: 1px solid var(--line); border-radius: var(--r-l, 18px); padding: 1.2rem 1.1rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); animation: rise 0.35s ease-out; }
+.tt-card h2 { font-family: var(--f-display); margin: 0; }
+.tt-top { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+.tt-sub { color: var(--muted); margin: 0.3rem 0 0.6rem; }
+.tt-sub b { color: var(--parchment); font-family: var(--f-display); font-size: 1.2rem; }
+.tt-invite { text-align: center; border-color: rgba(233, 185, 73, 0.5);
+  background: radial-gradient(120% 80% at 50% 0%, rgba(233, 185, 73, 0.16), transparent 60%), var(--dusk); }
+.tt-invite p { color: #E8DCC3; font-family: var(--f-serif); font-size: 1.05rem; }
+.tt-actions { display: grid; gap: 0.5rem; margin-top: 0.8rem; }
+.tt-sigil { position: relative; width: 64px; height: 44px; margin: 0 auto 0.4rem; }
+.tt-sigil i { position: absolute; top: 4px; width: 34px; height: 34px; border-radius: 6px; transform: rotate(45deg); }
+.tt-sigil i:first-child { left: 4px; background: var(--hope); box-shadow: 0 0 16px rgba(233, 185, 73, 0.7); animation: tt-meet-l 2.4s ease-in-out infinite; }
+.tt-sigil i:last-child { right: 4px; background: var(--fear); box-shadow: 0 0 16px rgba(154, 107, 224, 0.7); mix-blend-mode: screen; animation: tt-meet-r 2.4s ease-in-out infinite; }
+@keyframes tt-meet-l { 50% { transform: translateX(8px) rotate(45deg); } }
+@keyframes tt-meet-r { 50% { transform: translateX(-8px) rotate(45deg); } }
+.tt-myroll { border-top: 1px solid var(--line); margin-top: 0.6rem; padding-top: 0.4rem; }
+.tt-phys { display: flex; gap: 0.8rem; }
+.tt-phys label { display: grid; gap: 0.2rem; font-size: 0.85rem; flex: 1; }
+.tt-phys .hope-t { color: var(--hope); } .tt-phys .fear-t { color: var(--fear-glow); }
+.tag-opt.waiting { cursor: default; border-style: dashed; opacity: 0.7; }
+.to-wait { color: var(--muted); font-style: italic; padding: 1.2rem 0; }
+.to-ok { font-size: 0.8rem; font-weight: 700; }
+.to-ok.ok { color: #8FD48A; } .to-ok.ko { color: var(--danger); }
+.tag-opt:disabled { cursor: default; transform: none; }
+.tt-cancel { display: block; margin: 0.8rem auto 0; }
+.tt-diff { display: flex; align-items: flex-end; gap: 0.5rem; flex-wrap: wrap; margin: 0.4rem 0 0.6rem; }
+.tt-diff label { display: grid; gap: 0.2rem; font-size: 0.85rem; color: var(--muted); }
+.tt-diff input { width: 6rem; font-size: 1.2rem; }
+.tt-dock { position: fixed; z-index: 45; left: 50%; transform: translateX(-50%); top: calc(4.6rem + env(safe-area-inset-top, 0px)); max-height: 70vh; overflow-y: auto; width: min(560px, calc(100% - 1.4rem));
+  padding: 0.8rem 0.9rem; border-radius: var(--r-m); background: rgba(44, 35, 65, 0.97); border: 1px solid rgba(233, 185, 73, 0.45);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45); animation: rise 0.3s ease-out; }
+.tt-dock p { margin: 0 0 0.4rem; }
+.tt-result.ok { border-color: rgba(143, 212, 138, 0.6); }
+.tt-result.ko { border-color: rgba(200, 71, 62, 0.6); }
+.tt-verdict { font-family: var(--f-display); font-size: 1.15rem; }
+.tt-result.ok .tt-verdict { color: #A8E3A3; } .tt-result.ko .tt-verdict { color: #F09A90; }
+.tt-dmg { list-style: none; padding: 0; margin: 0.3rem 0; display: grid; gap: 0.2rem; }
+.tt-dmg li { display: flex; justify-content: space-between; }
+.tt-total b { font-family: var(--f-display); font-size: 1.6rem; color: #F7B48F; margin-left: 0.4rem; }
+.tt-pill { position: fixed; z-index: 45; left: 50%; transform: translateX(-50%); top: calc(4.6rem + env(safe-area-inset-top, 0px)); border-radius: 999px; padding: 0.55rem 1.1rem;
+  border: 1px solid var(--hope); background: rgba(44, 35, 65, 0.97); color: var(--hope-glow); font: inherit; font-weight: 700; cursor: pointer; animation: rise 0.3s; }
+@media (prefers-reduced-motion: reduce) { .tt-sigil i { animation: none; } }
