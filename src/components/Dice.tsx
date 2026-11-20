@@ -126,7 +126,9 @@ function DualityOverlay({ roll, onClose, ownRoll = true }: OverlayProps) {
   if (roll.adv_die) math += roll.adv_die > 0 ? ` + ${roll.adv_die} (vantaggio)` : ` − ${-roll.adv_die} (svantaggio)`
   if (roll.modifier) math += roll.modifier > 0 ? ` + ${roll.modifier}` : ` − ${-roll.modifier}`
 
-  const effect = roll.outcome === 'fear'
+  const effect = roll.reaction ? 'Tiro di reazione: niente Speranza né Paura'
+    : roll.effects ? (roll.effects.fear != null ? `Il master guadagna ${roll.effects.fear} Paura` : `+1 Speranza a entrambi${roll.outcome === 'crit' ? ' e −1 Stress' : ''}`)
+    : roll.outcome === 'fear'
     ? 'Il master guadagna 1 Paura'
     : roll.character_id
       ? roll.outcome === 'crit' ? '+1 Speranza e −1 Stress' : '+1 Speranza'

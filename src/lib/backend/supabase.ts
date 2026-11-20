@@ -127,6 +127,7 @@ export function createSupabaseBackend(url: string, key: string): Backend {
       const { data, error } = await sb.rpc('roll_duality', {
         p_campaign: campaignId, p_character: characterId, p_modifier: req.modifier, p_label: req.label, p_advantage: req.advantage,
         ...(req.manual ? { p_hope: req.manual.hope, p_fear: req.manual.fear, p_adv: req.manual.adv ?? null } : {}),
+        ...(req.reaction ? { p_reaction: true } : {}),
       })
       fail(error)
       return data as Roll
@@ -138,6 +139,22 @@ export function createSupabaseBackend(url: string, key: string): Backend {
       })
       fail(error)
       return data as Roll
+    },
+    async tagTeam(campaignId, a, b) {
+      const { data, error } = await sb.rpc('roll_tag_team', {
+        p_campaign: campaignId, p_a: a.id, p_mod_a: a.modifier, p_label_a: a.label, p_b: b.id, p_mod_b: b.modifier, p_label_b: b.label,
+      })
+      fail(error)
+      return (data ?? []) as Roll[]
+    },
+    async resolveTagTeam(groupId, chosen) {
+      const { data, error } = await sb.rpc('resolve_tag_team', { p_group: groupId, p_chosen: chosen })
+      fail(error)
+      return data as Roll
+    },
+    async protectLife(fromId, toId) {
+      const { error } = await sb.rpc('protect_life', { p_from: fromId, p_to: toId })
+      fail(error)
     },
     async undoRoll(rollId, revert) {
       const { error } = await sb.rpc('undo_roll', { p_roll: rollId, p_revert: revert })
@@ -209,6 +226,7 @@ export function createSupabaseBackend(url: string, key: string): Backend {
         .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'campaigns', filter: `id=eq.${campaignId}` }, (p: any) => h.onCampaign?.(p.new as Campaign))
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'rolls', filter: `campaign_id=eq.${campaignId}` }, (p: any) => h.onRoll?.(p.new as Roll))
         // le DELETE non si possono filtrare: arriva solo l'id, lo cerco nella lista locale
+        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'rolls', filter: `campaign_id=eq.${campaignId}` }, (p: any) => h.onRollUpdate?.(p.new as Roll))
         .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'rolls' }, (p: any) => p.old?.id && h.onRollDelete?.(p.old.id))
         .on('postgres_changes', { event: '*', schema: 'public', table: 'campaign_members', filter: `campaign_id=eq.${campaignId}` }, () => h.onMembers?.())
         .on('postgres_changes', { event: '*', schema: 'public', table: 'session_recaps', filter: `campaign_id=eq.${campaignId}` }, () => h.onRecaps?.())

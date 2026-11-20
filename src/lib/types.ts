@@ -120,6 +120,12 @@ export interface Roll {
   dice?: { groups: { sides: number; n: number; rolls: number[] }[]; bonus: number; crit_bonus: number } | null
   damage_type?: 'phy' | 'mag' | null
   crit?: boolean
+  /** tiro di reazione: niente Speranza né Paura */
+  reaction?: boolean
+  /** Tiro Combinato: i due tiri condividono group_id; pending finché non si sceglie */
+  group_id?: string | null
+  pending?: boolean
+  effects?: { hope?: Record<string, number>; stress?: Record<string, number>; fear?: number } | null
   /** true se il giocatore ha inserito il risultato di dadi fisici */
   manual?: boolean
   hope_gain?: number | null
@@ -142,6 +148,7 @@ export interface DiceRequest {
 
 export interface RollRequest {
   modifier: number; label: string; advantage: -1 | 0 | 1
+  reaction?: boolean
   /** dadi fisici: valori letti dal tavolo */
   manual?: { hope: number; fear: number; adv?: number }
 }
@@ -181,6 +188,7 @@ export interface RealtimeHandlers {
   onCampaign?: (c: Campaign) => void
   onRoll?: (r: Roll) => void
   onRollDelete?: (id: string) => void
+  onRollUpdate?: (r: Roll) => void
   onMembers?: () => void
   onRecaps?: () => void
   onMedia?: () => void
@@ -212,6 +220,11 @@ export interface Backend {
   deletePortrait(url: string): Promise<void>
   roll(campaignId: string, characterId: string | null, req: RollRequest): Promise<Roll>
   rollDice(campaignId: string, characterId: string | null, req: DiceRequest): Promise<Roll>
+  /** Tiro Combinato: spende 3 Speranza di A, tira per entrambi; poi resolveTagTeam sceglie il risultato */
+  tagTeam(campaignId: string, a: { id: string; modifier: number; label: string }, b: { id: string; modifier: number; label: string }): Promise<Roll[]>
+  resolveTagTeam(groupId: string, chosenRollId: string): Promise<Roll>
+  /** Serafino: 3 Speranza per togliere 1 PF a un alleato */
+  protectLife(fromId: string, toId: string): Promise<void>
   listRolls(campaignId: string, limit?: number): Promise<Roll[]>
   /** solo master: elimina il tiro e, se revert, toglie Speranza/Paura che aveva dato */
   undoRoll(rollId: string, revert: boolean): Promise<void>

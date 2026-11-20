@@ -590,3 +590,217 @@ begin
   return r;
 end $$;
 grant execute on function public.roll_dice(uuid, uuid, text, jsonb, int, text, text, boolean, int) to authenticated;
+
+-- ---------------------------------------------------------------------
+--  Migrazione 8: mosse di gruppo (tiri di reazione, Tiro Combinato)
+--  e privilegio Speranza del Serafino che cura un alleato.
+-- ---------------------------------------------------------------------
+alter table public.rolls add column if not exists reaction boolean not null default false;
+alter table public.rolls add column if not exists group_id uuid;
+alter table public.rolls add column if not exists pending boolean not null default false;
+-- effetti applicati da un tiro su più personaggi: {"hope":{"<id>":1},"stress":{"<id>":1},"fear":2}
+alter table public.rolls add column if not exists effects jsonb;
+
+drop function if exists public.roll_duality(uuid, uuid, int, text, int, int, int, int);
+create or replace function public.roll_duality(
+  p_campaign  uuid,
+  p_character uuid,
+  p_modifier  int  default 0,
+  p_label     text default '',
+  p_advantage int  default 0,      -- 1 vantaggio, -1 svantaggio, 0 nessuno
+  p_hope      int  default null,   -- dadi fisici: valori inseriti a mano
+  p_fear      int  default null,
+  p_adv       int  default null,   -- valore del d6 (sempre positivo)
+  p_reaction  boolean default false -- tiro di reazione: niente Speranza né Paura
+) returns public.rolls language plpgsql security definer set search_path = public as $$
+declare
+  ch characters;
+  r rolls;
+  manual boolean := p_hope is not null or p_fear is not null;
+  h int;
+  f int;
+  a int := 0;
+  res text;
+  who text;
+  fb int;
+  nh int;
+  ns int;
+begin
+  if not is_member(p_campaign) then raise exception 'Non fai parte di questa campagna'; end if;
+
+  if p_character is not null then
+    select * into ch from characters where id = p_character and campaign_id = p_campaign;
+    if not found then raise exception 'Personaggio non trovato'; end if;
+    if ch.owner_id <> auth.uid() and not is_gm(p_campaign) then
+      raise exception 'Non puoi tirare per questo personaggio';
+    end if;
+    who := ch.name;
+  else
+    select display_name into who from profiles where id = auth.uid();
+  end if;
+
+  if manual then
+    if p_hope is null or p_fear is null or p_hope not between 1 and 12 or p_fear not between 1 and 12 then
+      raise exception 'I dadi di Speranza e Paura vanno da 1 a 12';
+    end if;
+    if p_advantage <> 0 and (p_adv is null or p_adv not between 1 and 6) then
+      raise exception 'Il dado di vantaggio va da 1 a 6';
+    end if;
+    h := p_hope; f := p_fear;
+    if p_advantage <> 0 then a := sign(p_advantage) * p_adv; end if;
+  else
+    h := 1 + floor(random() * 12)::int;
+    f := 1 + floor(random() * 12)::int;
+    if p_advantage > 0 then a := 1 + floor(random() * 6)::int;
+    elsif p_advantage < 0 then a := -(1 + floor(random() * 6)::int);
+    end if;
+  end if;
+
+  if h = f then res := 'crit';
+  elsif h > f then res := 'hope';
+  else res := 'fear';
+  end if;
+
+  insert into rolls (campaign_id, character_id, user_id, roller_name, label,
+                     hope_die, fear_die, adv_die, modifier, total, outcome, manual, reaction)
+  values (p_campaign, p_character, auth.uid(), coalesce(who,''), coalesce(p_label,''),
+          h, f, a, coalesce(p_modifier,0), h + f + a + coalesce(p_modifier,0), res, manual, coalesce(p_reaction, false))
+  returning * into r;
+
+  if coalesce(p_reaction, false) then
+    return r;
+  elsif res = 'fear' then
+    select fear into fb from campaigns where id = p_campaign for update;
+    update campaigns set fear = least(fb + 1, 12) where id = p_campaign;
+    update rolls set fear_gain = least(fb + 1, 12) - fb where id = r.id;
+  elsif p_character is not null then
+    update characters
+       set hope = least(hope + 1, coalesce((data->>'hope_max')::int, 6)),
+           stress_marked = case when res = 'crit' then greatest(stress_marked - 1, 0)
+                                else stress_marked end
+     where id = p_character
+     returning hope, stress_marked into nh, ns;
+    update rolls set hope_gain = nh - ch.hope, stress_cleared = ch.stress_marked - ns where id = r.id;
+  end if;
+
+  select * into r from rolls where id = r.id;
+  return r;
+end $$;
+grant execute on function public.roll_duality(uuid, uuid, int, text, int, int, int, int, boolean) to authenticated;
+
+-- Tiro Combinato: chi lo avvia spende 3 Speranza, si tirano entrambi i tiri senza effetti;
+-- poi si sceglie quale risultato vale per tutti e due (resolve_tag_team).
+create or replace function public.roll_tag_team(
+  p_campaign uuid, p_a uuid, p_mod_a int, p_label_a text, p_b uuid, p_mod_b int, p_label_b text
+) returns setof public.rolls language plpgsql security definer set search_path = public as $$
+declare
+  ca characters; cb characters; g uuid := gen_random_uuid();
+  h int; f int; res text;
+  who uuid; ch characters; m int; lab text;
+begin
+  select * into ca from characters where id = p_a and campaign_id = p_campaign;
+  select * into cb from characters where id = p_b and campaign_id = p_campaign;
+  if ca.id is null or cb.id is null or ca.id = cb.id then raise exception 'Scegli due personaggi diversi della campagna'; end if;
+  if ca.owner_id <> auth.uid() and not is_gm(p_campaign) then raise exception 'Non puoi avviare il tiro per questo personaggio'; end if;
+  if ca.hope < 3 then raise exception 'Servono 3 Speranza per il Tiro Combinato'; end if;
+  update characters set hope = hope - 3 where id = ca.id;
+  foreach who in array array[ca.id, cb.id] loop
+    if who = ca.id then ch := ca; m := p_mod_a; lab := p_label_a; else ch := cb; m := p_mod_b; lab := p_label_b; end if;
+    h := 1 + floor(random() * 12)::int;
+    f := 1 + floor(random() * 12)::int;
+    res := case when h = f then 'crit' when h > f then 'hope' else 'fear' end;
+    return query
+      insert into rolls (campaign_id, character_id, user_id, roller_name, label, hope_die, fear_die, adv_die,
+                         modifier, total, outcome, group_id, pending)
+      values (p_campaign, ch.id, auth.uid(), ch.name, trim('Tiro Combinato ' || coalesce(lab, '')), h, f, 0,
+              coalesce(m, 0), h + f + coalesce(m, 0), res, g, true)
+      returning *;
+  end loop;
+end $$;
+grant execute on function public.roll_tag_team(uuid, uuid, int, text, uuid, int, text) to authenticated;
+
+create or replace function public.resolve_tag_team(p_group uuid, p_chosen uuid)
+returns public.rolls language plpgsql security definer set search_path = public as $$
+declare
+  r rolls; other rolls; ids uuid[]; eff jsonb := '{}'::jsonb; cid uuid; nh int; ns int; fb int;
+begin
+  select * into r from rolls where id = p_chosen and group_id = p_group and pending;
+  if not found then raise exception 'Tiro già risolto'; end if;
+  if not exists (select 1 from rolls x join characters c on c.id = x.character_id
+                 where x.group_id = p_group and (c.owner_id = auth.uid()))
+     and not is_gm(r.campaign_id) then
+    raise exception 'Non partecipi a questo Tiro Combinato';
+  end if;
+  select array_agg(character_id) into ids from rolls where group_id = p_group;
+  if r.outcome = 'fear' then
+    select fear into fb from campaigns where id = r.campaign_id for update;
+    update campaigns set fear = least(fb + array_length(ids, 1), 12) where id = r.campaign_id;
+    eff := jsonb_build_object('fear', least(fb + array_length(ids, 1), 12) - fb);
+  else
+    eff := jsonb_build_object('hope', '{}'::jsonb, 'stress', '{}'::jsonb);
+    foreach cid in array ids loop
+      select hope, stress_marked into nh, ns from characters where id = cid for update;
+      update characters
+         set hope = least(hope + 1, coalesce((data->>'hope_max')::int, 6)),
+             stress_marked = case when r.outcome = 'crit' then greatest(stress_marked - 1, 0) else stress_marked end
+       where id = cid;
+      eff := jsonb_set(eff, array['hope', cid::text], to_jsonb((select hope from characters where id = cid) - nh));
+      eff := jsonb_set(eff, array['stress', cid::text], to_jsonb(ns - (select stress_marked from characters where id = cid)));
+    end loop;
+  end if;
+  delete from rolls where group_id = p_group and id <> p_chosen;
+  update rolls set pending = false, effects = eff, label = trim(label || ' (scelto)') where id = p_chosen returning * into r;
+  return r;
+end $$;
+grant execute on function public.resolve_tag_team(uuid, uuid) to authenticated;
+
+-- Annullare: anche i tiri combinati (effetti su più personaggi)
+create or replace function public.undo_roll(p_roll uuid, p_revert boolean default true)
+returns void language plpgsql security definer set search_path = public as $$
+declare
+  r rolls; k text; v jsonb;
+begin
+  select * into r from rolls where id = p_roll;
+  if not found then return; end if;
+  if not is_gm(r.campaign_id) then raise exception 'Solo il master può annullare i tiri'; end if;
+  if p_revert and r.kind = 'duality' and not r.reaction and not r.pending then
+    if r.effects is not null then
+      if r.effects ? 'fear' then
+        update campaigns set fear = greatest(fear - (r.effects->>'fear')::int, 0) where id = r.campaign_id;
+      end if;
+      for k, v in select * from jsonb_each(coalesce(r.effects->'hope', '{}'::jsonb)) loop
+        update characters set hope = greatest(hope - v::int, 0) where id = k::uuid;
+      end loop;
+      for k, v in select * from jsonb_each(coalesce(r.effects->'stress', '{}'::jsonb)) loop
+        update characters set stress_marked = least(stress_marked + v::int, stress_max) where id = k::uuid;
+      end loop;
+    elsif r.outcome = 'fear' then
+      update campaigns set fear = greatest(fear - coalesce(r.fear_gain, 1), 0) where id = r.campaign_id;
+    elsif r.character_id is not null then
+      update characters
+         set hope = greatest(hope - coalesce(r.hope_gain, 1), 0),
+             stress_marked = least(stress_marked + coalesce(r.stress_cleared, 0), stress_max)
+       where id = r.character_id;
+    end if;
+  end if;
+  if r.group_id is not null and r.pending then
+    delete from rolls where group_id = r.group_id;
+  else
+    delete from rolls where id = p_roll;
+  end if;
+end $$;
+
+-- Serafino, "Proteggere la Vita": 3 Speranza per togliere 1 PF a un alleato
+create or replace function public.protect_life(p_from uuid, p_to uuid)
+returns void language plpgsql security definer set search_path = public as $$
+declare a characters; b characters;
+begin
+  select * into a from characters where id = p_from;
+  select * into b from characters where id = p_to;
+  if a.id is null or b.id is null or a.campaign_id <> b.campaign_id then raise exception 'Alleato non valido'; end if;
+  if a.owner_id <> auth.uid() and not is_gm(a.campaign_id) then raise exception 'Non puoi usare questo personaggio'; end if;
+  if a.hope < 3 then raise exception 'Servono 3 Speranza'; end if;
+  update characters set hope = hope - 3 where id = a.id;
+  update characters set hp_marked = greatest(hp_marked - 1, 0) where id = b.id;
+end $$;
+grant execute on function public.protect_life(uuid, uuid) to authenticated;

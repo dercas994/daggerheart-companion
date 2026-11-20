@@ -7,6 +7,7 @@ import { Sheet, Stepper } from './ui'
 
 export interface RollChoice {
   modifier: number; label: string; advantage: -1 | 0 | 1; hopeSpent: number
+  reaction?: boolean
   manual?: { hope: number; fear: number; adv?: number }
 }
 
@@ -23,9 +24,9 @@ function DieGrid({ sides, value, onPick, tone, label }: { sides: number; value: 
   )
 }
 
-export function RollSheet({ open, onClose, character, presetTrait, onRoll, onOtherDice }: {
+export function RollSheet({ open, onClose, character, presetTrait, presetExtra = 0, presetLabel = '', onRoll, onOtherDice }: {
   open: boolean; onClose: () => void; character: Character | null
-  presetTrait?: TraitKey | null; onRoll: (c: RollChoice) => void; onOtherDice?: () => void
+  presetTrait?: TraitKey | null; presetExtra?: number; presetLabel?: string; onRoll: (c: RollChoice) => void; onOtherDice?: () => void
 }) {
   const [trait, setTrait] = useState<TraitKey | null>(null)
   const [exps, setExps] = useState<number[]>([])
@@ -36,11 +37,12 @@ export function RollSheet({ open, onClose, character, presetTrait, onRoll, onOth
   const [hDie, setHDie] = useState<number | null>(null)
   const [fDie, setFDie] = useState<number | null>(null)
   const [aDie, setADie] = useState<number | null>(null)
+  const [reaction, setReaction] = useState(false)
   const setMode = (m: 'app' | 'physical') => { setModeState(m); try { localStorage.setItem(MODE_KEY, m) } catch { /* niente */ } }
 
   useEffect(() => {
-    if (open) { setTrait(presetTrait ?? null); setExps([]); setAdv(0); setExtra(0); setLabel(''); setHDie(null); setFDie(null); setADie(null) }
-  }, [open, presetTrait])
+    if (open) { setTrait(presetTrait ?? null); setExps([]); setAdv(0); setExtra(presetExtra); setLabel(presetLabel); setHDie(null); setFDie(null); setADie(null); setReaction(false) }
+  }, [open, presetTrait, presetExtra, presetLabel])
 
   const d = character?.data
   const spell = d ? spellcastTrait(d) : null
@@ -57,7 +59,7 @@ export function RollSheet({ open, onClose, character, presetTrait, onRoll, onOth
   }
 
   return (
-    <Sheet open={open} onClose={onClose} title="Tiro di Dualità">
+    <Sheet open={open} onClose={onClose} title={reaction ? 'Tiro di reazione' : 'Tiro di Dualità'}>
       <div className="seg dice-mode">
         <button type="button" className={mode === 'app' ? 'sel' : ''} onClick={() => setMode('app')}>Dadi dell’app</button>
         <button type="button" className={mode === 'physical' ? 'sel' : ''} onClick={() => setMode('physical')}>Dadi fisici</button>
@@ -89,6 +91,11 @@ export function RollSheet({ open, onClose, character, presetTrait, onRoll, onOth
           )}
         </>
       )}
+
+      <label className="toggle">
+        <input type="checkbox" checked={reaction} onChange={e => setReaction(e.target.checked)} />
+        Tiro di reazione: non dà Speranza né Paura (per esempio quando aiuti in un’Azione di gruppo)
+      </label>
 
       <p className="field-title">Vantaggio</p>
       <div className="seg">
@@ -129,12 +136,12 @@ export function RollSheet({ open, onClose, character, presetTrait, onRoll, onOth
       )}
 
       {mode === 'app' ? (
-        <button type="button" className="btn btn-roll" onClick={() => onRoll({ modifier: total, label: label.trim() || autoLabel, advantage: adv, hopeSpent: exps.length })}>
+        <button type="button" className="btn btn-roll" onClick={() => onRoll({ modifier: total, label: label.trim() || autoLabel, advantage: adv, hopeSpent: exps.length, reaction })}>
           Tira 2d12 {total !== 0 && <span>{fmt(total)}</span>}{adv !== 0 && <span>{adv > 0 ? '+d6' : '−d6'}</span>}
         </button>
       ) : (
         <button type="button" className="btn btn-roll" disabled={!hDie || !fDie || (adv !== 0 && !aDie)}
-          onClick={() => onRoll({ modifier: total, label: label.trim() || autoLabel, advantage: adv, hopeSpent: exps.length, manual: { hope: hDie!, fear: fDie!, adv: adv !== 0 ? aDie! : undefined } })}>
+          onClick={() => onRoll({ modifier: total, label: label.trim() || autoLabel, advantage: adv, hopeSpent: exps.length, reaction, manual: { hope: hDie!, fear: fDie!, adv: adv !== 0 ? aDie! : undefined } })}>
           Registra il tiro
         </button>
       )}

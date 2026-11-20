@@ -62,7 +62,7 @@ export function FearTrack({ value, onChange, big }: { value: number; onChange?: 
 }
 
 const OUT = { hope: 'Speranza', fear: 'Paura', crit: 'Critico' }
-const rollTag = (r: Roll) => r.kind === 'damage' ? `Danni ${r.damage_type === 'mag' ? 'magici' : 'fisici'}` : r.kind === 'dice' ? 'Dadi' : r.outcome ? OUT[r.outcome] : ''
+const rollTag = (r: Roll) => r.pending ? 'In attesa di scelta' : r.reaction ? `Reazione${r.outcome ? ', ' + OUT[r.outcome].toLowerCase() : ''}` : r.kind === 'damage' ? `Danni ${r.damage_type === 'mag' ? 'magici' : 'fisici'}` : r.kind === 'dice' ? 'Dadi' : r.outcome ? OUT[r.outcome] : ''
 function rollDetail(r: Roll) {
   const phys = r.manual ? ', dadi fisici' : ''
   if (r.kind && r.kind !== 'duality') {
@@ -101,7 +101,9 @@ export function UndoRollSheet({ roll, onClose, onConfirm }: { roll: Roll | null;
   if (!roll) return null
   const r = roll
   let effect: string | null
-  if (r.kind && r.kind !== 'duality') effect = null
+  if ((r.kind && r.kind !== 'duality') || r.reaction) effect = null
+  else if (r.pending) effect = null
+  else if (r.effects) effect = r.effects.fear != null ? `toglie ${r.effects.fear} Paura alla tua riserva` : 'toglie la Speranza data a entrambi (e rimette lo Stress del critico)'
   else if (r.outcome === 'fear') effect = `toglie ${r.fear_gain ?? 1} Paura alla tua riserva`
   else if (!r.character_id) effect = 'non aveva dato Speranza a nessun personaggio'
   else {

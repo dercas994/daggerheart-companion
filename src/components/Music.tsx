@@ -125,17 +125,17 @@ export function Music({ campaignId, media, reload, isGm, p }: { campaignId: stri
 
       {p.tracks.length === 0 && <p className="empty">Nessun brano ancora. Aggiungi le musiche d'atmosfera per le sessioni: taverne, battaglie, momenti tristi.</p>}
       {albums.map(a => (
-        <div key={a} className="track-group">
+        <div key={a} className="song-group">
           {(albums.length > 1 || a) && <h3>{a || 'Senza album'}</h3>}
-          <ul className="tracks">
+          <ul className="songs">
             {p.tracks.filter(t => t.album === a).map(t => {
               const cur = p.current?.id === t.id
               return (
                 <li key={t.id} className={cur ? 'cur' : ''}>
-                  <button className="track" onClick={() => p.play(t)} aria-label={`${cur && p.playing ? 'Pausa' : 'Riproduci'} ${t.title}`}>
-                    <span className="track-icon">{cur && p.playing ? <Bars /> : <PlayIcon />}</span>
-                    <span className="track-title">{t.title || 'Senza titolo'}</span>
-                    {t.drive_id && <span className="track-src">Drive</span>}
+                  <button className="song" onClick={() => p.play(t)} aria-label={`${cur && p.playing ? 'Pausa' : 'Riproduci'} ${t.title}`}>
+                    <span className="song-icon">{cur && p.playing ? <Bars /> : <PlayIcon />}</span>
+                    <span className="song-title">{t.title || 'Senza titolo'}</span>
+                    {t.drive_id && <span className="song-src">Drive</span>}
                   </button>
                   {(t.created_by === user.id || isGm) && <button className="link-btn" onClick={() => setEditing(t)}>Modifica</button>}
                 </li>

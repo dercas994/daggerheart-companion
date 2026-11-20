@@ -7,6 +7,8 @@ export function useCampaignLive(be: Backend, campaignId: string | undefined, use
   const [characters, setCharacters] = useState<Character[]>([])
   const [members, setMembers] = useState<Member[]>([])
   const [rolls, setRolls] = useState<Roll[]>([])
+  const rollsRef = useRef<Roll[]>([])
+  rollsRef.current = rolls
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const uid = useRef(userId)
@@ -37,7 +39,13 @@ export function useCampaignLive(be: Backend, campaignId: string | undefined, use
       onCharacterDelete: id => setCharacters(xs => xs.filter(x => x.id !== id)),
       onRoll: r => {
         setRolls(xs => (xs.some(x => x.id === r.id) ? xs : [r, ...xs].slice(0, 50)))
-        if (r.user_id !== uid.current) foreign.current?.(r)
+        // un Tiro Combinato si mostra quando è stato scelto il risultato
+        if (r.user_id !== uid.current && !r.pending) foreign.current?.(r)
+      },
+      onRollUpdate: r => {
+        const was = rollsRef.current.find(x => x.id === r.id)
+        setRolls(xs => xs.map(x => (x.id === r.id ? { ...x, ...r } : x)))
+        if (r.group_id && !r.pending && was?.pending && r.user_id !== uid.current) foreign.current?.(r)
       },
       onRollDelete: id => setRolls(xs => xs.filter(x => x.id !== id)),
       onMembers: reloadMembers,
@@ -72,8 +80,12 @@ export function useCampaignLive(be: Backend, campaignId: string | undefined, use
     try { await be.updateCampaign(campaignId, patch) } catch (e) { setCampaign(before); throw e }
   }, [be, campaignId])
 
+  const replaceRolls = (rs: Roll[], dropGroup?: string) => setRolls(xs => {
+    const rest = xs.filter(x => !rs.some(r => r.id === x.id) && (!dropGroup || x.group_id !== dropGroup))
+    return [...rs, ...rest].sort((a, b) => b.created_at.localeCompare(a.created_at)).slice(0, 50)
+  })
   const removeRoll = (id: string) => setRolls(xs => xs.filter(x => x.id !== id))
   const addRoll = (r: Roll) => setRolls(xs => (xs.some(x => x.id === r.id) ? xs : [r, ...xs].slice(0, 50)))
 
-  return { campaign, characters, members, rolls, error, loading, patchCharacter, patchCampaign, addRoll, removeRoll, setCharacters, setCampaign }
+  return { campaign, characters, members, rolls, error, loading, patchCharacter, patchCampaign, addRoll, removeRoll, replaceRolls, setCharacters, setCampaign }
 }

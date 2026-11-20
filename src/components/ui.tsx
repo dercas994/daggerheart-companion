@@ -1,5 +1,22 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
 
+const PIP_ICON: Record<string, { d: string; crack?: string }> = {
+  hp: { d: 'M12 20.5s-7.6-4.5-9.4-9.4C1.3 7.6 3.4 4 6.9 4c2.2 0 3.9 1.3 5.1 3 1.2-1.7 2.9-3 5.1-3 3.5 0 5.6 3.6 4.3 7.1-1.8 4.9-9.4 9.4-9.4 9.4z', crack: 'M12.6 7.2l-1.9 3.6 2.6 1.6-1.9 4' },
+  stress: { d: 'M13.6 2.5 5.2 13.4h5.6l-1.3 8.1 8.9-11.4h-5.8z' },
+  hope: { d: 'M12 2.5 20.5 12 12 21.5 3.5 12z' },
+  armor: { d: 'M12 2.8 4.5 5.7v5.8c0 4.7 3.2 8.2 7.5 9.7 4.3-1.5 7.5-5 7.5-9.7V5.7z', crack: 'M13 6.5l-2.2 4 2.6 1.8-2 4.5' },
+}
+function PipIcon({ kind }: { kind: string }) {
+  const ic = PIP_ICON[kind]
+  if (!ic) return null
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path className="ic" d={ic.d} />
+      {ic.crack && <path className="crack" d={ic.crack} />}
+    </svg>
+  )
+}
+
 export function Pips({ max, value, kind, onChange, size = 'md', label }: {
   max: number; value: number; kind: 'hp' | 'stress' | 'hope' | 'armor' | 'fear'
   onChange?: (n: number) => void; size?: 'sm' | 'md' | 'lg'; label?: string
@@ -19,13 +36,13 @@ export function Pips({ max, value, kind, onChange, size = 'md', label }: {
       {Array.from({ length: max }, (_, i) => {
         const on = i < value
         const el = (
-          <span className={`pip ${on ? 'on' : ''} ${pulse === i ? 'pulse' : ''}`} key={i} />
+          <span className={`pip ${on ? 'on' : ''} ${pulse === i ? 'pulse' : ''}`} key={i}><PipIcon kind={kind} /></span>
         )
         if (!onChange) return el
         return (
           <button type="button" key={i} className={`pip ${on ? 'on' : ''} ${pulse === i ? 'pulse' : ''}`}
             aria-label={`${label ?? ''} ${i + 1}`} aria-pressed={on}
-            onClick={() => onChange(on && i === value - 1 ? i : i + 1)} />
+            onClick={() => onChange(on && i === value - 1 ? i : i + 1)}><PipIcon kind={kind} /></button>
         )
       })}
     </div>

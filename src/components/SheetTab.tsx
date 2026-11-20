@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import type { Character, TraitKey } from '../lib/types'
 import { TRAITS } from '../lib/types'
 import { className, fname, ftext, getAncestry, getClass, getCommunity, getSubclass, IT, type Feature } from '../data'
@@ -6,13 +6,17 @@ import { ancestryFeatures, fmt, getArmor, getWeapon, spellcastTrait, traitValue,
 import type { DicePreset } from './DiceSheet'
 import { HomebrewSection } from './Homebrew'
 import { FeatureList } from './CardView'
-import { Stepper } from './ui'
+import { ErrorLine, Sheet, Stepper, useAsync, useToast } from './ui'
+import { useApp } from '../App'
 
 const CONDITIONS = ['Vulnerabile', 'Trattenuto', 'Nascosto', 'Distratto', 'Avvelenato', 'In fiamme']
 
-export function SheetTab({ c, canEdit, patch, onRoll, onDamage }: {
+export function SheetTab({ c, canEdit, patch, onRoll, onDamage, allies = [], afterGear }: {
   c: Character; canEdit: boolean; patch: (p: Partial<Character>) => void; onRoll: (t: TraitKey | null) => void; onDamage?: (p: DicePreset) => void
+  allies?: Character[]; afterGear?: ReactNode
 }) {
+  const toast = useToast()
+  const [allyPick, setAllyPick] = useState(false)
   const d = c.data
   const cls = getClass(d.class_id)
   const sub = getSubclass(d.class_id, d.subclass_id)
@@ -77,6 +81,9 @@ export function SheetTab({ c, canEdit, patch, onRoll, onDamage }: {
         </div>
       </section>
 
+      {afterGear}
+      {allyPick && <ProtectLife c={c} allies={allies} onClose={() => setAllyPick(false)} />}
+
       <section>
         <h2>Esperienze</h2>
         <ul className="exp-list">
@@ -93,7 +100,7 @@ export function SheetTab({ c, canEdit, patch, onRoll, onDamage }: {
               <p>{ftext(cls.hope_feature)}</p>
             </div>
             {canEdit && (
-              <button className="btn btn-hope" disabled={c.hope < 3} onClick={() => patch({ hope: c.hope - 3 })}>Usa, 3 Speranza</button>
+              <HopeFeatureButton c={c} classId={d.class_id} patch={patch} toast={toast} onAlly={() => setAllyPick(true)} />
             )}
           </div>
           <FeatureList items={cls.features.map(f => ({ name: fname(f), text: ftext(f) }))} />
@@ -174,5 +181,55 @@ function LazyText({ value, onSave, disabled, rows, placeholder }: { value: strin
       onFocus={() => { setV(value); setFocused(true) }}
       onChange={e => setV(e.target.value)}
       onBlur={() => { setFocused(false); if (v !== value) onSave(v) }} />
+  )
+}
+
+/**
+ * Privilegio Speranza della classe (3 Speranza). Dove l'effetto è un numero sulla scheda
+ * lo applico; negli altri casi tolgo la Speranza e ricordo cosa fare.
+ */
+const HOPE_EFFECT: Record<string, { apply?: (c: Character) => Partial<Character>; can?: (c: Character) => string | null; done: string }> = {
+  guardian: { apply: c => ({ armor_marked: Math.max(0, c.armor_marked - 2) }), can: c => c.armor_marked === 0 ? 'Non hai slot Armatura segnati' : null, done: 'Liberati 2 slot Armatura' },
+  assassin: { apply: c => ({ stress_marked: Math.max(0, c.stress_marked - 2) }), can: c => c.stress_marked === 0 ? 'Non hai Stress segnato' : null, done: 'Rimossi 2 Stress' },
+  rogue: { done: '+2 Evasione fino al prossimo attacco che ti colpisce (o al riposo): ricordalo al master' },
+  warrior: { done: '+1 ai tiri attacco fino al prossimo riposo: aggiungilo in «Altri modificatori»' },
+  warlock: { done: 'Ripeti il tiro fallito con vantaggio' },
+  witch: { done: 'Il tiro fallito diventa un successo con Paura' },
+  sorcerer: { done: 'Ritira i dadi di danno che vuoi' },
+  druid: { done: 'Ti trasformi senza segnare Stress; +1 a un tratto finché resti in Forma Bestiale' },
+}
+
+function HopeFeatureButton({ c, classId, patch, toast, onAlly }: {
+  c: Character; classId: string; patch: (p: Partial<Character>) => void; toast: ReturnType<typeof useToast>; onAlly: () => void
+}) {
+  const eff = HOPE_EFFECT[classId]
+  const blocked = eff?.can?.(c) ?? null
+  if (classId === 'seraph') return <button className="btn btn-hope" disabled={c.hope < 3} onClick={onAlly}>Usa, 3 Speranza</button>
+  return (
+    <button className="btn btn-hope" disabled={c.hope < 3 || !!blocked} title={blocked ?? undefined} onClick={() => {
+      patch({ hope: c.hope - 3, ...(eff?.apply?.(c) ?? {}) })
+      toast({ text: eff?.done ?? 'Spese 3 Speranza', tone: 'hope' })
+    }}>Usa, 3 Speranza</button>
+  )
+}
+
+function ProtectLife({ c, allies, onClose }: { c: Character; allies: Character[]; onClose: () => void }) {
+  const { be } = useApp()
+  const toast = useToast()
+  const job = useAsync()
+  const hurt = allies.filter(a => a.hp_marked > 0)
+  return (
+    <Sheet open onClose={onClose} title="Proteggere la Vita">
+      <p className="hint">Spendi 3 Speranza per togliere un Punto Ferita a un alleato entro distanza Ravvicinata.</p>
+      {hurt.length === 0 && <p className="empty">Nessun alleato ha Punti Ferita segnati.</p>}
+      <div className="chip-grid">
+        {hurt.map(a => (
+          <button key={a.id} className="chip" disabled={job.busy} onClick={async () => {
+            if (await job.run(() => be.protectLife(c.id, a.id).then(() => true))) { toast({ text: `${a.name}: −1 Punto Ferita`, tone: 'hope' }); onClose() }
+          }}><span>{a.name}</span><b>{a.hp_marked} PF</b></button>
+        ))}
+      </div>
+      <ErrorLine error={job.error} />
+    </Sheet>
   )
 }

@@ -10,6 +10,9 @@ import { DiceOverlay, outcomeText, rollTone } from '../components/Dice'
 import { RollSheet, type RollChoice } from '../components/RollSheet'
 import { DiceSheet, type DicePreset } from '../components/DiceSheet'
 import type { DiceRequest } from '../lib/types'
+import { GroupMoves, TagTeamChoice } from '../components/GroupMoves'
+import { traitValue } from '../lib/rules'
+import { IT } from '../data'
 import { FearTrack, ownerName, PartyCard, RollLog } from '../components/Party'
 import { SheetTab } from '../components/SheetTab'
 import { CardsTab } from '../components/CardsTab'
@@ -32,6 +35,7 @@ export function CharacterPage({ id }: { id: string }) {
   const [rolling, setRolling] = useState(false)
   const [diceOpen, setDiceOpen] = useState(false)
   const [dicePreset, setDicePreset] = useState<DicePreset | null>(null)
+  const [rollPreset, setRollPreset] = useState<{ extra: number; label: string }>({ extra: 0, label: '' })
 
   // ricavo la campagna dal PG, poi uso lo stato live della campagna
   useEffect(() => { be.getCharacter(id).then(c => setCampaignId(c.campaign_id)).catch(e => setLoadErr(e.message)) }, [be, id])
@@ -54,14 +58,14 @@ export function CharacterPage({ id }: { id: string }) {
   const ownPortrait = c.data.portrait_url
   const portrait = ownPortrait || getAncestry(c.data.ancestry_id === 'mixed' ? c.data.mixed?.[0] : c.data.ancestry_id)?.image
 
-  function openRoll(t: TraitKey | null) { setPreset(t); setRollOpen(true) }
+  function openRoll(t: TraitKey | null) { setPreset(t); setRollPreset({ extra: 0, label: '' }); setRollOpen(true) }
 
   async function doRoll(choice: RollChoice) {
     if (!c || !campaignId || rolling) return
     setRollOpen(false); setRolling(true)
     try {
       if (choice.hopeSpent > 0) await live.patchCharacter(c.id, { hope: Math.max(0, c.hope - choice.hopeSpent) })
-      const r = await be.roll(campaignId, c.id, { modifier: choice.modifier, label: choice.label, advantage: choice.advantage, manual: choice.manual })
+      const r = await be.roll(campaignId, c.id, { modifier: choice.modifier, label: choice.label, advantage: choice.advantage, manual: choice.manual, reaction: choice.reaction })
       live.addRoll(r)
       setOverlay({ roll: r, own: true })
       // l'aggiornamento arriva anche via realtime; rileggo per sicurezza
@@ -83,6 +87,26 @@ export function CharacterPage({ id }: { id: string }) {
     } finally { setRolling(false) }
   }
   function openDice(p: DicePreset | null) { setDicePreset(p); setRollOpen(false); setDiceOpen(true) }
+
+  const allies = live.characters.filter(x => x.id !== c.id)
+  async function help(ally: Character) {
+    if (!c || !campaignId) return
+    await live.patchCharacter(c.id, { hope: Math.max(0, c.hope - 1) })
+    const r = await be.rollDice(campaignId, c.id, { label: `Aiuta ${ally.name}`, groups: [{ n: 1, sides: 6 }], bonus: 0, kind: 'dice' })
+    live.addRoll(r); setOverlay({ roll: r, own: true })
+  }
+  async function tagTeam(ally: Character, mine: { trait: TraitKey | null; extra: number }, theirs: { trait: TraitKey | null; extra: number }) {
+    if (!c || !campaignId) return
+    const rs = await be.tagTeam(campaignId,
+      { id: c.id, modifier: (mine.trait ? traitValue(c.data, mine.trait) : 0) + mine.extra, label: mine.trait ? IT.traits[mine.trait] : '' },
+      { id: ally.id, modifier: (theirs.trait ? traitValue(ally.data, theirs.trait) : 0) + theirs.extra, label: theirs.trait ? IT.traits[theirs.trait] : '' })
+    live.replaceRolls(rs)
+    be.getCharacter(c.id).then(x => live.setCharacters(xs => xs.map(y => (y.id === x.id ? x : y)))).catch(() => {})
+  }
+  // Tiro Combinato in attesa che riguarda uno dei miei personaggi
+  const myChars = new Set(live.characters.filter(x => x.owner_id === user.id).map(x => x.id))
+  const pendingGroup = live.rolls.find(r => r.pending && r.group_id && (r.user_id === user.id || live.rolls.some(o => o.group_id === r.group_id && o.character_id && myChars.has(o.character_id))))?.group_id
+  const pendingRolls = pendingGroup ? live.rolls.filter(r => r.group_id === pendingGroup).sort((a, b) => a.created_at.localeCompare(b.created_at)) : []
 
   const others = live.characters.filter(x => x.id !== c.id)
 
@@ -135,7 +159,9 @@ export function CharacterPage({ id }: { id: string }) {
       </nav>
 
       <main className="page tab-page">
-        {tab === 'scheda' && <SheetTab c={c} canEdit={canEdit} patch={patch} onRoll={openRoll} onDamage={openDice} />}
+        {tab === 'scheda' && <SheetTab c={c} canEdit={canEdit} patch={patch} onRoll={openRoll} onDamage={openDice} allies={allies}
+          afterGear={canEdit && <GroupMoves c={c} allies={allies} onHelp={help} onTagTeam={tagTeam}
+            onGroupAction={(m, l) => { setPreset(null); setRollPreset({ extra: m, label: l }); setRollOpen(true) }} />} />}
         {tab === 'carte' && <CardsTab c={c} canEdit={canEdit} patch={patch} />}
         {tab === 'gruppo' && (
           <>
@@ -154,7 +180,13 @@ export function CharacterPage({ id }: { id: string }) {
         </button>
       )}
 
-      <RollSheet open={rollOpen} onClose={() => setRollOpen(false)} character={c} presetTrait={preset} onRoll={doRoll} onOtherDice={() => openDice(null)} />
+      <RollSheet open={rollOpen} onClose={() => setRollOpen(false)} character={c} presetTrait={preset} presetExtra={rollPreset.extra} presetLabel={rollPreset.label} onRoll={doRoll} onOtherDice={() => openDice(null)} />
+      {pendingRolls.length >= 2 && !overlay && <TagTeamChoice key={pendingGroup} rolls={pendingRolls} onChoose={async (g, id) => {
+        const r = await be.resolveTagTeam(g, id)
+        live.replaceRolls([r], g)
+        setOverlay({ roll: r, own: true })
+        be.listCharacters(r.campaign_id).then(live.setCharacters).catch(() => {})
+      }} />}
       <DiceSheet open={diceOpen} onClose={() => setDiceOpen(false)} character={c} preset={dicePreset} onRoll={doDice} />
       {overlay && <DiceOverlay roll={overlay.roll} ownRoll={overlay.own} onClose={() => setOverlay(null)} />}
       <DamageSheet open={sheet === 'damage'} onClose={() => setSheet(null)} c={c} patch={patch} />
@@ -166,10 +198,16 @@ export function CharacterPage({ id }: { id: string }) {
   )
 }
 
+const TRACK_WORD = {
+  hp: (n: number) => n === 1 ? 'segnato' : 'segnati',
+  stress: (n: number) => n === 1 ? 'segnato' : 'segnati',
+  hope: () => '',
+  armor: (n: number) => n === 1 ? 'usato' : 'usati',
+}
 function Track({ label, kind, max, value, onChange }: { label: string; kind: 'hp' | 'stress' | 'hope' | 'armor'; max: number; value: number; onChange?: (n: number) => void }) {
   return (
     <div className={`track track-${kind}`}>
-      <div className="track-head"><span>{label}</span><b>{value}/{max}</b></div>
+      <div className="track-head"><span>{label}</span><span><b>{value}</b><small>{[TRACK_WORD[kind](value), `su ${max}`].filter(Boolean).join(" ")}</small></span></div>
       <Pips kind={kind} max={max} value={value} onChange={onChange} label={label} />
     </div>
   )
