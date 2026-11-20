@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef, useLayoutEffect } from 'react'
 import { useApp } from '../App'
 import type { Character, Roll, TraitKey } from '../lib/types'
 import { useCampaignLive } from '../lib/live'
@@ -16,6 +16,7 @@ import { GroupMoves } from '../components/GroupMoves'
 import { TagTeamFlow } from '../components/TagTeam'
 import { Countdowns } from '../components/Countdowns'
 import { FearAura, HopeAura } from '../components/FearAura'
+import { DeathCrack, LongRestSky, useRise } from '../components/Effects'
 import { FearTrack, ownerName, PartyCard, RollLog } from '../components/Party'
 import { SheetTab } from '../components/SheetTab'
 import { CardsTab } from '../components/CardsTab'
@@ -41,6 +42,8 @@ export function CharacterPage({ id }: { id: string }) {
   const [rollPreset, setRollPreset] = useState<{ extra: number; label: string; note?: string; adv?: -1 | 0 | 1 }>({ extra: 0, label: '' })
   const [pending, setPending] = useState<PendingBonus | null>(null)
   const [diceNote, setDiceNote] = useState(false)
+  const [restRun, setRestRun] = useState(0)
+  const [dawn, setDawn] = useState(false)
 
   // ricavo la campagna dal PG, poi uso lo stato live della campagna
   useEffect(() => { be.getCharacter(id).then(c => setCampaignId(c.campaign_id)).catch(e => setLoadErr(e.message)) }, [be, id])
@@ -49,6 +52,20 @@ export function CharacterPage({ id }: { id: string }) {
     toast({ text: outcomeText(r), tone: rollTone(r) })
   })
   const c = live.characters.find(x => x.id === id)
+  const levelTick = useRise(c?.level)
+  // le crepe partono dall'ultimo cuore segnato
+  const vitalsRef = useRef<HTMLElement>(null)
+  const [crackAt, setCrackAt] = useState({ x: 14, y: 30 })
+  const dying = !!c && c.hp_max > 0 && c.hp_marked >= c.hp_max
+  useLayoutEffect(() => {
+    const box = vitalsRef.current
+    if (!dying || !box) return
+    const pips = [...box.querySelectorAll<HTMLElement>('.track-hp .pip')]
+    if (!pips.length) return
+    const r = box.getBoundingClientRect()
+    const last = pips.map(p => p.getBoundingClientRect()).sort((a, b) => a.left - b.left)[0]
+    setCrackAt({ x: ((last.left + last.width / 2 - r.left) / r.width) * 100, y: ((last.top + last.height / 2 - r.top) / r.height) * 100 })
+  }, [dying])
 
   if (loadErr) return <div className="center-screen"><ErrorLine error={loadErr} /><a href="#/">Torna alla home</a></div>
   if (!c || !live.campaign) return <div className="center-screen"><Spinner /></div>
@@ -142,7 +159,17 @@ export function CharacterPage({ id }: { id: string }) {
         right={canEdit && <button className="btn btn-ghost small" onClick={() => setSheet('edit')}>Modifica</button>} />
 
       <header className="char-hero">
-        {portrait && <img className={`char-portrait ${ownPortrait ? 'own' : ''}`} src={portrait} alt={ownPortrait ? `Ritratto di ${c.name}` : ''} />}
+        {portrait && (
+          <div className={`portrait-frame ${levelTick ? 'leveled' : ''}`} key={`f${levelTick}`}>
+            <img className={`char-portrait ${ownPortrait ? 'own' : ''}`} src={portrait} alt={ownPortrait ? `Ritratto di ${c.name}` : ''} />
+            {levelTick > 0 && (
+              <svg className="lv-outline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                <rect x="0.6" y="0.6" width="98.8" height="98.8" rx="4" ry="4" pathLength={1} vectorEffect="non-scaling-stroke" />
+              </svg>
+            )}
+          </div>
+        )}
+        {levelTick > 0 && <p className="lv-engrave" key={`e${levelTick}`}>Livello {c.level}</p>}
         {!ownPortrait && canEdit && <button className="btn btn-ghost small hero-add-portrait" onClick={() => setSheet('edit')}>Aggiungi il ritratto del personaggio</button>}
         <h1 className="char-name">{c.name}</h1>
         <p className="char-line">
@@ -154,7 +181,8 @@ export function CharacterPage({ id }: { id: string }) {
 
       {campaignId && <Countdowns campaignId={campaignId} isGm={live.campaign.gm_id === user.id} compact />}
 
-      <section className="vitals panel">
+      <section ref={vitalsRef} className={`vitals panel ${dying ? 'dying' : ''} ${c.stress_max > 0 && c.stress_marked >= c.stress_max ? 'stress-full' : ''} ${dawn ? 'dawn' : ''}`}>
+        {dying && <DeathCrack seed={c.id} x={crackAt.x} y={crackAt.y} />}
         <div className="defense">
           <div className="def-box"><span>Evasione</span><b>{evasion(c.data)}</b></div>
           <div className="thresholds" aria-label="Soglie di danno">
@@ -224,7 +252,8 @@ export function CharacterPage({ id }: { id: string }) {
       <DiceSheet open={diceOpen} onClose={() => setDiceOpen(false)} character={c} preset={dicePreset} onRoll={doDice} />
       {overlay && <DiceOverlay roll={overlay.roll} ownRoll={overlay.own} onClose={() => setOverlay(null)} />}
       <DamageSheet open={sheet === 'damage'} onClose={() => setSheet(null)} c={c} patch={patch} />
-      <RestSheet open={sheet === 'rest'} onClose={() => setSheet(null)} c={c} patch={patch} />
+      <RestSheet open={sheet === 'rest'} onClose={() => setSheet(null)} c={c} patch={patch} onLongRest={() => { setSheet(null); setRestRun(Date.now()) }} />
+      <LongRestSky run={restRun} onDone={() => { setRestRun(0); setDawn(true); setTimeout(() => setDawn(false), 1600) }} />
       {sheet === 'level' && <LevelUpSheet open onClose={() => setSheet(null)} c={c} patch={patch} />}
       {sheet === 'edit' && <EditSheet open onClose={() => setSheet(null)} c={c} patch={patch}
         onDelete={async () => { await be.deleteCharacter(c.id); location.hash = `#/c/${c.campaign_id}` }} />}

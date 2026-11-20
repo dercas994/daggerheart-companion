@@ -63,8 +63,8 @@ export function HopeAura({ hope, enabled, wait = false, name }: { hope: number |
     const start = setTimeout(() => {
       setBurst({ id, gained })
       navigator.vibrate?.(30)
-    }, waitRef.current ? 1500 : 0)
-    const end = setTimeout(() => setBurst(b => (b?.id === id ? null : b)), (waitRef.current ? 1500 : 0) + 3600)
+    }, waitRef.current ? 2600 : 0)
+    const end = setTimeout(() => setBurst(b => (b?.id === id ? null : b)), (waitRef.current ? 2600 : 0) + 3600)
     return () => { clearTimeout(start); clearTimeout(end) }
   }, [hope, enabled])
 

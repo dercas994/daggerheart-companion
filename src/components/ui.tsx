@@ -22,9 +22,11 @@ export function Pips({ max, value, kind, onChange, size = 'md', label }: {
   onChange?: (n: number) => void; size?: 'sm' | 'md' | 'lg'; label?: string
 }) {
   const [pulse, setPulse] = useState<number | null>(null)
+  const [gain, setGain] = useState(false)
   const prev = useRef(value)
   useEffect(() => {
     if (value !== prev.current) {
+      setGain(value > prev.current)
       setPulse(value > prev.current ? value - 1 : value)
       const t = setTimeout(() => setPulse(null), 650)
       prev.current = value
@@ -32,15 +34,15 @@ export function Pips({ max, value, kind, onChange, size = 'md', label }: {
     }
   }, [value])
   return (
-    <div className={`pips pips-${kind} pips-${size}`} role="group" aria-label={label}>
+    <div className={`pips pips-${kind} pips-${size} ${max > 0 && value >= max ? 'full' : ''}`} role="group" aria-label={label}>
       {Array.from({ length: max }, (_, i) => {
         const on = i < value
         const el = (
-          <span className={`pip ${on ? 'on' : ''} ${pulse === i ? 'pulse' : ''}`} key={i}><PipIcon kind={kind} /></span>
+          <span className={`pip ${on ? 'on' : ''} ${pulse === i ? `pulse ${gain ? 'gain' : 'loss'}` : ''}`} key={i}><PipIcon kind={kind} /></span>
         )
         if (!onChange) return el
         return (
-          <button type="button" key={i} className={`pip ${on ? 'on' : ''} ${pulse === i ? 'pulse' : ''}`}
+          <button type="button" key={i} className={`pip ${on ? 'on' : ''} ${pulse === i ? `pulse ${gain ? 'gain' : 'loss'}` : ''}`}
             aria-label={`${label ?? ''} ${i + 1}`} aria-pressed={on}
             onClick={() => onChange(on && i === value - 1 ? i : i + 1)}><PipIcon kind={kind} /></button>
         )

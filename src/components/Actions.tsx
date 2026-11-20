@@ -53,7 +53,7 @@ export function DamageSheet({ open, onClose, c, patch }: { open: boolean; onClos
 
 const d4 = () => 1 + Math.floor(Math.random() * 4)
 
-export function RestSheet({ open, onClose, c, patch }: { open: boolean; onClose: () => void; c: Character; patch: (p: Partial<Character>) => void }) {
+export function RestSheet({ open, onClose, c, patch, onLongRest }: { open: boolean; onClose: () => void; c: Character; patch: (p: Partial<Character>) => void; onLongRest?: () => void }) {
   const toast = useToast()
   const [kind, setKind] = useState<'short' | 'long'>('short')
   const [used, setUsed] = useState<string[]>([])
@@ -95,7 +95,7 @@ export function RestSheet({ open, onClose, c, patch }: { open: boolean; onClose:
           </button>
         ))}
       </div>
-      <button className="btn btn-primary" onClick={onClose}>Fine del riposo</button>
+      <button className="btn btn-primary" onClick={() => (kind === 'long' && used.length > 0 && onLongRest ? onLongRest() : onClose())}>Fine del riposo</button>
     </Sheet>
   )
 }

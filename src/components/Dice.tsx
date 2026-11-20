@@ -6,7 +6,7 @@ import { DieShape } from './DiceSheet'
 const reduced = () => typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches
 
 /** Vista frontale di un d12: faccia pentagonale al centro dentro un decagono. */
-function D12({ value, tone }: { value: number; tone: 'hope' | 'fear' }) {
+function D12({ value, tone }: { value: number; tone: 'hope' | 'fear' | 'crit' }) {
   const { outer, inner, spokes } = useMemo(() => {
     const R = 46, r = 25
     const pt = (rad: number, a: number) => [50 + rad * Math.cos(a), 50 + rad * Math.sin(a)]
@@ -100,16 +100,19 @@ function DualityOverlay({ roll, onClose, ownRoll = true }: OverlayProps) {
   const fast = reduced()
   // con i dadi fisici il risultato è già noto: niente rotolamento, solo la rivelazione
   const skip = fast || !!roll.manual
-  const [phase, setPhase] = useState<'tumble' | 'reveal'>(skip ? 'reveal' : 'tumble')
+  const crit = roll.outcome === 'crit'
+  const [phase, setPhase] = useState<'tumble' | 'fuse' | 'reveal'>(skip ? 'reveal' : 'tumble')
   const [faces, setFaces] = useState<[number, number]>([roll.hope_die, roll.fear_die])
 
   useEffect(() => {
     if (skip) return
     const flick = setInterval(() => setFaces([1 + Math.floor(Math.random() * 12), 1 + Math.floor(Math.random() * 12)]), 70)
     const stop = setTimeout(() => { clearInterval(flick); setFaces([roll.hope_die, roll.fear_die]) }, 1050)
-    const rev = setTimeout(() => setPhase('reveal'), 1250)
+    // al critico i due dadi, uguali, si fondono prima di rivelarsi
+    const fuse = crit ? setTimeout(() => setPhase('fuse'), 1250) : undefined
+    const rev = setTimeout(() => setPhase('reveal'), crit ? 2050 : 1250)
     navigator.vibrate?.(30)
-    return () => { clearInterval(flick); clearTimeout(stop); clearTimeout(rev) }
+    return () => { clearInterval(flick); clearTimeout(stop); clearTimeout(rev); if (fuse) clearTimeout(fuse) }
   }, [roll.id])
 
   useEffect(() => {
@@ -157,6 +160,20 @@ function DualityOverlay({ roll, onClose, ownRoll = true }: OverlayProps) {
             <D12 value={faces[1]} tone="fear" />
             <span className="die-label">Paura</span>
           </div>
+          {crit && (
+            <div className="crit-fusion" aria-hidden="true">
+              <i className="cf-glow" />
+              <div className="cf-half cf-l"><D12 value={roll.hope_die} tone="crit" /></div>
+              <div className="cf-half cf-r"><D12 value={roll.hope_die} tone="crit" /></div>
+              <svg className="cf-crack" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <polyline points="52,2 46,20 55,40 45,60 54,80 48,98" pathLength={1} />
+                <polyline points="46,20 34,27" pathLength={1} className="cf-branch" />
+                <polyline points="45,60 60,66" pathLength={1} className="cf-branch" />
+              </svg>
+              <span className="cf-num">{roll.hope_die}</span>
+              <span className="cf-sub">Speranza e Paura uguali</span>
+            </div>
+          )}
         </div>
 
         <div className="dice-result" aria-live="assertive">

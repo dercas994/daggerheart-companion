@@ -7,6 +7,7 @@ import {
 import { massiveThreshold } from '../lib/rules'
 import type { Adversary, Campaign, Encounter, EncounterUnit, Roll } from '../lib/types'
 import { DiceOverlay } from './Dice'
+import { AshBurst } from './Effects'
 import { ErrorLine, Pips, Sheet, Spinner, Stepper, useAsync, useToast } from './ui'
 
 const TYPES = ['Solo', 'Bruiser', 'Leader', 'Standard', 'Skulk', 'Ranged', 'Horde', 'Minion', 'Support', 'Social'] as const
@@ -197,6 +198,13 @@ function UnitCard({ u, a, onChange, onRemove, onDefeatMinions, onRoll, onFear }:
   const [dmg, setDmg] = useState('')
   const [last, setLast] = useState<string | null>(null)
   const [pending, setPending] = useState<PendingBonus | null>(null)
+  // quando cade, la scheda si sbriciola in cenere
+  const [ash, setAsh] = useState(0)
+  const wasDown = useRef(u.defeated)
+  useEffect(() => {
+    if (u.defeated && !wasDown.current) { const t = Date.now(); setAsh(t); setTimeout(() => setAsh(a => (a === t ? 0 : a)), 3000) }
+    wasDown.current = u.defeated
+  }, [u.defeated])
   const minion = a.type === 'Minion'
   const mv = minionValue(a)
   const hordeHalf = a.type === 'Horde' && u.hp >= Math.ceil(a.hp / 2)
@@ -243,7 +251,8 @@ function UnitCard({ u, a, onChange, onRemove, onDefeatMinions, onRoll, onFear }:
   }
 
   return (
-    <article className={`unit t-${a.type.toLowerCase()} ${u.defeated ? 'down' : ''} ${!u.defeated && a.hp - u.hp <= Math.max(1, Math.floor(a.hp / 4)) && u.hp > 0 ? 'critical' : ''}`}>
+    <article className={`unit t-${a.type.toLowerCase()} ${u.defeated ? 'down' : ''} ${ash ? 'crumbling' : ''} ${!u.defeated && a.hp - u.hp <= Math.max(1, Math.floor(a.hp / 4)) && u.hp > 0 ? 'critical' : ''}`}>
+      {ash > 0 && <AshBurst id={`${u.uid}${ash}`} key={ash} />}
       <header className="unit-head">
         <div>
           <input className="unit-name" value={u.name} maxLength={60} onChange={e => onChange({ name: e.target.value })} aria-label="Nome" />
