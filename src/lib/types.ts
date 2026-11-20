@@ -134,6 +134,57 @@ export interface Roll {
   created_at: string
 }
 
+export interface AdversaryFeature {
+  name: string
+  name_en?: string
+  kind: 'passive' | 'action' | 'reaction'
+  text: string
+  fear?: number
+  stress?: number
+}
+/** Scheda di un avversario (dal manuale o creata dal master). */
+export interface Adversary {
+  id: string
+  tier: number
+  type: string
+  type_it: string
+  horde?: number
+  name: string
+  name_en?: string
+  desc: string
+  motives: string
+  difficulty: number
+  thresholds: [number, number] | null
+  hp: number
+  stress: number
+  atk: number | string
+  weapon: string
+  range: string
+  damage: string
+  damage_type: 'phy' | 'mag' | string
+  experience: string
+  features: AdversaryFeature[]
+  custom?: boolean
+}
+export interface EncounterUnit {
+  uid: string
+  adv: string
+  name: string
+  hp: number
+  stress: number
+  defeated: boolean
+  note?: string
+}
+export interface Encounter {
+  id: string
+  campaign_id: string
+  name: string
+  units: EncounterUnit[]
+  active: boolean
+  created_at: string
+  updated_at: string
+}
+
 export interface Countdown {
   id: string
   campaign_id: string
@@ -257,6 +308,13 @@ export interface Backend {
   deletePortrait(url: string): Promise<void>
   roll(campaignId: string, characterId: string | null, req: RollRequest): Promise<Roll>
   rollDice(campaignId: string, characterId: string | null, req: DiceRequest): Promise<Roll>
+  listEncounters(campaignId: string): Promise<Encounter[]>
+  saveEncounter(campaignId: string, e: Partial<Pick<Encounter, 'id' | 'name' | 'units' | 'active'>>): Promise<Encounter>
+  deleteEncounter(id: string): Promise<void>
+  listCustomAdversaries(): Promise<Adversary[]>
+  saveCustomAdversary(a: Adversary): Promise<Adversary>
+  deleteCustomAdversary(id: string): Promise<void>
+
   listCountdowns(campaignId: string): Promise<Countdown[]>
   saveCountdown(campaignId: string, c: CountdownInput): Promise<Countdown>
   deleteCountdown(id: string): Promise<void>

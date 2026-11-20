@@ -7,8 +7,8 @@ export type Route =
   | { name: 'wizard'; campaignId: string }
   | { name: 'character'; id: string }
 
-export type CampaignTab = 'tavolo' | 'storia' | 'galleria' | 'musica'
-const TABS: CampaignTab[] = ['tavolo', 'storia', 'galleria', 'musica']
+export type CampaignTab = 'tavolo' | 'scontro' | 'storia' | 'galleria' | 'musica'
+const TABS: CampaignTab[] = ['tavolo', 'scontro', 'storia', 'galleria', 'musica']
 
 export function parse(hash: string): Route {
   const p = hash.replace(/^#\/?/, '').split('/').filter(Boolean)

@@ -1,5 +1,5 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
-import type { Backend, Campaign, CampaignWithRole, Character, Countdown, Media, Member, Recap, Roll, TagTeam, User } from '../types'
+import type { Adversary, Backend, Campaign, CampaignWithRole, Character, Countdown, Encounter, Media, Member, Recap, Roll, TagTeam, User } from '../types'
 
 function fail(error: { message: string } | null) {
   if (error) throw new Error(translate(error.message))
@@ -140,6 +140,37 @@ export function createSupabaseBackend(url: string, key: string): Backend {
       fail(error)
       return data as Roll
     },
+    async listEncounters(campaignId) {
+      const { data, error } = await sb.from('encounters').select('*').eq('campaign_id', campaignId).order('updated_at', { ascending: false })
+      fail(error)
+      return (data ?? []) as Encounter[]
+    },
+    async saveEncounter(campaignId, e) {
+      const { id, ...row } = e
+      const q = id
+        ? sb.from('encounters').update({ ...row, updated_at: new Date().toISOString() }).eq('id', id)
+        : sb.from('encounters').insert({ ...row, campaign_id: campaignId })
+      const { data, error } = await q.select().single()
+      fail(error)
+      return data as Encounter
+    },
+    async deleteEncounter(id) { const { error } = await sb.from('encounters').delete().eq('id', id); fail(error) },
+    async listCustomAdversaries() {
+      const { data, error } = await sb.from('custom_adversaries').select('id, data').order('created_at')
+      fail(error)
+      return (data ?? []).map((r: any) => ({ ...r.data, id: r.id, custom: true })) as Adversary[]
+    },
+    async saveCustomAdversary(a) {
+      const { id, ...rest } = a
+      const isNew = !id || !/^[0-9a-f-]{36}$/.test(id)
+      const q = isNew
+        ? sb.from('custom_adversaries').insert({ data: rest })
+        : sb.from('custom_adversaries').update({ data: rest, updated_at: new Date().toISOString() }).eq('id', id)
+      const { data, error } = await q.select('id, data').single()
+      fail(error)
+      return { ...(data as any).data, id: (data as any).id, custom: true } as Adversary
+    },
+    async deleteCustomAdversary(id) { const { error } = await sb.from('custom_adversaries').delete().eq('id', id); fail(error) },
     async listCountdowns(campaignId) {
       const { data, error } = await sb.from('countdowns').select('*').eq('campaign_id', campaignId).order('sort').order('created_at')
       fail(error)

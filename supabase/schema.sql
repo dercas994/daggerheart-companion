@@ -1090,3 +1090,36 @@ end $$;
 drop trigger if exists rolls_tick_countdowns on public.rolls;
 create trigger rolls_tick_countdowns after insert on public.rolls
   for each row execute function public.countdowns_on_roll();
+
+-- ---------------------------------------------------------------------
+--  Migrazione 11: Scontri e avversari personalizzati (solo master).
+--  units = [{"uid","adv","name","hp","stress","defeated","note"}]
+-- ---------------------------------------------------------------------
+create table if not exists public.encounters (
+  id          uuid primary key default gen_random_uuid(),
+  campaign_id uuid not null references public.campaigns(id) on delete cascade,
+  name        text not null default '' check (char_length(name) <= 80),
+  units       jsonb not null default '[]'::jsonb,
+  active      boolean not null default true,
+  created_at  timestamptz not null default now(),
+  updated_at  timestamptz not null default now()
+);
+create index if not exists encounters_campaign on public.encounters(campaign_id, updated_at desc);
+alter table public.encounters enable row level security;
+grant select, insert, update, delete on public.encounters to authenticated;
+drop policy if exists "encounters gm" on public.encounters;
+create policy "encounters gm" on public.encounters for all to authenticated
+  using (is_gm(campaign_id)) with check (is_gm(campaign_id));
+
+create table if not exists public.custom_adversaries (
+  id          uuid primary key default gen_random_uuid(),
+  owner_id    uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  data        jsonb not null,
+  created_at  timestamptz not null default now(),
+  updated_at  timestamptz not null default now()
+);
+alter table public.custom_adversaries enable row level security;
+grant select, insert, update, delete on public.custom_adversaries to authenticated;
+drop policy if exists "custom adversaries owner" on public.custom_adversaries;
+create policy "custom adversaries owner" on public.custom_adversaries for all to authenticated
+  using (owner_id = auth.uid()) with check (owner_id = auth.uid());

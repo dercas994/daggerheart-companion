@@ -17,8 +17,9 @@ import { DiceSheet } from '../components/DiceSheet'
 import { FearAura } from '../components/FearAura'
 import { TagTeamFlow } from '../components/TagTeam'
 import { Countdowns } from '../components/Countdowns'
+import { EncounterTab } from '../components/Encounter'
 
-const TAB_LABEL: Record<CampaignTab, string> = { tavolo: 'Tavolo', storia: 'Storia', galleria: 'Galleria', musica: 'Musica' }
+const TAB_LABEL: Record<CampaignTab, string> = { tavolo: 'Tavolo', scontro: 'Scontro', storia: 'Storia', galleria: 'Galleria', musica: 'Musica' }
 
 export function CampaignPage({ id, tab }: { id: string; tab: CampaignTab }) {
   const { be, user } = useApp()
@@ -47,16 +48,17 @@ export function CampaignPage({ id, tab }: { id: string; tab: CampaignTab }) {
     <>
       <TopBar title={campaign.name} back="#/" right={isGm && <button className="btn btn-ghost small" onClick={() => setSettings(true)}>Gestisci</button>} />
       <nav className="tabs campaign-tabs" role="tablist">
-        {(Object.keys(TAB_LABEL) as CampaignTab[]).map(t => (
+        {(Object.keys(TAB_LABEL) as CampaignTab[]).filter(t => t !== 'scontro' || isGm).map(t => (
           <button key={t} role="tab" aria-selected={tab === t} className={tab === t ? 'sel' : ''}
             onClick={() => go(t === 'tavolo' ? `/c/${id}` : `/c/${id}/${t}`)}>{TAB_LABEL[t]}</button>
         ))}
       </nav>
       <main className={`page tab-page ${isGm && tab === 'tavolo' ? 'gm-page' : ''} ${player.current ? 'with-player' : ''}`}>
+        {tab === 'scontro' && isGm && <EncounterTab campaignId={id} campaign={campaign} partySize={characters.length} patchCampaign={live.patchCampaign} />}
         {tab === 'storia' && <Chronicle campaignId={id} isGm={isGm} members={members} />}
         {tab === 'galleria' && <Gallery campaignId={id} media={media.items} reload={media.reload} isGm={isGm} />}
         {tab === 'musica' && <Music campaignId={id} media={media.items} reload={media.reload} isGm={isGm} p={player} />}
-        {tab !== 'tavolo' ? null : isGm ? (
+        {tab !== 'tavolo' && !(tab === 'scontro' && !isGm) ? null : isGm ? (
           <div className="gm-grid">
             <section className="panel fear-panel">
               <FearTrack big value={campaign.fear} onChange={n => live.patchCampaign({ fear: n }).catch(e => toast({ text: e.message, tone: 'error' }))} />

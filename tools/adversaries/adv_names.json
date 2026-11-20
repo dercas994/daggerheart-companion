@@ -1,0 +1,2739 @@
+{
+ "acid-burrower": {
+  "name": "SCIOGLITERRA",
+  "weapon": "Artigli",
+  "features": [
+   "Inesorabile (3)",
+   "Eruzione Tellurica",
+   "Sputo Acido",
+   "Bagno Acido"
+  ],
+  "experience": "Percepire Vibrazioni +2"
+ },
+ "ahuizotl": {
+  "name": "AHUIZOTL",
+  "weapon": "Morso",
+  "features": [
+   "Attaccante Acquatico",
+   "Schiacciata di Coda",
+   "Trascina e Cattura"
+  ],
+  "experience": "Furtività +2, Nuoto +2"
+ },
+ "atototl": {
+  "name": "ATOTOTL",
+  "weapon": "Artigli",
+  "features": [
+   "Signore del Vento",
+   "Pietra dei Presagi",
+   "Flagello dell’Arciere"
+  ],
+  "experience": "Giungla +3, Volare +3"
+ },
+ "bear": {
+  "name": "ORSO",
+  "weapon": "Artigli",
+  "features": [
+   "Forza Schiacciante",
+   "Morso",
+   "Slancio"
+  ],
+  "experience": "Imboscata +3, Sensi Acuti +2"
+ },
+ "bugboar": {
+  "name": "CINGHIANTE",
+  "weapon": "Mazza Chiodata",
+  "features": [
+   "Sorpresa!",
+   "Brutale",
+   "Cuore di Guerriero"
+  ],
+  "experience": "Trappole +3"
+ },
+ "cave-ogre": {
+  "name": "OGRE DI CAVERNA",
+  "weapon": "Clava",
+  "features": [
+   "Pioggia di Massi",
+   "Furia Belluina"
+  ],
+  "experience": "Lanciare +2"
+ },
+ "common-ruffian": {
+  "name": "FURFANTE COMUNE",
+  "weapon": "Arma Improvvisata",
+  "features": [
+   "Attacco in Massa",
+   "Istinto di Sopravvivenza"
+  ],
+  "experience": "Disperato +3"
+ },
+ "construct": {
+  "name": "COSTRUTTO",
+  "weapon": "Pugno",
+  "features": [
+   "Inesorabile (2)",
+   "Struttura Fragile",
+   "Travolgere",
+   "Sovraccarico",
+   "Terremoto Mortale"
+  ],
+  "experience": ""
+ },
+ "courtier": {
+  "name": "CORTIGIANO",
+  "weapon": "Pugnale",
+  "features": [
+   "Derisione",
+   "Capro Espiatorio"
+  ],
+  "experience": "Socializzare +3"
+ },
+ "darkweave-crawler": {
+  "name": "STRISCIANTE DI TRAMASCURA",
+  "weapon": "Morso",
+  "features": [
+   "Seguace (3)",
+   "Accapponare la Pelle",
+   "Attacco in Massa",
+   "Veleno di Tramascura"
+  ],
+  "experience": "Oscurità +3"
+ },
+ "darkweave-queen": {
+  "name": "REGINA DI TRAMASCURA",
+  "weapon": "Morso del Ragno",
+  "features": [
+   "Inesorabile (3)",
+   "Terrificante",
+   "Madre della Nidiata",
+   "Più Veloce di Quanto Sembri",
+   "Avvelenamento da Zannascura"
+  ],
+  "experience": "Cacciatrice +3, Gigantesca +3"
+ },
+ "darkweave-spinner": {
+  "name": "TESSITORE DI TRAMASCURA",
+  "weapon": "Zanne",
+  "features": [
+   "Avvolgere nella Seta d’Ombra",
+   "Zanna d’Ombra"
+  ],
+  "experience": "Buche +2, Ragnatele +2"
+ },
+ "darkweave-swarmlings": {
+  "name": "SCIAMANTI DI TRAMASCURA",
+  "weapon": "Rosicchiare",
+  "features": [
+   "Orda (1d4)",
+   "“Toglimeli, Toglimeli!”"
+  ],
+  "experience": "Arrampicarsi +2"
+ },
+ "deeproot-defender": {
+  "name": "DIFENSORE DALLE RADICI PROFONDE",
+  "weapon": "| Viticci",
+  "features": [
+   "Abbattere al Suolo",
+   "Afferra e Trascina"
+  ],
+  "experience": "Enorme +3"
+ },
+ "dire-wolf": {
+  "name": "LUPO TERRIBILE",
+  "weapon": "Artigli",
+  "features": [
+   "Branco",
+   "Colpo Azzoppante"
+  ],
+  "experience": "Sensi Acuti +3"
+ },
+ "elk": {
+  "name": "ALCE",
+  "weapon": "Corna",
+  "features": [
+   "Testata",
+   "Come un fulmine"
+  ],
+  "experience": "Corsa +3, Sensi Acuti +3"
+ },
+ "falcon": {
+  "name": "FALCO",
+  "weapon": "Artigli",
+  "features": [
+   "Agile Volatile",
+   "Picchiata"
+  ],
+  "experience": "Sensi Acuti +4, Volare +3"
+ },
+ "giant-mosquitoes": {
+  "name": "ZANZARE GIGANTI",
+  "weapon": "Proboscide",
+  "features": [
+   "Orda (1d4+1)",
+   "Volo",
+   "Succhiasangue"
+  ],
+  "experience": "Mimetizzazione +2"
+ },
+ "giant-rat": {
+  "name": "RATTO GIGANTE",
+  "weapon": "Artigli",
+  "features": [
+   "Seguace (3)",
+   "Attacco in Massa"
+  ],
+  "experience": "Sensi Acuti +3"
+ },
+ "giant-scorpion": {
+  "name": "SCORPIONE GIGANTE",
+  "weapon": "Chele",
+  "features": [
+   "Doppio Colpo",
+   "Pungiglione Velenoso",
+   "Slancio"
+  ],
+  "experience": "Mimetizzazione +2"
+ },
+ "glass-snake": {
+  "name": "SERPENTE DI VETRO",
+  "weapon": "Zanne di Vetro",
+  "features": [
+   "Frammenti che Lacerano l’Armatura",
+   "Serpe Roteante",
+   "Sputatore"
+  ],
+  "experience": ""
+ },
+ "grimmling-warband": {
+  "name": "BANDA DA GUERRA DI MALIGNOMI",
+  "weapon": "Forbici da Sarto",
+  "features": [
+   "Orda (1d4+1)",
+   "Codardia"
+  ],
+  "experience": "Trappole +3"
+ },
+ "archer-guard": {
+  "name": "GUARDIA ARCIERE",
+  "weapon": "Arco Lungo",
+  "features": [
+   "Tiro Ostacolante"
+  ],
+  "experience": "Conoscenza Locale +3"
+ },
+ "bladed-guard": {
+  "name": "GUARDIA ARMATA",
+  "weapon": "Spada Lunga",
+  "features": [
+   "Muro di Scudi",
+   "In Arresto"
+  ],
+  "experience": "Conoscenza locale +3"
+ },
+ "head-guard": {
+  "name": "CAPO DELLE GUARDIE",
+  "weapon": "Mazza",
+  "features": [
+   "Chiamare le Guardie",
+   "Al Mio Segnale",
+   "Slancio"
+  ],
+  "experience": "Comandante +2, Conoscenza Locale +2"
+ },
+ "harpy": {
+  "name": "ARPIA",
+  "weapon": "Artigli",
+  "features": [
+   "Aura Tossica",
+   "Piombare sul Nemico"
+  ],
+  "experience": "Isole +3"
+ },
+ "harrier": {
+  "name": "SCHERMAGLIATORE",
+  "weapon": "Giavellotto",
+  "features": [
+   "Mantieni la Distanza",
+   "Ritirata"
+  ],
+  "experience": "Mimetizzazione +2"
+ },
+ "jagged-knife-bandit": {
+  "name": "BANDITO DEI COLTELLI SEGHETTATI",
+  "weapon": "Pugnale",
+  "features": [],
+  "experience": "Ladro +2"
+ },
+ "jagged-knife-hexer": {
+  "name": "STREGONE DEI COLTELLI SEGHETTATI",
+  "weapon": "Bastone",
+  "features": [
+   "Maledizione",
+   "Flusso Caotico"
+  ],
+  "experience": "Sapienza Magica +2"
+ },
+ "jagged-knife-kneebreaker": {
+  "name": "PICCHIATORE DEI COLTELLI SEGHETTATI",
+  "weapon": "Clava",
+  "features": [
+   "Li ho in Pugno",
+   "Sta’ Giù!"
+  ],
+  "experience": "Ladro +2, Svelare Minacce +3"
+ },
+ "jagged-knife-lackey": {
+  "name": "LACCHÈ DEI COLTELLI SEGHETTATI",
+  "weapon": "Pugnale",
+  "features": [
+   "Seguace (3)",
+   "Attacco in Massa"
+  ],
+  "experience": "Ladro +2"
+ },
+ "jagged-knife-lieutenant": {
+  "name": "LUOGOTENENTE DEI COLTELLI SEGHETTATI",
+  "weapon": "Giavellotto",
+  "features": [
+   "Tattiche",
+   "Altri della Stessa Risma",
+   "Colpo di Grazia",
+   "Slancio"
+  ],
+  "experience": "Conoscenza Locale +2"
+ },
+ "jagged-knife-shadow": {
+  "name": "OMBRA DEI COLTELLI SEGHETTATI",
+  "weapon": "Pugnale",
+  "features": [
+   "Pugnalata alle Spalle",
+   "Ammantato"
+  ],
+  "experience": "Effrazione +3"
+ },
+ "jagged-knife-sniper": {
+  "name": "CECCHINO DEI COLTELLI SEGHETTATI",
+  "weapon": "Arco Corto",
+  "features": [
+   "Colpo Invisibile"
+  ],
+  "experience": "Furtività +2"
+ },
+ "kelpie": {
+  "name": "KELPIE",
+  "weapon": "Zoccoli",
+  "features": [
+   "Accattivante",
+   "Desiderio Recondito",
+   "Mutaforme",
+   "Incanto"
+  ],
+  "experience": "Intrappolare +3, Leggere il Pensiero +3"
+ },
+ "masque-muerte": {
+  "name": "MASCHERA DI MORTE",
+  "weapon": "Colpo a Mano Aperta",
+  "features": [
+   "Libre",
+   "Voltafaccia del Cattivo",
+   "Suplex Spettrale",
+   "Smascherare la Morte",
+   "Attacco Combinato"
+  ],
+  "experience": "Afferrare +3, Esibizionista +3"
+ },
+ "mechanorb": {
+  "name": "MECCANOSFERA",
+  "weapon": "Ago",
+  "features": [
+   "Mente Alveare",
+   "Tattiche di Adattamento"
+  ],
+  "experience": "Macchine +2"
+ },
+ "merchant": {
+  "name": "MERCANTE",
+  "weapon": "Clava",
+  "features": [
+   "Trattamento di Favore",
+   "Giri di Parole"
+  ],
+  "experience": "Negoziatore Scaltro +3"
+ },
+ "minor-chaos-elemental": {
+  "name": "ELEMENTALE MINORE DEL CAOS",
+  "weapon": "Esplosione Distorsiva",
+  "features": [
+   "Forma Arcana",
+   "Flusso Nauseante",
+   "Rimodellare la Realtà",
+   "Riflessione Magica",
+   "Slancio"
+  ],
+  "experience": ""
+ },
+ "minor-fire-elemental": {
+  "name": "ELEMENTALE MINORE DEL FUOCO",
+  "weapon": "Esplosione Elementale",
+  "features": [
+   "Inesorabile (2)",
+   "Terra Bruciata",
+   "Esplosione",
+   "Combustione",
+   "Slancio"
+  ],
+  "experience": ""
+ },
+ "minor-demon": {
+  "name": "DEMONE MINORE",
+  "weapon": "Artigli",
+  "features": [
+   "Inesorabile (2)",
+   "Tutto ha una Fine",
+   "Fuoco Infernale",
+   "Mietitore",
+   "Slancio"
+  ],
+  "experience": ""
+ },
+ "minor-treant": {
+  "name": "TREANT MINORE",
+  "weapon": "Ramo Artigliato",
+  "features": [
+   "Seguace (5)",
+   "Attacco in Massa"
+  ],
+  "experience": ""
+ },
+ "mountain-troll": {
+  "name": "TROLL DI MONTAGNA",
+  "weapon": "Flagello di Teschi",
+  "features": [
+   "Inesorabile (3)",
+   "Armatura Rubata",
+   "Spazzata di Flagello",
+   "Doppia Spazzata"
+  ],
+  "experience": "Montagne +4"
+ },
+ "octopus": {
+  "name": "PIOVRA",
+  "weapon": "Becco",
+  "features": [
+   "Afferrare",
+   "Spruzzo d’Inchiostro"
+  ],
+  "experience": "Acqua +3, Destrezza +3"
+ },
+ "green-ooze": {
+  "name": "MELMA VERDE",
+  "weapon": "Appendice Melmosa",
+  "features": [
+   "Lento",
+   "Forma Acida",
+   "Avvolgere",
+   "Scissione"
+  ],
+  "experience": "Mimetizzazione +3"
+ },
+ "tiny-green-ooze": {
+  "name": "MELMA VERDE PICCOLA",
+  "weapon": "Appendice Melmosa",
+  "features": [
+   "Forma Acida"
+  ],
+  "experience": ""
+ },
+ "red-ooze": {
+  "name": "MELMA ROSSA",
+  "weapon": "Appendice Melmosa",
+  "features": [
+   "Fuoco Strisciante",
+   "Incendio",
+   "Scissione"
+  ],
+  "experience": "Mimetizzazione +3"
+ },
+ "tiny-red-ooze": {
+  "name": "MELMA ROSSA PICCOLA",
+  "weapon": "Appendice Melmosa",
+  "features": [
+   "Ustionante"
+  ],
+  "experience": ""
+ },
+ "panther": {
+  "name": "PANTERA",
+  "weapon": "Denti e Artigli",
+  "features": [
+   "Predatore nell’Ombra",
+   "Colpo Balzante"
+  ],
+  "experience": "Furtività +3, Sensi Acuti +3"
+ },
+ "petty-noble": {
+  "name": "NOBILE MINORE",
+  "weapon": "Stocco",
+  "features": [
+   "La Mia Terra, Le Mie Regole",
+   "Guardie, Catturateli!",
+   "Esilio"
+  ],
+  "experience": "Aristocratico +3"
+ },
+ "phantom": {
+  "name": "SPETTRO",
+  "weapon": "Tocco Gelido",
+  "features": [
+   "Aura di Paura",
+   "Presenza Persistente"
+  ],
+  "experience": "Sinistro +3"
+ },
+ "pirate-captain": {
+  "name": "CAPITANO PIRATA",
+  "weapon": "Sciabola",
+  "features": [
+   "Cappa e Spada",
+   "Rinforzi",
+   "Senza Pietà",
+   "Slancio"
+  ],
+  "experience": "Comandante +2, Marinaio +3"
+ },
+ "pirate-raiders": {
+  "name": "PIRATI PREDONI",
+  "weapon": "Sciabola",
+  "features": [
+   "Orda (1d4+1)",
+   "Cappa e Spada"
+  ],
+  "experience": "Marinaio +3"
+ },
+ "pirate-tough": {
+  "name": "PIRATA BRUTALE",
+  "weapon": "Pugni Massicci",
+  "features": [
+   "Cappa e Spada",
+   "Spazzare il Ponte"
+  ],
+  "experience": "Marinaio +2"
+ },
+ "poltergeist": {
+  "name": "POLTERGEIST",
+  "weapon": "Oggetto Lanciato",
+  "features": [
+   "Ectoplasma",
+   "Possessione",
+   "Tempesta Spettrale"
+  ],
+  "experience": "Sinistro +3"
+ },
+ "rabble-mawb": {
+  "name": "MARMAGLIA DIGRIGNANTE",
+  "weapon": "Morso",
+  "features": [
+   "Orda (1d4+1)",
+   "Peggio di Prima"
+  ],
+  "experience": "Sotterraneo +2"
+ },
+ "redcap-biters": {
+  "name": "AZZANNATORI DEL CAPPUCCIO ROSSO",
+  "weapon": "Morso",
+  "features": [
+   "Orda (1d4+2)",
+   "Afferrare le Caviglie"
+  ],
+  "experience": "Angoli e Fessure +3"
+ },
+ "redcap-breaker": {
+  "name": "BRUTO DEL CAPPUCCIO ROSSO",
+  "weapon": "Clava di Legno",
+  "features": [
+   "Spaccare la Schiena",
+   "Gambizzare"
+  ],
+  "experience": "Ossa +2"
+ },
+ "redcap-butcher": {
+  "name": "MACELLAIO DEL CAPPUCCIO ROSSO",
+  "weapon": "Mannaia",
+  "features": [
+   "Sminuzzare in Allegria",
+   "Lanciatore di Coltelli"
+  ],
+  "experience": "Affrettarsi +2"
+ },
+ "redcap-candlemaker": {
+  "name": "CANDELAIO DEL CAPPUCCIO ROSSO",
+  "weapon": "Candelabro Ustionante",
+  "features": [
+   "Mano della Gloria",
+   "Tedoforo",
+   "Danzare tra le Fiamme"
+  ],
+  "experience": "Vigilanza +3"
+ },
+ "redcap-skinner": {
+  "name": "SCUOIATORE DEL CAPPUCCIO ROSSO",
+  "weapon": "Rasoio",
+  "features": [
+   "Servitore (4)",
+   "Tagli Superficiali",
+   "Attacco in Massa"
+  ],
+  "experience": "Lavorazione del Cuoio +3"
+ },
+ "rugaru": {
+  "name": "RUGARU",
+  "weapon": "Mascelle Schiaccianti",
+  "features": [
+   "Inesorabile (3)",
+   "Figlio delle Tenebre",
+   "Assetato di Sangue",
+   "Ululare alla Luna",
+   "Straziare la Carne"
+  ],
+  "experience": "Paludi +3"
+ },
+ "sawtoothed-gillbeast": {
+  "name": "BRANCHIOBESTIA DAI DENTI A SEGA",
+  "weapon": "Armi Fradicie",
+  "features": [
+   "GNAM!",
+   "Frenesia Famelica",
+   "Squamata"
+  ],
+  "experience": "Acquatico +2"
+ },
+ "sellsword": {
+  "name": "MERCENARIO",
+  "weapon": "Spada Lunga",
+  "features": [
+   "Seguace (4)",
+   "Attacco in Massa"
+  ],
+  "experience": ""
+ },
+ "skeleton-archer": {
+  "name": "TIRATORE SCHELETRICO",
+  "weapon": "Arco Corto",
+  "features": [
+   "Opportunista",
+   "Tiro Letale"
+  ],
+  "experience": ""
+ },
+ "skeleton-dredge": {
+  "name": "CATASTA SCHELETRICA",
+  "weapon": "Artigli d’Ossa",
+  "features": [
+   "Seguace (4)",
+   "Attacco in Massa"
+  ],
+  "experience": ""
+ },
+ "skeleton-knight": {
+  "name": "CAVALIERE SCHELETRICO",
+  "weapon": "Spadone Arrugginito",
+  "features": [
+   "Terrificante",
+   "Tagliare fi no alle Ossa",
+   "Scava Due Fosse"
+  ],
+  "experience": ""
+ },
+ "skeleton-warrior": {
+  "name": "GUERRIERO SCHELETRICO",
+  "weapon": "Spada",
+  "features": [
+   "Solo Ossa",
+   "Non Resterà Morto"
+  ],
+  "experience": ""
+ },
+ "soul-shattered-mage": {
+  "name": "MAGO DALL’ANIMA SPEZZATA",
+  "weapon": "Bastone di Assenzio",
+  "features": [
+   "Inesorabile (3)",
+   "Magia Spezzata",
+   "Prova il Mio Dolore"
+  ],
+  "experience": "Conoscenza Proibita +2"
+ },
+ "spellblade": {
+  "name": "DUELLANTE ARCANO",
+  "weapon": "Spada Lunga Potenziata",
+  "features": [
+   "Acciaio Arcano",
+   "Esplosione Soppressiva",
+   "Movimento all’Unisono",
+   "Slancio"
+  ],
+  "experience": "Sapienza Magica +2"
+ },
+ "spellbound-armor": {
+  "name": "CORAZZA STREGATA",
+  "weapon": "Zweihänder",
+  "features": [
+   "Instancabile",
+   "Sferragliare e Riassemblarsi"
+  ],
+  "experience": "Guardiano +2"
+ },
+ "swarm-of-rats": {
+  "name": "BRANCO DI RATTI",
+  "weapon": "Artigli",
+  "features": [
+   "Orda (1d4+1)",
+   "In Faccia"
+  ],
+  "experience": ""
+ },
+ "sylvan-soldier": {
+  "name": "SOLDATO SILVANO",
+  "weapon": "Falce",
+  "features": [
+   "Tattiche del Branco",
+   "Controllare la Foresta",
+   "Mimetizzarsi"
+  ],
+  "experience": "Battipista +2"
+ },
+ "tangle-bramble-swarm": {
+  "name": "SCIAME DI GROVIGLI AVVILUPPANTI",
+  "weapon": "Spine",
+  "features": [
+   "Orda (1d4+2)",
+   "Schiacciare",
+   "Ingombrare"
+  ],
+  "experience": "Mimetizzazione +2"
+ },
+ "tangle-bramble": {
+  "name": "GROVIGLIO AVVILUPPANTE",
+  "weapon": "Spine",
+  "features": [
+   "Attacco in Massa",
+   "Prosciugare e Moltiplicarsi"
+  ],
+  "experience": ""
+ },
+ "viper": {
+  "name": "VIPERA",
+  "weapon": "Morso",
+  "features": [
+   "Servitore (4)",
+   "Velenosa",
+   "Attacco in Massa"
+  ],
+  "experience": "Ventre a Terra +4"
+ },
+ "waxwork-creation": {
+  "name": "CREATURA DI CERA",
+  "weapon": "Pugni",
+  "features": [
+   "Inesorabile (2)",
+   "Nessun Organo Vitale",
+   "Palla di Cera",
+   "Preso!",
+   "Stretta Strangolante"
+  ],
+  "experience": "Gigantesca +2"
+ },
+ "weaponmaster": {
+  "name": "MAESTRO D’ARMI",
+  "weapon": "Claymore",
+  "features": [
+   "Lanciare la Sfida",
+   "Scatto Adrenalinico",
+   "Slancio"
+  ],
+  "experience": ""
+ },
+ "will-o-the-wisps": {
+  "name": "FUOCHI FATUI",
+  "weapon": "Lampo",
+  "features": [
+   "Orda (1d4−1)",
+   "Caleidoscopici",
+   "Affascinanti"
+  ],
+  "experience": "Oscurità +3"
+ },
+ "young-dryad": {
+  "name": "GIOVANE DRIADE",
+  "weapon": "Falce",
+  "features": [
+   "Voce della Foresta",
+   "Gabbia Spinosa",
+   "Slancio"
+  ],
+  "experience": "Comandante +3"
+ },
+ "yufo": {
+  "name": "YUFO",
+  "weapon": "Colpo di Tentacolo",
+  "features": [
+   "Cassaforte Psichica",
+   "Onda di Anomalia",
+   "Corrosione Temporale"
+  ],
+  "experience": "Segreti +3, Stranezza Fluttuante +3"
+ },
+ "brawny-zombie": {
+  "name": "ZOMBI CORPULENTO",
+  "weapon": "Colpo Violento",
+  "features": [
+   "Lento",
+   "Fare a Pezzi",
+   "Strappare e Squarciare"
+  ],
+  "experience": "Danni Collaterali +2, Lancio +4"
+ },
+ "patchwork-zombie-hulk": {
+  "name": "ZOMBI GIGANTE RICUCITO",
+  "weapon": "Troppe Braccia",
+  "features": [
+   "Smontabile",
+   "Un Altro nel Mucchio",
+   "Urla tormentate"
+  ],
+  "experience": "Intimidire +2, Strappare +2"
+ },
+ "rotted-zombie": {
+  "name": "ZOMBI MARCIO",
+  "weapon": "Morso",
+  "features": [
+   "Attacco in Massa"
+  ],
+  "experience": ""
+ },
+ "shambling-zombie": {
+  "name": "ZOMBI BARCOLLANTE",
+  "weapon": "Morso",
+  "features": [
+   "Sono Troppi!",
+   "Terrorizzato"
+  ],
+  "experience": ""
+ },
+ "zombie-pack": {
+  "name": "ORDA DI ZOMBI",
+  "weapon": "Morso",
+  "features": [
+   "Orda (1d4+2)",
+   "Sopraffare"
+  ],
+  "experience": ""
+ },
+ "archer-squadron": {
+  "name": "DRAPPELLO DI ARCIERI",
+  "weapon": "Arco Lungo",
+  "features": [
+   "Orda (1d6+3)",
+   "Salva Concentrata",
+   "Fuoco di Copertura"
+  ],
+  "experience": ""
+ },
+ "apprentice-assassin": {
+  "name": "APPRENDISTA ASSASSINO",
+  "weapon": "Pugnale da Lancio",
+  "features": [
+   "Seguace (6)",
+   "Attacco in Massa"
+  ],
+  "experience": "Effrazione +2"
+ },
+ "assassin-poisoner": {
+  "name": "ASSASSINO AVVELENATORE",
+  "weapon": "Pugnale da Lancio Avvelenato",
+  "features": [
+   "Veleno di Macinadenti",
+   "Dal Nulla",
+   "Affumicare"
+  ],
+  "experience": "Effrazione +2"
+ },
+ "master-assassin": {
+  "name": "MAESTRO ASSASSINO",
+  "weapon": "Pugnale Seghettato",
+  "features": [
+   "Non lo Vedrete Arrivare",
+   "Colpire all’Unisono",
+   "Lama Subdola",
+   "Slancio"
+  ],
+  "experience": "Comandante +3, Effrazione +3"
+ },
+ "banshee": {
+  "name": "BANSHEE",
+  "weapon": "Unghie",
+  "features": [
+   "Ectoplasma",
+   "Terrificante",
+   "Tattica della Paura",
+   "Lamento di Disperazione"
+  ],
+  "experience": "Gonfia di Rabbia +3, Vanitosa +3"
+ },
+ "basilisk": {
+  "name": "BASILISCO",
+  "weapon": "Mascelle e Artigli",
+  "features": [
+   "Pietrificare",
+   "CRUNCH!"
+  ],
+  "experience": ""
+ },
+ "battle-box": {
+  "name": "GUERRA IN SCATOLA",
+  "weapon": "Colpo Violento",
+  "features": [
+   "Inesorabile (2)",
+   "Tattiche Casuali",
+   "Sovralimentazione",
+   "Terremoto Mortale"
+  ],
+  "experience": "Mimetizzazione +2"
+ },
+ "berserker-alpha": {
+  "name": "BERSERKER ALFA",
+  "weapon": "Denti e Artigli",
+  "features": [
+   "Furia del Branco",
+   "Abbaiare alla Luna",
+   "Ira del Berserker"
+  ],
+  "experience": "Caccia +3, Sensi Acuti +2"
+ },
+ "berserker-initiate": {
+  "name": "BERSERKER INIZIATO",
+  "weapon": "Denti e Artigli",
+  "features": [
+   "Furia del Branco",
+   "Ira del Berserker"
+  ],
+  "experience": "Caccia +3"
+ },
+ "centaur-warden": {
+  "name": "CENTAURO GUARDIANO",
+  "weapon": "Arco Ricurvo",
+  "features": [
+   "Manovra di Fiancheggiamento",
+   "Occhio del Saggio",
+   "Travolgere",
+   "Salva Repentina"
+  ],
+  "experience": "Filosofia +2, Natura +2"
+ },
+ "chaos-skull": {
+  "name": "TESCHIO DEL CAOS",
+  "weapon": "Esplosione di Energia",
+  "features": [
+   "Levitazione",
+   "Sigilli",
+   "Esplosione Magica",
+   "Sifone Magico"
+  ],
+  "experience": ""
+ },
+ "chicken-foot-hut": {
+  "name": "CAPANNO DALLE ZAMPE DI GALLINA",
+  "weapon": "Zampe Artigliate",
+  "features": [
+   "Doppio Attacco",
+   "Inchiodare"
+  ],
+  "experience": "Foreste +2"
+ },
+ "conscript": {
+  "name": "COSCRITTO",
+  "weapon": "Lancia",
+  "features": [
+   "Seguace (6)",
+   "Attacco in Massa"
+  ],
+  "experience": ""
+ },
+ "courtesan": {
+  "name": "DIGNITARIO",
+  "weapon": "Pugnale",
+  "features": [
+   "Occhiata Fulminante"
+  ],
+  "experience": "Manipolazione +3, Socializzare +3"
+ },
+ "cult-adept": {
+  "name": "ADEPTO DEL CULTO",
+  "weapon": "Bastone Ricoperto di Rune",
+  "features": [],
+  "experience": "Conoscenza degli Dèi Caduti +2, Rituali +2"
+ },
+ "cult-fang": {
+  "name": "ZANNA DEL CULTO",
+  "weapon": "Lungo Coltello",
+  "features": [
+   "Abbraccio dell’Ombra",
+   "Eliminare la Retroguardia"
+  ],
+  "experience": ""
+ },
+ "cult-initiate": {
+  "name": "INIZIATO DEL CULTO",
+  "weapon": "Pugnale Rituale",
+  "features": [
+   "Seguace (6)",
+   "Attacco in Massa"
+  ],
+  "experience": ""
+ },
+ "demonic-hound-pack": {
+  "name": "BRANCO DI SEGUGI INFERNALI",
+  "weapon": "Artigli e Zanne",
+  "features": [
+   "Orda (2d4+1)",
+   "Ululato Terrificante",
+   "Slancio"
+  ],
+  "experience": "Olfatto +3"
+ },
+ "dire-pangolati": {
+  "name": "PANGOLATI CRUDELE",
+  "weapon": "Colpo di Coda",
+  "features": [
+   "Mangia Corazze",
+   "Giravolta Tagliente",
+   "Scaglialama",
+   "Scaglie di Cheratina"
+  ],
+  "experience": "Fiutare le Tracce +3, Arrampicarsi +3"
+ },
+ "doppelhound": {
+  "name": "BISEGUGIO",
+  "weapon": "Frustata di Coda Spinata",
+  "features": [
+   "Bestia Intermittente",
+   "Doppio Attacco"
+  ],
+  "experience": "Ombre +3"
+ },
+ "dragon-knight": {
+  "name": "CAVALIERE DRAGO",
+  "weapon": "Lancia da Cavaliere",
+  "features": [
+   "Posizione di Vantaggio",
+   "Lanciarsi all’Attacco",
+   "Colpo di Ritorno"
+  ],
+  "experience": "Giostrare +2"
+ },
+ "electric-eels": {
+  "name": "ANGUILLE ELETTRICHE",
+  "weapon": "Morso Elettrico",
+  "features": [
+   "Orda (2d4+1)",
+   "Shock Paralizzante"
+  ],
+  "experience": ""
+ },
+ "elephant": {
+  "name": "ELEFANTE",
+  "weapon": "Zampe e Zanne",
+  "features": [
+   "Travolgere",
+   "Scagliare"
+  ],
+  "experience": "Enorme +2, Non Dimentica Mai +2"
+ },
+ "elite-soldier": {
+  "name": "SOLDATO SCELTO",
+  "weapon": "Lancia",
+  "features": [
+   "Rinforzo",
+   "Lealtà del Vassallo"
+  ],
+  "experience": ""
+ },
+ "entombed-cat-beast": {
+  "name": "FELINOIDE INUMATO",
+  "weapon": "Artigli Affilati",
+  "features": [
+   "Inesorabile (3)",
+   "Colpo Sanguinario",
+   "Miagolio Stridente",
+   "Solo Io",
+   "Rappresaglia Feroce"
+  ],
+  "experience": "Selvaggio +2"
+ },
+ "entombed-elite-guard": {
+  "name": "GUARDIA SCELTA INUMATA",
+  "weapon": "Lama Ricurva",
+  "features": [
+   "In Formazione",
+   "Giavellotto"
+  ],
+  "experience": "Soldato +3"
+ },
+ "entombed-empress": {
+  "name": "IMPERATRICE INUMATA",
+  "weapon": "Zampata",
+  "features": [
+   "Guscio Vuoto",
+   "Organi Mancanti",
+   "Catene Afferranti",
+   "Eterna Obbedienza",
+   "Carezza Maledetta",
+   "Trasformazione Finale (Cambio di Fase)"
+  ],
+  "experience": "Sovrana +4, Non Morta +2"
+ },
+ "entombed-necropriest": {
+  "name": "NECROPRETE INUMATO",
+  "weapon": "Dardo della Morte",
+  "features": [
+   "Invigorire",
+   "Ultima Stretta",
+   "Tocco Gelido"
+  ],
+  "experience": "Magia Oscura +4, Protezione +2"
+ },
+ "entombed-skin-beetles": {
+  "name": "SCARABEI DELLA CARNE INUMATI",
+  "weapon": "Chele",
+  "features": [
+   "Orda (2d4+1)",
+   "Slancio",
+   "Omofagi"
+  ],
+  "experience": "Tombe +3"
+ },
+ "entombed-stonemason": {
+  "name": "TAGLIAPIETRE INUMATO",
+  "weapon": "Martello e Scalpello",
+  "features": [
+   "Seguace (5)",
+   "Attacco in Massa",
+   "Il Lavoro Non Finisce Mai"
+  ],
+  "experience": "Costruttore +2"
+ },
+ "failed-experiment": {
+  "name": "ESPERIMENTO FALLITO",
+  "weapon": "Morso e Artigli",
+  "features": [
+   "Vigore Distorto",
+   "Sopraffare",
+   "Affondo Barcollante"
+  ],
+  "experience": "Imitare +3"
+ },
+ "flock-of-feather-fiends": {
+  "name": "PIUMATE",
+  "weapon": "Becco e Artigli",
+  "features": [
+   "Orda (1d6+1)",
+   "Cacofonia Delirante"
+  ],
+  "experience": "Sciame +2, Volo +2"
+ },
+ "fowlbear": {
+  "name": "ORSO PIUMATO",
+  "weapon": "Denti d’Oca e Artigli d’Orso",
+  "features": [
+   "Inesorabile (2)",
+   "Doppio Attacco",
+   "Starnazzio Terrificante"
+  ],
+  "experience": "Sensi Acuti +3, Stagni +3"
+ },
+ "fungispunj-sporeling": {
+  "name": "SPORA DI FUNGISPUGNA",
+  "weapon": "Spora Neurotossica",
+  "features": [
+   "Seguace (6)",
+   "Attacco in Massa",
+   "Unirsi"
+  ],
+  "experience": "Oscurità +3"
+ },
+ "fungispunj-sporophore": {
+  "name": "SPOROFORO DI FUNGISPUGNA",
+  "weapon": "Pugno Spugnoso",
+  "features": [
+   "Nube di Spore Neurotossiche",
+   "Rianimatore",
+   "Colonia",
+   "Fusione Mentale"
+  ],
+  "experience": "Comandante +5, Guardiano +4"
+ },
+ "gargoyle": {
+  "name": "GARGOYLE",
+  "weapon": "Artigli di Pietra",
+  "features": [
+   "Non Vivo",
+   "Piombare in Picchiata",
+   "Fendente Pietrificante"
+  ],
+  "experience": "Mimetizzazione +4, Rovine +3"
+ },
+ "giant-beastmaster": {
+  "name": "GIGANTE SIGNORE DELLE BESTIE",
+  "weapon": "Arco Lungo",
+  "features": [
+   "Due in Uno",
+   "Inchiodare",
+   "Compagno Letale"
+  ],
+  "experience": "Trattare con gli Animali +3"
+ },
+ "giant-brawler": {
+  "name": "GIGANTE LOTTATORE",
+  "weapon": "Martello da Guerra",
+  "features": [
+   "Ariete d’Assedio",
+   "Rappresaglia Cruenta",
+   "Slancio"
+  ],
+  "experience": "Effrazione +2"
+ },
+ "giant-eagle": {
+  "name": "AQUILA GIGANTE",
+  "weapon": "Artigli e Becco",
+  "features": [
+   "Volare",
+   "Picchiata Letale",
+   "Decollo",
+   "Caduta letale"
+  ],
+  "experience": ""
+ },
+ "giant-octopus": {
+  "name": "PIOVRA GIGANTE",
+  "weapon": "Frusta Tentacolare",
+  "features": [
+   "Inesorabile (3)",
+   "Armata e Pericolosa",
+   "Presa",
+   "Schiantare"
+  ],
+  "experience": "Intelligente +3"
+ },
+ "giant-recruit": {
+  "name": "GIGANTE RECLUTA",
+  "weapon": "Martello da Guerra",
+  "features": [
+   "Seguace (7)",
+   "Attacco in Massa"
+  ],
+  "experience": ""
+ },
+ "gobstalker": {
+  "name": "FAUCE PREDATRICE",
+  "weapon": "Tentacoli",
+  "features": [
+   "Inesorabile (3)",
+   "Alito Antimagia",
+   "Raggi Tentacolari",
+   "Leccata della Sanguisuga"
+  ],
+  "experience": "Magia +3"
+ },
+ "gorgon": {
+  "name": "GORGONE",
+  "weapon": "Arco Corto del Sole al Tramonto",
+  "features": [
+   "Inesorabile (2)",
+   "Frecce del Sole al Tramonto",
+   "Corona di Serpenti",
+   "Sguardo Pietrificante",
+   "Slancio"
+  ],
+  "experience": "Furtività +3"
+ },
+ "guahalan-alebrujo": {
+  "name": "ALEBRIJE STREGATO DI GUAHALA",
+  "weapon": "Denti e Artigli",
+  "features": [
+   "Liberare la Belva",
+   "Sacrificio di Guahala",
+   "Ululato di Guahala",
+   "Strappa e Squarcia",
+   "Spettacolo Brutale"
+  ],
+  "experience": "Brutale +2, Rapido +2"
+ },
+ "guahalan-fang-lord": {
+  "name": "SIGNORE DELLA ZANNA DI GUAHALA",
+  "weapon": "Lancia",
+  "features": [
+   "Capobranco",
+   "Liberare la Belva",
+   "Chiamata di Guahala",
+   "Forma Ferale (Cambio di Fase)"
+  ],
+  "experience": "Cacciatore +2, Conoscenza Antica +2"
+ },
+ "guahalan-shifter": {
+  "name": "GUAHALA MUTAFORMA",
+  "weapon": "Mazza da Guerra",
+  "features": [
+   "Liberare la Belva",
+   "Attacco del Branco"
+  ],
+  "experience": "Cacciatore +2, Trappole +2"
+ },
+ "guahalan-spirit-beast": {
+  "name": "SPIRITO BESTIA DI GUAHALA",
+  "weapon": "Morso e Artigli",
+  "features": [
+   "Seguace (5)",
+   "Forma Eterea",
+   "Attacco in Massa",
+   "Deflagrazione Bestiale"
+  ],
+  "experience": ""
+ },
+ "guahalan-spirit-singer": {
+  "name": "CANTORE DEGLI SPIRITI DI GUAHALA",
+  "weapon": "Fiamma Spirituale",
+  "features": [
+   "Liberare la Belva",
+   "Evocatore della Bestia",
+   "Furia degli Spiriti",
+   "Sacrificio Spirituale"
+  ],
+  "experience": "Rituali +3, Storia Antica +2"
+ },
+ "hill-titan": {
+  "name": "TITANO DELLE COLLINE",
+  "weapon": "Ceppo d’Albero",
+  "features": [
+   "Inesorabile (3)",
+   "Slancio",
+   "Credulone",
+   "Sciame di Insetti",
+   "Sbracciata Poderosa"
+  ],
+  "experience": "Sopravvivenza +3, Vendetta +3"
+ },
+ "hive-walker": {
+  "name": "ERRANTE DELL’ALVEARE",
+  "weapon": "Pugno Putrido",
+  "features": [
+   "Miele di Sangue",
+   "Eruzione di Insetti"
+  ],
+  "experience": "Mangiatore di Carne +2"
+ },
+ "jack-o-lantern": {
+  "name": "ZUCCA STREGATA",
+  "weapon": "Morso",
+  "features": [
+   "Seguace (4)",
+   "Attacco in Massa",
+   "Risata da Brivido"
+  ],
+  "experience": ""
+ },
+ "juvenile-flickerfly": {
+  "name": "SCINTILLANTE GIOVANE",
+  "weapon": "Sferzata d’Ali",
+  "features": [
+   "Inesorabile (3)",
+   "Precisione Senza Pari",
+   "Danza delle Menti",
+   "Soffio Allucinogeno"
+  ],
+  "experience": ""
+ },
+ "knight-of-the-realm": {
+  "name": "CAVALIERE DEL REAME",
+  "weapon": "Spada Lunga",
+  "features": [
+   "Cavalleresco",
+   "Armatura Pesante",
+   "Carica di Cavalleria",
+   "Per il Regno!"
+  ],
+  "experience": "Alta Società +2, Storia Antica +3, Tattica +2"
+ },
+ "landshark": {
+  "name": "SQUALO DI TERRA",
+  "weapon": "Fauci Dentate",
+  "features": [
+   "Scavare",
+   "Pelle Spessa",
+   "Morsicata Lacerante"
+  ],
+  "experience": "Sotterraneo +3, Assetato di Sangue +2"
+ },
+ "landshark-behemoth": {
+  "name": "SQUALO DI TERRA COLOSSALE",
+  "weapon": "Fauci Dentate",
+  "features": [
+   "Inesorabile (3)",
+   "Scavatore delle Profondità",
+   "Pelle d’Acciaio",
+   "Eruzione Impetuosa"
+  ],
+  "experience": "Sotterraneo +4, Assetato di Sangue +3"
+ },
+ "masked-thief": {
+  "name": "LADRO MASCHERATO",
+  "weapon": "Spada a Doppia Lama",
+  "features": [
+   "Manolesta",
+   "Piano di Fuga"
+  ],
+  "experience": "Acrobazia +3"
+ },
+ "merchant-baron": {
+  "name": "MAGNATE",
+  "weapon": "Stocco",
+  "features": [
+   "Tutti Hanno un Prezzo",
+   "I Migliori Muscoli che il Denaro Possa Comprare"
+  ],
+  "experience": "Commercio +2, Nobiltà +2"
+ },
+ "minotaur-wrecker": {
+  "name": "MINOTAURO DEMOLITORE",
+  "weapon": "Ascia da Battaglia",
+  "features": [
+   "Potenziamento",
+   "Toro Scatenato",
+   "Incornata"
+  ],
+  "experience": "Orientamento +2"
+ },
+ "mortal-hunter": {
+  "name": "CACCIATORE DI MORTALI",
+  "weapon": "Strappare la Carne",
+  "features": [
+   "Terrificante",
+   "Stretta Mortale",
+   "Morte Ineluttabile",
+   "Furia Belluina"
+  ],
+  "experience": "Segugio +3"
+ },
+ "ravenous-mockery": {
+  "name": "PARODIA FAMELICA",
+  "weapon": "Denti Digrignanti",
+  "features": [
+   "Slinguata",
+   "Divorare",
+   "Mai Solo Uno"
+  ],
+  "experience": "Mimetismo +5, Affamato +3"
+ },
+ "royal-advisor": {
+  "name": "CONSIGLIERE DI CORTE",
+  "weapon": "Bachetta",
+  "features": [
+   "Replica Devastante",
+   "Far Drizzare le Orecchie",
+   "Capro Espiatorio"
+  ],
+  "experience": "Amministrazione +3, Cortigiano +3"
+ },
+ "rust-eater": {
+  "name": "MANGIARUGGINE",
+  "weapon": "Morso",
+  "features": [
+   "Feromoni Opprimenti",
+   "Tocco della Ruggine"
+  ],
+  "experience": "Annusare +3"
+ },
+ "scarecrow": {
+  "name": "SPAVENTAPASSERI",
+  "weapon": "Falce",
+  "features": [
+   "Fatto di Paglia",
+   "Visione di Terrore"
+  ],
+  "experience": "Campi +2, Uccelli +2"
+ },
+ "secret-keeper": {
+  "name": "CUSTODE DEI SEGRETI",
+  "weapon": "Bastone Istoriato",
+  "features": [
+   "Cogliere l’Attimo",
+   "La Volontà del Nostro Padrone",
+   "Rituale di Evocazione",
+   "Segugi Infernali"
+  ],
+  "experience": "Coercizione +2, Conoscenza degli Dèi Caduti +2"
+ },
+ "shark": {
+  "name": "SQUALO",
+  "weapon": "Fauci Dentate",
+  "features": [
+   "Terrificante",
+   "Morso Lacerante",
+   "Sangue nell’Acqua"
+  ],
+  "experience": "Olfatto +3"
+ },
+ "siren": {
+  "name": "SIRENA",
+  "weapon": "Mascella Disarticolata",
+  "features": [
+   "Ascoltatore Avvinto",
+   "Canto Incantatore"
+  ],
+  "experience": "Repertorio di Canti +3"
+ },
+ "spectral-archer": {
+  "name": "ARCIERE SPETTRALE",
+  "weapon": "Arco Lungo",
+  "features": [
+   "Fantasma",
+   "Scegli il Tuo Bersaglio"
+  ],
+  "experience": "Storia Antica +2"
+ },
+ "spectral-captain": {
+  "name": "CAPITANO SPETTRALE",
+  "weapon": "Arco Lungo",
+  "features": [
+   "Fantasma",
+   "Battaglia Senza Fine",
+   "Tenere la Posizione",
+   "Slancio"
+  ],
+  "experience": "Storia Antica +3"
+ },
+ "spectral-guardian": {
+  "name": "GUARDIANO SPETTRALE",
+  "weapon": "Lancia",
+  "features": [
+   "Fantasma",
+   "Lama del Sepolcro"
+  ],
+  "experience": "Storia Antica +2"
+ },
+ "sprite": {
+  "name": "SPIRITELLO",
+  "weapon": "Frecce Appuntite Come Aghi",
+  "features": [
+   "Seguace (5)",
+   "Arte dell’Invisibilità",
+   "Veleno di Petalo dei Sogni"
+  ],
+  "experience": "Furtività +2, Vendicatore +2"
+ },
+ "spy": {
+  "name": "SPIA",
+  "weapon": "Pugnale",
+  "features": [
+   "Scovare Segreti"
+  ],
+  "experience": "Spionaggio +3"
+ },
+ "stone-titan": {
+  "name": "TITANO DI PIETRA",
+  "weapon": "Martello di Pietra",
+  "features": [
+   "Inesorabile (3)",
+   "Colpo Esperto",
+   "Debolezza alla Luce Solare",
+   "Martellata"
+  ],
+  "experience": "Creazione +3, Rune +3"
+ },
+ "stonewraith": {
+  "name": "SPETTRO DI PIETRA",
+  "weapon": "Morso e Artigli",
+  "features": [
+   "Passapietra",
+   "Imboscata tra le Rocce",
+   "Ruggito della Valanga",
+   "Slancio"
+  ],
+  "experience": "Percezione a Contatto della Roccia +3"
+ },
+ "triceratops": {
+  "name": "TRICERATOPO",
+  "weapon": "Corna",
+  "features": [
+   "Pelle come il Cuoio",
+   "Spazzata di Coda",
+   "Carica Taurina"
+  ],
+  "experience": "Difensore +3"
+ },
+ "tyrannosaurus": {
+  "name": "TIRANNOSAURO",
+  "weapon": "Mascelle Possenti",
+  "features": [
+   "Il Ruggito Che Scuote la Terra",
+   "Calpestamento",
+   "Morso Devastante"
+  ],
+  "experience": "Predatore +3"
+ },
+ "urco": {
+  "name": "URCO",
+  "weapon": "Zanna Nera",
+  "features": [
+   "Mercante di Paura",
+   "Alimentato dal Terrore",
+   "Divoratore di Paure",
+   "Sguardo Funesto"
+  ],
+  "experience": "Furtività +3, Presagi +3"
+ },
+ "valdenhax": {
+  "name": "VALDENHAX",
+  "weapon": "Pestello di Pietra Gigante",
+  "features": [
+   "A Me, Miei Cuccioli",
+   "Strangolatrice nell’Ombra",
+   "Sussurrare ai Cadaveri",
+   "Parola Irritante"
+  ],
+  "experience": "Stregoneria +3"
+ },
+ "war-wizard": {
+  "name": "MAGO DA BATTAGLIA",
+  "weapon": "Bastone",
+  "features": [
+   "Teletrasporto da Battaglia",
+   "Riattivare Globo di Protezione",
+   "Eruzione",
+   "Artiglieria Arcana",
+   "Globo di Protezione"
+  ],
+  "experience": "Sapienza Magica +2, Strategia +2"
+ },
+ "adult-flickerfly": {
+  "name": "SCINTILLANTE ADULTO",
+  "weapon": "Sferzata d’Ali",
+  "features": [
+   "Inesorabile (4)",
+   "Sempre a Segno",
+   "Volo Letale",
+   "Turbine",
+   "Danza delle Menti",
+   "Soffio Allucinogeno",
+   "Riflessi Soprannaturali"
+  ],
+  "experience": ""
+ },
+ "archmage": {
+  "name": "ARCIMAGO",
+  "weapon": "Bordone dell’Arcimago",
+  "features": [
+   "Inesorabile (3)",
+   "Egida Orbitante",
+   "Salva di Forza",
+   "Palla di Fuoco",
+   "Contromagia"
+  ],
+  "experience": "Esoterica +4"
+ },
+ "catrin": {
+  "name": "CATRIN",
+  "weapon": "Fiamma Spirituale",
+  "features": [
+   "Abbagliato dalla Ricchezza",
+   "Il Peso dell’Opulenza",
+   "Fallimento Oneroso"
+  ],
+  "experience": "Narratrice +2, Opulenza +2"
+ },
+ "chimera": {
+  "name": "CHIMERA",
+  "weapon": "Artigli",
+  "features": [
+   "Fauci Laceranti",
+   "Doppia Artigliata",
+   "Respiro Infuocato",
+   "Guizzo del Serpente"
+  ],
+  "experience": "Predatore +3"
+ },
+ "crimson-lepus": {
+  "name": "LEPRE CREMISI",
+  "weapon": "Morso al Balzo",
+  "features": [
+   "Inesorabile (3)",
+   "“Oooh!”",
+   "Terrificante",
+   "Balzo alla Giugulare",
+   "Evasiva",
+   "“Via di Qui!”"
+  ],
+  "experience": "Malvagio +4"
+ },
+ "cryptimoth": {
+  "name": "CRIPTOFALENA",
+  "weapon": "Artigli",
+  "features": [
+   "Terrificante",
+   "Stridio Psichico",
+   "Sciame d’Ombre",
+   "Bagliore Paranoico"
+  ],
+  "experience": "Oscuri Presagi +3"
+ },
+ "cursed-merfolk": {
+  "name": "TRITONE MALEDETTO",
+  "weapon": "Tridente Incatenato",
+  "features": [
+   "Coda di Pesce",
+   "Fare Squadra",
+   "“Vieni Qui!”"
+  ],
+  "experience": "Acquatico +3"
+ },
+ "deep-dweller": {
+  "name": "CREATURA DEGLI ABISSI",
+  "weapon": "Denti e Tentacoli",
+  "features": [
+   "Deflagrazione Psichica",
+   "Risucchio Cerebrale",
+   "Richiamo degli Abissi",
+   "Mucosa Contaminante"
+  ],
+  "experience": "Acque Oscure +2, Misteri Antichi +2"
+ },
+ "demon-of-avarice": {
+  "name": "DEMONE DELL’AVARIZIA",
+  "weapon": "Fauci Affamate",
+  "features": [
+   "Il Denaro Conta",
+   "I Numeri Devono Salire",
+   "Il Denaro È Tempo"
+  ],
+  "experience": "Manipolazione +3"
+ },
+ "demon-of-despair": {
+  "name": "DEMONE DELLA DISPERAZIONE",
+  "weapon": "Dardo Miasmatico",
+  "features": [
+   "Abissi della Disperazione",
+   "Resistere È Inutile",
+   "I Tuoi Amici Ti Deluderanno",
+   "Slancio"
+  ],
+  "experience": "Manipolazione +3"
+ },
+ "demon-of-hubris": {
+  "name": "DEMONE DELL’ARROGANZA",
+  "weapon": "Lancia Perfetta",
+  "features": [
+   "Terrificante",
+   "Tutto o Niente",
+   "Perizia Impareggiabile",
+   "La Radice del Male",
+   "Non Reggere il Confronto"
+  ],
+  "experience": "Manipolazione +2"
+ },
+ "demon-of-jealousy": {
+  "name": "DEMONE DELLA GELOSIA",
+  "weapon": null,
+  "features": [
+   "Mente Indifesa",
+   "Tocca a Me",
+   "Rivalità",
+   "Quello che È tuo, È Mio"
+  ],
+  "experience": "Manipolazione +3"
+ },
+ "demon-of-wrath": {
+  "name": "DEMONE DELL’IRA",
+  "weapon": "Pugni",
+  "features": [
+   "Rabbia Inestinguibile",
+   "Bramosia di Battaglia",
+   "Ritorsione",
+   "Sangue e Anime"
+  ],
+  "experience": "Intimidire +2"
+ },
+ "dire-bat": {
+  "name": "PIPISTRELLO GIGANTE",
+  "weapon": "Zanne e Artigli",
+  "features": [
+   "Volo",
+   "Urlo",
+   "Guardiano"
+  ],
+  "experience": "Sanguinario +3"
+ },
+ "drake": {
+  "name": "DRAGHETTO",
+  "weapon": "Zanne e Unghie",
+  "features": [
+   "Inesorabile (2)",
+   "Cane da Guardia"
+  ],
+  "experience": "Malvagio +3"
+ },
+ "dryad": {
+  "name": "DRIADE",
+  "weapon": "Arco Corto Intrappolante",
+  "features": [
+   "Cespuglio di Rovi",
+   "Coltivare Arbusti",
+   "Siamo Una Cosa Sola"
+  ],
+  "experience": "Conoscenza della Foresta +4"
+ },
+ "dullahan": {
+  "name": "DULLAHAN",
+  "weapon": "Frusta di Vertebre",
+  "features": [
+   "Ectoplasma",
+   "Destriero Spettrale",
+   "Frustata d’Ossa",
+   "Bagliore di Morte"
+  ],
+  "experience": "Notturno +3"
+ },
+ "elemental-spark": {
+  "name": "TIZZONE ELEMENTALE",
+  "weapon": "Esplosioni di Fuoco",
+  "features": [
+   "Seguace (9)",
+   "Attacco in Massa"
+  ],
+  "experience": ""
+ },
+ "fellmounted-shadow-king": {
+  "name": "SOVRANO DELL’OMBRA FUNESTA",
+  "weapon": "Lancia Maledetta",
+  "features": [
+   "Destriero Maligno",
+   "Luci e Ombre",
+   "Cacciatore di Reliquie",
+   "Canzone Infernale",
+   "Supporto Aereo"
+  ],
+  "experience": "Cercatore +3"
+ },
+ "fire-titan": {
+  "name": "TITANO DEL FUOCO",
+  "weapon": "Spadone",
+  "features": [
+   "Inesorabile (3)",
+   "Capolavoro d’Armatura",
+   "Slancio",
+   "Scagliare Macigni",
+   "Spaccateschi",
+   "Cuore Fiammeggiante"
+  ],
+  "experience": "Forgiatura +5, Tattiche +3"
+ },
+ "frost-titan": {
+  "name": "TITANO DEL GELO",
+  "weapon": "Asce Gemelle",
+  "features": [
+   "Inesorabile (2)",
+   "Corno di Guerra",
+   "Carica Taurina",
+   "Fendente Tranciante",
+   "Cacciatore di Trofei"
+  ],
+  "experience": "Freddo +3, Guerra +3"
+ },
+ "gargantuan-sea-turtle": {
+  "name": "TESTUGGINE DI MARE GIGANTESCA",
+  "weapon": "Mascelle Devastanti",
+  "features": [
+   "Inesorabile (3)",
+   "Morso Penetrante",
+   "Botta di Coda",
+   "Tuffo Mareale",
+   "Soffio di Vapore"
+  ],
+  "experience": "Mare Aperto +5"
+ },
+ "greater-earth-elemental": {
+  "name": "ELEMENTALE MAGGIORE DELLA TERRA",
+  "weapon": "Pugno di Massi",
+  "features": [
+   "Lento",
+   "Colpi Devastanti",
+   "Inamovibile",
+   "Frana",
+   "Slancio"
+  ],
+  "experience": ""
+ },
+ "greater-water-elemental": {
+  "name": "ELEMENTALE MAGGIORE DELL’ACQUA",
+  "weapon": "Onda Devastante",
+  "features": [
+   "Getto d’Acqua",
+   "Abbraccio dell’Annegato",
+   "Alta Marea"
+  ],
+  "experience": ""
+ },
+ "huge-green-ooze": {
+  "name": "MELMA VERDE GIGANTE",
+  "weapon": "Appendice Viscida",
+  "features": [
+   "Lento",
+   "Forma Acida",
+   "Avviluppare",
+   "Scissione"
+  ],
+  "experience": "Mimetizzazione +3"
+ },
+ "hydra": {
+  "name": "IDRA",
+  "weapon": "Morso",
+  "features": [
+   "Minaccia dalle Molte Teste",
+   "Inesorabile (X)",
+   "Rigenerazione",
+   "Coro Terrificante",
+   "Debolezza Magica"
+  ],
+  "experience": ""
+ },
+ "lamia": {
+  "name": "LAMIA",
+  "weapon": "Pugnale Ricurvo",
+  "features": [
+   "Costrizione",
+   "Succhia Vita",
+   "Tossina Soporifera"
+  ],
+  "experience": "Serpente +3"
+ },
+ "lamplight-beguiler": {
+  "name": "LAMPARA INGANNATRICE",
+  "weapon": "Fauci",
+  "features": [
+   "Esca Mutaforme",
+   "Adescare",
+   "Deglutire"
+  ],
+  "experience": "Incanto +3, Segreti +3"
+ },
+ "manticore": {
+  "name": "MANTICORA",
+  "weapon": "Zanne e Unghie",
+  "features": [
+   "Inesorabile (3)",
+   "Indovina un po’",
+   "Alata",
+   "Attacco Balzante",
+   "Spina Caudale Paralizzante",
+   "Serrare le Mascelle"
+  ],
+  "experience": "Indovinelli +3, Vegetazione Lussureggiante +3"
+ },
+ "monarch": {
+  "name": "MONARCA",
+  "weapon": "Martello da Guerra",
+  "features": [
+   "A Morte!",
+   "Guardie della Corona",
+   "Casus Belli"
+  ],
+  "experience": "Nobiltà +3, Storia +3"
+ },
+ "night-children": {
+  "name": "PROLE DELLA NOTTE",
+  "weapon": "Zanne e Artigli",
+  "features": [
+   "Orda (2d6+2)",
+   "Ingrossare le Fila",
+   "Sopraffare"
+  ],
+  "experience": "Terrorizzare +3"
+ },
+ "pain-priest": {
+  "name": "SACERDOTE DEL DOLORE",
+  "weapon": "Strumenti di Tortura",
+  "features": [
+   "Camminare Tra i Mondi",
+   "Dolore e Piacere"
+  ],
+  "experience": "Sperimentazione +4"
+ },
+ "phoenix": {
+  "name": "FENICE",
+  "weapon": "Dardo di Fuoco",
+  "features": [
+   "Aura Purificatrice",
+   "Seme di Fuoco"
+  ],
+  "experience": "Brillante +4, Leggendaria +3"
+ },
+ "plesiosaurus": {
+  "name": "PLESIOSAURO",
+  "weapon": "Morso",
+  "features": [
+   "Solo un Mito",
+   "Muro d’Acqua"
+  ],
+  "experience": "Laghi +3"
+ },
+ "roc": {
+  "name": "ROC",
+  "weapon": "Becco e Artigli",
+  "features": [
+   "Inesorabile (3)",
+   "Rapace",
+   "Arriva il Tuono",
+   "Stretta Stritolatrice",
+   "Gonfio di Rabbia",
+   "Aura Elettrificata"
+  ],
+  "experience": "Picchi Scoscesi +3"
+ },
+ "sandwyrm": {
+  "name": "WYRM DELLE SABBIE",
+  "weapon": "Morso",
+  "features": [
+   "Pungiglione Velenoso",
+   "Divorare",
+   "Affamato, Non Stupido"
+  ],
+  "experience": "Percepire le Vibrazioni +4"
+ },
+ "shapeshifting-fiend": {
+  "name": "DEMONE MUTAFORME",
+  "weapon": "Lama Nascosta",
+  "features": [
+   "Natura Demoniaca",
+   "Impersonare",
+   "Divenire invisibile",
+   "Consiglio Ambiguo",
+   "Smascherato! (Cambio di Fase)"
+  ],
+  "experience": "Manipolazione +3, Mimetizzazione +2"
+ },
+ "shapeshifting-fiend-revealed": {
+  "name": "DEMONE MUTAFORME SMASCHERATO",
+  "weapon": "Artigli da Mantide",
+  "features": [
+   "Inesorabile (3)",
+   "Resistenza Demoniaca",
+   "Furia Demoniaca",
+   "Sala degli Specchi",
+   "Artigliata Fulminea",
+   "Giochetti Mentali"
+  ],
+  "experience": "Infernale +3, Immortale +2"
+ },
+ "stag-knight": {
+  "name": "CAVALIERE DEL CERVO",
+  "weapon": "Spada di Rovi",
+  "features": [
+   "Dall’Alto",
+   "Spada della Foresta",
+   "Corazza di Spine"
+  ],
+  "experience": "Conoscenza della Foresta +3"
+ },
+ "storm-titan": {
+  "name": "TITANO DELLE TEMPESTE",
+  "weapon": "Fulmine Magico",
+  "features": [
+   "Inesorabile (3)",
+   "Slancio",
+   "Fulmine Globulare",
+   "Portatore di Tempesta",
+   "Rombo di Tuono"
+  ],
+  "experience": "Potere della Tempesta +3"
+ },
+ "oak-treant": {
+  "name": "TREANT DELLE QUERCE",
+  "weapon": "Ramo",
+  "features": [
+   "Solo un Albero",
+   "Sventagliata di Ghiande",
+   "Mettere Radici"
+  ],
+  "experience": "Conoscenza della Foresta +3"
+ },
+ "treant-sapling": {
+  "name": "TREANT ARBUSTO",
+  "weapon": "Rami",
+  "features": [
+   "Seguace (6)",
+   "Attacco in Massa"
+  ],
+  "experience": ""
+ },
+ "unicorn": {
+  "name": "UNICORNO",
+  "weapon": "Zoccolo e Corno",
+  "features": [
+   "Lancia Celestiale",
+   "Tocco Curativo",
+   "Aura Protettrice",
+   "Teletrasporto"
+  ],
+  "experience": "Magia +3, Natura +3"
+ },
+ "head-vampire": {
+  "name": "VAMPIRO DOMINANTE",
+  "weapon": "Stocco",
+  "features": [
+   "Terrificante",
+   "Guardami!",
+   "Nutrirsi dei Seguaci",
+   "La Caccia È Aperta",
+   "Prosciugare la Vita"
+  ],
+  "experience": "Aristocratico +3"
+ },
+ "vampire": {
+  "name": "VAMPIRO",
+  "weapon": "Stocco",
+  "features": [
+   "Morso Succhiasangue",
+   "Forma di Nebbia"
+  ],
+  "experience": "Cacciatore Notturno +3"
+ },
+ "vampire-bat-swarm": {
+  "name": "SCIAME DI PIPISTRELLI VAMPIRO",
+  "weapon": "Zanne",
+  "features": [
+   "Orda (2d6)",
+   "Moltitudine Accecante",
+   "Sciame Succhiasangue"
+  ],
+  "experience": "Sangue +3"
+ },
+ "vampire-lord": {
+  "name": "SOVRANO VAMPIRO",
+  "weapon": "Artigli",
+  "features": [
+   "Inesorabile (3)",
+   "Cuore della Mezzanotte",
+   "Terrificante",
+   "Scatenare le Fiamme dell’Inferno",
+   "Rinascita",
+   "Fondersi nelle Ombre",
+   "Su Ali Cremisi",
+   "Bagno di Sangue"
+  ],
+  "experience": "Malvagità +3, Nobile +3"
+ },
+ "vault-guardian-gaoler": {
+  "name": "CARCERIERE DELLA CRIPTA",
+  "weapon": "Schianto",
+  "features": [
+   "Parata con Scudo",
+   "Chiuso a Chiave"
+  ],
+  "experience": ""
+ },
+ "vault-guardian-sentinel": {
+  "name": "SENTINELLA DELLA CRIPTA",
+  "weapon": "Mazza Infusa",
+  "features": [
+   "Schianto Cinetico",
+   "Mettere alle Strette",
+   "Dardo di Mana",
+   "Slancio"
+  ],
+  "experience": ""
+ },
+ "vault-guardian-turret": {
+  "name": "TORRETTA DELLA CRIPTA",
+  "weapon": "Cannone Magitech",
+  "features": [
+   "Lenta Cadenza di Fuoco",
+   "Inquadrare il Bersaglio",
+   "Concentrare il Fuoco",
+   "Detonazione"
+  ],
+  "experience": ""
+ },
+ "viscera-sucker": {
+  "name": "SUGGIVISCERE",
+  "weapon": "Unghie Allungate",
+  "features": [
+   "Riunisciti o Muori",
+   "Visceri Intrappolanti",
+   "Risucchio Vitale"
+  ],
+  "experience": "Volo +3"
+ },
+ "whisper-wraith": {
+  "name": "WRAITH BISBIGLIANTE",
+  "weapon": "Tocco d’Ombra",
+  "features": [
+   "Ectoplasma Maggiore",
+   "Sinistro",
+   "Sudario d’Incubo"
+  ],
+  "experience": "Sogni +4"
+ },
+ "wyvern": {
+  "name": "VIVERNA",
+  "weapon": "Zanne e Unghie",
+  "features": [
+   "Doppio Attacco",
+   "Strillo Terrificante",
+   "Stretta"
+  ],
+  "experience": "Morte dall’Alto +4"
+ },
+ "young-fire-dragon": {
+  "name": "GIOVANE DRAGO DI FUOCO",
+  "weapon": "Morso e Artigli",
+  "features": [
+   "Inesorabile (3)",
+   "Intimidire",
+   "Soffio di Fiamme",
+   "Eruzione",
+   "Scaglie Incandescenti",
+   "Taglia e Brucia"
+  ],
+  "experience": "Rabbia Bruciante +3"
+ },
+ "young-ice-dragon": {
+  "name": "DRAGO DEI GHIACCI GIOVANE",
+  "weapon": "Morso e Artigli",
+  "features": [
+   "Inesorabile (3)",
+   "Squarta e Schiaccia",
+   "Nessuna Speranza",
+   "Soffio della Tormenta",
+   "Valanga",
+   "Scaglie Ghiacciate",
+   "Slancio"
+  ],
+  "experience": "Proteggere ciò che è mio +3"
+ },
+ "arch-necromancer": {
+  "name": "ARCI-NEGROMANTE",
+  "weapon": "Esplosione Necrotica",
+  "features": [
+   "Danza della Morte",
+   "Raggio Corruttore",
+   "Aprire i Cancelli della Morte",
+   "Non Oggi, Miei Cari",
+   "La Tua Vita È Mia"
+  ],
+  "experience": "Conoscenza Proibita +3, Saggezza dei Secoli +3"
+ },
+ "cephilith-abomination": {
+  "name": "ABOMINIO CEPHILITH",
+  "weapon": "Pugni Possenti",
+  "features": [
+   "Pelle Tossica",
+   "Presa dell’Orso",
+   "Sgranocchiare!",
+   "Lingua Appiccicosa",
+   "Sanguisughe Parassite"
+  ],
+  "experience": "Bruto +3"
+ },
+ "cephilith-hatchling": {
+  "name": "CEPHILITH CUCCIOLO",
+  "weapon": "Ventose Spinose",
+  "features": [
+   "Seguace (12)",
+   "Indurre in Coma",
+   "Attacco in Massa"
+  ],
+  "experience": "Psichico +2"
+ },
+ "cephilith-novitiate": {
+  "name": "NOVIZIO DEI CEPHILITH",
+  "weapon": "Potere Soprannaturale",
+  "features": [
+   "Servitore (12)",
+   "Attacco in Massa",
+   "Immolarsi"
+  ],
+  "experience": "Visioni +2"
+ },
+ "cephilith-priest": {
+  "name": "SACERDOTE CEPHILITH",
+  "weapon": "Colpo Psichico",
+  "features": [
+   "Deflagrazione Psichica",
+   "Incursione Cerebrale",
+   "Stretta Telecinetica"
+  ],
+  "experience": "Regni Esterni +4"
+ },
+ "cephilith-titan": {
+  "name": "TITANO CEPHILITH",
+  "weapon": "Pseudartiglio",
+  "features": [
+   "Inesorabile (X)",
+   "Terrificante",
+   "Solo una Proiezione",
+   "Urlo Psichico",
+   "Richiamare i Devoti"
+  ],
+  "experience": "Caos +5, Psichico +5"
+ },
+ "cipactli": {
+  "name": "CIPACTLI",
+  "weapon": "Morso",
+  "features": [
+   "Inesorabile (3)",
+   "Molte Bocche",
+   "Pasto Famelico",
+   "Passi Sismici",
+   "Sangue Fertilizzante",
+   "Esplosione di Vegetazione"
+  ],
+  "experience": "Affamato +3, Primordiale +3"
+ },
+ "cloud-titan": {
+  "name": "TITANO DELLE NUVOLE",
+  "weapon": "Lame Ingioiellata",
+  "features": [
+   "Scagliare il Fulmine",
+   "Tessere la Foschia",
+   "Trasformarsi in Nuvola",
+   "Aprire la Voliera",
+   "Plasmare il Vento",
+   "Lascia o Raddoppia"
+  ],
+  "experience": "Lusso +3, Nobiltà +3"
+ },
+ "demon-lord-berzug": {
+  "name": "BERZUG, SIGNORE DEMONIACO",
+  "weapon": "Artigli Abissali",
+  "features": [
+   "Inesorabile (3)",
+   "Frustata di Caos",
+   "Scrutare nell’Abisso",
+   "Attacco Frantumante",
+   "Orripilante"
+  ],
+  "experience": "Conoscenza Infernale +3"
+ },
+ "dragon-mother-mitera": {
+  "name": "MITERA, MADRE DEI DRAGHI",
+  "weapon": "Morso e Fendente",
+  "features": [
+   "Inesorabile (3)",
+   "Pelle Adamantina",
+   "Soffio Elementale",
+   "Spazzata di Coda",
+   "Temibile",
+   "Sette Teste"
+  ],
+  "experience": "Antica +5"
+ },
+ "fallen-shock-troop": {
+  "name": "TRUPPA D’ASSALTO DEI CADUTI",
+  "weapon": "Ascia Maledetta",
+  "features": [
+   "Seguace (12)",
+   "Aura del Destino",
+   "Attacco in Massa"
+  ],
+  "experience": ""
+ },
+ "fallen-sorcerer": {
+  "name": "STREGONE DEI CADUTI",
+  "weapon": "Bastone Corrotto",
+  "features": [
+   "Conflagrazione",
+   "Visione d’Incubo",
+   "Sfuggente",
+   "Catene del Rimpianto"
+  ],
+  "experience": "Conoscenza Antica +2"
+ },
+ "realm-breaker": {
+  "name": "SIGNORE DELLA GUERRA DEI CADUTI: DISTRUTTORE DI REAMI",
+  "weapon": "Frusta Spinata",
+  "features": [
+   "Inesorabile (2)",
+   "Armatura a Piastre Sputafuoco",
+   "Frusta del Tormento",
+   "La Furia che Tutto Consuma",
+   "Esecutore del Fato",
+   "Non Ho Mai Conosciuto Sconfitta (Cambio di Fase)"
+  ],
+  "experience": "Conquista +3, Storia +2, Intimidire +3"
+ },
+ "undefeated-champion": {
+  "name": "SIGNORE DELLA GUERRA DEI CADUTI: CAMPIONE IMBATTUTO",
+  "weapon": "Spada Spezza-Cuori",
+  "features": [
+   "Inesorabile (3)",
+   "Armatura Frantumata",
+   "Colpo Frantumante",
+   "Legioni Infinite",
+   "Cerchio di Profanazione",
+   "Slancio",
+   "Portatore di Sventura"
+  ],
+  "experience": "Conquista +3, Intimidire +3, Storia +2"
+ },
+ "fire-titan-warlord": {
+  "name": "CONDOTTIERO DEI TITANI DEL FUOCO",
+  "weapon": "Mazza",
+  "features": [
+   "Inesorabile (2)",
+   "Creatore di Colossi",
+   "Sguinzagliare i Segugi",
+   "Attacco Turbinante",
+   "Spaccare la Terra"
+  ],
+  "experience": "Tattiche +4"
+ },
+ "gargantuan-war-machine": {
+  "name": "CONGEGNO BELLICO COLOSSALE",
+  "weapon": "Pugni di Ferro",
+  "features": [
+   "Inesorabile (3)",
+   "Dimensioni Titaniche",
+   "Pugno Razzo",
+   "Pestata Sismica",
+   "Sovralimentato"
+  ],
+  "experience": "Indistruttibile +3"
+ },
+ "ghastly-legion": {
+  "name": "LEGIONE FANTASMA",
+  "weapon": "Panoplia Spettrale",
+  "features": [
+   "Orda (2d6+5)",
+   "Necroplasma",
+   "Atto Finale"
+  ],
+  "experience": "Tattiche +2"
+ },
+ "griffin": {
+  "name": "GRIFONE",
+  "weapon": "Becco e Artigli",
+  "features": [
+   "Accumulatore di Tesori",
+   "Picchiata Fenditrice"
+  ],
+  "experience": "Ricchezze +5, Sensi Acuti +3"
+ },
+ "hallowed-archer": {
+  "name": "ARCIERE SANTIFICATO",
+  "weapon": "Arco Lungo Santificato",
+  "features": [
+   "Punire i Colpevoli",
+   "Salva Divina"
+  ],
+  "experience": ""
+ },
+ "hallowed-choir": {
+  "name": "CORO SANTIFICATO",
+  "weapon": "Esplosione Corale",
+  "features": [
+   "Orda (2d10)",
+   "Coda Celestiale",
+   "Assalto Sonoro"
+  ],
+  "experience": "Musica +2"
+ },
+ "hallowed-soldier": {
+  "name": "SOLDATO SANTIFICATO",
+  "weapon": "Spada e Scudo",
+  "features": [
+   "Seguace (13)",
+   "Volo Divino",
+   "Attacco in Massa"
+  ],
+  "experience": ""
+ },
+ "harbinger-of-death": {
+  "name": "ARALDO DELLA MORTE",
+  "weapon": "Grande Falce",
+  "features": [
+   "Inesorabile (3)",
+   "Cavalcatura",
+   "Temete il Mietitore",
+   "Decapitare",
+   "Risvegliare i Caduti",
+   "Cenere alla Cenere, Polvere alla Polvere"
+  ],
+  "experience": "Giudizio +3"
+ },
+ "harbinger-of-famine": {
+  "name": "ARALDO DELLA CARESTIA",
+  "weapon": "Frusta Spinosa",
+  "features": [
+   "Inesorabile (2)",
+   "Cavalcatura",
+   "Fitte della Fame",
+   "Prosciugare Essenza",
+   "Troppe Bocche",
+   "Tocco Avvizzente"
+  ],
+  "experience": "Fame +2, Sete +2"
+ },
+ "harbinger-of-pestilence": {
+  "name": "ARALDO DELLA PESTILENZA",
+  "weapon": "Tocco della Corruzione",
+  "features": [
+   "Alone del Contagio",
+   "Cavalcatura",
+   "Sciame di Locuste",
+   "Progenie di Rane",
+   "Portatore della Piaga"
+  ],
+  "experience": "Marciume +3"
+ },
+ "harbinger-of-war": {
+  "name": "ARALDO DELLA GUERRA",
+  "weapon": "Ascia da Battaglia",
+  "features": [
+   "Inesorabile (2)",
+   "Cavalcatura",
+   "Dadi di Ferro",
+   "Comandante Supremo",
+   "Ariete d’Assedio"
+  ],
+  "experience": "Armatura Pesante +3"
+ },
+ "high-seraph": {
+  "name": "CAMPIONE CONSACRATO",
+  "weapon": "Spada Sacra",
+  "features": [
+   "Inesorabile (2)",
+   "Volo Divino",
+   "Giudizio",
+   "Strali Divini",
+   "Noi Siamo Uno"
+  ],
+  "experience": "Conoscenza Divina +3"
+ },
+ "kraken": {
+  "name": "KRAKEN",
+  "weapon": "Tentacoli",
+  "features": [
+   "Inesorabile (3)",
+   "Molti Tentacoli",
+   "Afferra e Affoga",
+   "Esplosione Ribollente",
+   "Slancio"
+  ],
+  "experience": "Nuoto +3"
+ },
+ "oracle-of-doom": {
+  "name": "ORACOLO DEL FATO",
+  "weapon": "Attacco Psichico",
+  "features": [
+   "Terrificante",
+   "Il Cerchio si Stringe",
+   "Profetizzare",
+   "Evoca Tormentatori",
+   "Conoscenza Inquietante",
+   "Destino Vendicativo"
+  ],
+  "experience": "Conoscenza Illimitata +4"
+ },
+ "outer-realms-abomination": {
+  "name": "ABOMINIO DEI REGNI ESTERNI",
+  "weapon": "Pseudopodo Massiccio",
+  "features": [
+   "Forma del Caos",
+   "Presenza Disorientante",
+   "Sconvolgere la Realtà",
+   "Forma Irreale"
+  ],
+  "experience": ""
+ },
+ "outer-realms-corrupter": {
+  "name": "CORRUTTORE DEI REAMI ESTERNI",
+  "weapon": "Pseudopodi Corrosivi",
+  "features": [
+   "Tocco che Abbatte la Volontà",
+   "Vomitare Avanzi di Realtà"
+  ],
+  "experience": ""
+ },
+ "outer-realms-thrall": {
+  "name": "SERVITORE DEI REAMI ESTERNI",
+  "weapon": "Artigli e Zanne",
+  "features": [
+   "Seguace (13)",
+   "Attacco in Massa"
+  ],
+  "experience": ""
+ },
+ "owl-witch": {
+  "name": "GUFO STREGATO",
+  "weapon": "Artigli Affilati Come Rasoi",
+  "features": [
+   "Cattivo Presagio",
+   "Barriera Stregata",
+   "Imitare le Voci",
+   "Occhiata da Incubo",
+   "Visioni di una Fine Violenta"
+  ],
+  "experience": "Magia +2, Predatore Notturno +2"
+ },
+ "ruby-dragon": {
+  "name": "DRAGO DI RUBINO",
+  "weapon": "Denti e Artigli",
+  "features": [
+   "Inesorabile (3)",
+   "Temibile",
+   "Soffio di Fusione",
+   "Fenditura Vulcanica",
+   "Sangue Caldo"
+  ],
+  "experience": "Montagne +4"
+ },
+ "severed-shadow": {
+  "name": "OMBRA RECISA",
+  "weapon": "Strangolamento",
+  "features": [
+   "Seguace (12)",
+   "Ombra Afferrante",
+   "Attacco in Massa"
+  ],
+  "experience": ""
+ },
+ "supreme-demiurge-adonix": {
+  "name": "ADONIX, DEMIURGO SUPREMO",
+  "weapon": "Colpo d’Ala",
+  "features": [
+   "Inesorabile (4)",
+   "Arconte Elementale",
+   "Rinnegare",
+   "Armageddon"
+  ],
+  "experience": "Onnipotenza +10, Non Temere +5"
+ },
+ "temporal-enforcer": {
+  "name": "CUSTODE TEMPORALE",
+  "weapon": "Martello Adamantino",
+  "features": [
+   "Inesorabile (2)",
+   "Ciclo Temporale",
+   "Muoversi tra gli Attimi",
+   "Riavvolgimento Istantaneo",
+   "Inversione di Polarità"
+  ],
+  "experience": "Anomalie Temporali +3"
+ },
+ "obsidian-predator": {
+  "name": "PREDATORE D’OSSIDIANA",
+  "weapon": "Artigli di Ossidiana",
+  "features": [
+   "Inesorabile (2)",
+   "Volare",
+   "Scaglie di Ossidiana",
+   "Coda Travolgente",
+   "Bombardamento in Picchiata",
+   "Furia Eruttiva (Cambio di Fase)"
+  ],
+  "experience": "Agguato dall’Alto +5"
+ },
+ "molten-scourge": {
+  "name": "FLAGELLO FUSO",
+  "weapon": "Artigli Ricoperti di Lava",
+  "features": [
+   "Inesorabile (3)",
+   "Scaglie Incrinate",
+   "Potenza Frantumante",
+   "Eruzione",
+   "Soffio Vulcanico",
+   "Spruzzo di Lava",
+   "Ceneri della Vendetta (Cambio di Fase)"
+  ],
+  "experience": "Agguato dall’Alto +5"
+ },
+ "ashen-tyrant": {
+  "name": "TIRANNO DELLA CENERE",
+  "weapon": "Artigli e Zanne",
+  "features": [
+   "Inesorabile (4)",
+   "All’Angolo",
+   "Ali Straziate",
+   "Cenere alla Cenere",
+   "Furia Disperata",
+   "Nube di Cenere",
+   "Disfatta Apocalittica"
+  ],
+  "experience": "Agguato dall’Alto +5"
+ },
+ "water-mother": {
+  "name": "MADRE DELLE ACQUE",
+  "weapon": "Morso",
+  "features": [
+   "Segmenti",
+   "Divorare il Mondo",
+   "Stritolare",
+   "Ondata Venefica"
+  ],
+  "experience": "Fiumi +4"
+ },
+ "wyrmfiend": {
+  "name": "MOSTRUOSITÀ DRACONICA",
+  "weapon": "Armi dal Tesoro",
+  "features": [
+   "Seguace (13)",
+   "Morso Velenoso",
+   "Attacco in Massa"
+  ],
+  "experience": "Legame Draconico +2"
+ },
+ "wyrmlings": {
+  "name": "NIDIATA DRACONICA",
+  "weapon": "Piccole Fauci e Artigli",
+  "features": [
+   "Orda (2d6+5)",
+   "Famelica",
+   "Sopraffare"
+  ],
+  "experience": "Legame Draconico +2"
+ },
+ "xero-the-castle-killer": {
+  "name": "XERO, L’ASSASSINO DI FORTEZZE",
+  "weapon": "Spazzata di Coda",
+  "features": [
+   "Inesorabile (X)",
+   "Danno Collaterale",
+   "Calpestamento Tellurico",
+   "Scivolata Poderosa",
+   "Respiro Radioattivo",
+   "Rigenerazione"
+  ],
+  "experience": "Distruzione +5"
+ },
+ "perfected-zombie": {
+  "name": "ZOMBI PERFEZIONATO",
+  "weapon": "Ascia Grande",
+  "features": [
+   "Terrificante",
+   "Presenza Spaventosa",
+   "Colpo Perfetto",
+   "Abile Opportunista"
+  ],
+  "experience": ""
+ },
+ "zombie-legion": {
+  "name": "LEGIONE DI ZOMBI",
+  "weapon": "Tentacoli",
+  "features": [
+   "Orda (2d6+5)",
+   "Inflessibile",
+   "Inesorabile (2)",
+   "Sopraffare"
+  ],
+  "experience": ""
+ }
+}
