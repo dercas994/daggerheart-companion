@@ -114,7 +114,7 @@ export function CampaignPage({ id, tab }: { id: string; tab: CampaignTab }) {
         )}
       </main>
 
-      <FearAura fear={campaign.fear} enabled={!isGm} />
+      <FearAura fear={campaign.fear} enabled />
       <TagTeamFlow tag={live.tag} characters={characters} rolls={rolls} isGm={isGm} onRollAdded={live.addRoll} />
       {tab !== 'musica' && <MiniPlayer p={player} onOpen={() => go(`/c/${id}/musica`)} />}
       {isGm && <UndoRollSheet key={undoing?.id} roll={undoing} onClose={() => setUndoing(null)} onConfirm={async revert => {

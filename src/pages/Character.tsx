@@ -175,7 +175,7 @@ export function CharacterPage({ id }: { id: string }) {
       )}
 
       <RollSheet open={rollOpen} onClose={() => setRollOpen(false)} character={c} presetTrait={preset} presetExtra={rollPreset.extra} presetLabel={rollPreset.label} onRoll={doRoll} onOtherDice={() => openDice(null)} />
-      <FearAura fear={live.campaign.fear} enabled={live.campaign.gm_id !== user.id} />
+      <FearAura fear={live.campaign.fear} enabled />
       <TagTeamFlow tag={live.tag} characters={live.characters} rolls={live.rolls} isGm={live.campaign.gm_id === user.id} onRollAdded={live.addRoll} />
       <DiceSheet open={diceOpen} onClose={() => setDiceOpen(false)} character={c} preset={dicePreset} onRoll={doDice} />
       {overlay && <DiceOverlay roll={overlay.roll} ownRoll={overlay.own} onClose={() => setOverlay(null)} />}

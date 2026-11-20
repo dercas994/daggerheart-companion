@@ -25,9 +25,16 @@ export function getArmor(id?: string, d?: SheetData): Armor | undefined {
   return h ? (h.kind === 'armor' ? homebrewArmor(h) : undefined) : srdArmor(id)
 }
 /** Bonus fissi dati da capacità e oggetti homebrew. */
+/** Bonus dell'homebrew: capacità e oggetti sempre, armi e armature solo se equipaggiate. */
 export function homebrewMods(d: SheetData) {
-  const m = { evasion: 0, armor: 0, thresholds: 0 }
-  for (const h of d.homebrew ?? []) if (h.kind === 'ability' || h.kind === 'item') for (const k of ['evasion', 'armor', 'thresholds'] as const) m[k] += h.mods?.[k] ?? 0
+  const m = { evasion: 0, armor: 0, thresholds: 0, traits: {} as Partial<Record<TraitKey, number>> }
+  const worn = [d.primary_weapon_id, d.secondary_weapon_id, d.armor_id]
+  for (const h of d.homebrew ?? []) {
+    const active = h.kind === 'ability' || h.kind === 'item' || worn.includes(HB + h.id)
+    if (!active) continue
+    for (const k of ['evasion', 'armor', 'thresholds'] as const) m[k] += h.mods?.[k] ?? 0
+    for (const [t, v] of Object.entries(h.mods?.traits ?? {})) m.traits[t as TraitKey] = (m.traits[t as TraitKey] ?? 0) + (v ?? 0)
+  }
   return m
 }
 
@@ -82,7 +89,7 @@ export function equipmentMods(d: SheetData) {
 }
 
 export function traitValue(d: SheetData, t: TraitKey) {
-  return (d.traits?.[t] ?? 0) + (equipmentMods(d)[t] ?? 0)
+  return (d.traits?.[t] ?? 0) + (equipmentMods(d)[t] ?? 0) + (homebrewMods(d).traits[t] ?? 0)
 }
 
 export function evasion(d: SheetData) {

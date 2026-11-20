@@ -19,12 +19,14 @@ function blank(kind: HomebrewKind): Homebrew {
 
 /** Riepilogo compatto delle statistiche di un elemento homebrew. */
 export function homebrewStats(h: Homebrew, proficiency = 1) {
-  if (h.kind === 'weapon') {
-    return `${IT.traits[h.trait ?? 'strength']}, ${IT.range[h.range ?? 'Melee']}, ${weaponDamage(`${h.dice || 'd6'} ${h.damageType ?? 'phy'}`, proficiency)}, ${IT.burden[h.burden ?? 'One-Handed']}, ${h.category === 'secondary' ? 'secondaria' : 'primaria'}`
-  }
-  if (h.kind === 'armor') return `Soglie base ${h.thresholds?.[0]}/${h.thresholds?.[1]}, punteggio ${h.score}`
   const m = h.mods ?? {}
-  const parts = [m.evasion ? `Evasione ${fmt(m.evasion)}` : '', m.armor ? `Armatura ${fmt(m.armor)}` : '', m.thresholds ? `Soglie ${fmt(m.thresholds)}` : '']
+  const modParts = [m.evasion ? `Evasione ${fmt(m.evasion)}` : '', m.armor ? `Armatura ${fmt(m.armor)}` : '', m.thresholds ? `Soglie ${fmt(m.thresholds)}` : '',
+    ...Object.entries(m.traits ?? {}).filter(([, v]) => v).map(([t, v]) => `${IT.traits[t as TraitKey]} ${fmt(v!)}`)].filter(Boolean)
+  if (h.kind === 'weapon') {
+    return [`${IT.traits[h.trait ?? 'strength']}, ${IT.range[h.range ?? 'Melee']}, ${weaponDamage(`${h.dice || 'd6'} ${h.damageType ?? 'phy'}`, proficiency)}, ${IT.burden[h.burden ?? 'One-Handed']}, ${h.category === 'secondary' ? 'secondaria' : 'primaria'}`, ...modParts].join(', ')
+  }
+  if (h.kind === 'armor') return [`Soglie base ${h.thresholds?.[0]}/${h.thresholds?.[1]}, punteggio ${h.score}`, ...modParts].join(', ')
+  const parts = [...modParts]
   if (h.kind === 'item' && (h.quantity ?? 1) !== 1) parts.unshift(`× ${h.quantity}`)
   return parts.filter(Boolean).join(', ')
 }
@@ -166,6 +168,18 @@ function HomebrewEditor({ item, onClose, onSave, onDelete }: { item: Homebrew; o
         </div>
       )}
 
+      {(h.kind === 'weapon' || h.kind === 'armor') && (
+        <>
+          <p className="field-title">Bonus e penalità <small>(valgono solo quando è equipaggiata)</small></p>
+          <div className="edit-grid">
+            <div className="edit-row"><span>Evasione</span><Stepper value={h.mods?.evasion ?? 0} min={-5} max={10} onChange={n => setMod('evasion', n)} /></div>
+            {h.kind === 'weapon' && <div className="edit-row"><span>Punteggio Armatura</span><Stepper value={h.mods?.armor ?? 0} min={-5} max={10} onChange={n => setMod('armor', n)} /></div>}
+            <div className="edit-row"><span>Soglie di danno</span><Stepper value={h.mods?.thresholds ?? 0} min={-10} max={20} onChange={n => setMod('thresholds', n)} /></div>
+          </div>
+          <TraitMods h={h} set={set} />
+        </>
+      )}
+
       {(h.kind === 'ability' || h.kind === 'item') && (
         <>
           {h.kind === 'item' && <div className="edit-row"><span>Quantità</span><Stepper value={h.quantity ?? 1} min={0} max={99} onChange={n => set({ quantity: n })} /></div>}
@@ -176,6 +190,7 @@ function HomebrewEditor({ item, onClose, onSave, onDelete }: { item: Homebrew; o
             <div className="edit-row"><span>Soglie di danno</span><Stepper value={h.mods?.thresholds ?? 0} min={-10} max={20} onChange={n => setMod('thresholds', n)} /></div>
             <div className="edit-row"><span>Caselle d'uso</span><Stepper value={h.uses ?? 0} min={0} max={12} onChange={n => set({ uses: n, used: Math.min(h.used ?? 0, n) })} /></div>
           </div>
+          <TraitMods h={h} set={set} />
         </>
       )}
 
@@ -190,5 +205,23 @@ function HomebrewEditor({ item, onClose, onSave, onDelete }: { item: Homebrew; o
         ? <button className="btn btn-danger" onClick={() => setConfirmDel(true)}>Elimina</button>
         : <button className="btn btn-danger" onClick={onDelete}>Conferma: elimina {h.name}</button>)}
     </Sheet>
+  )
+}
+
+/** Bonus o penalità ai tratti (es. armatura pesante: −1 Agilità). */
+function TraitMods({ h, set }: { h: Homebrew; set: (p: Partial<Homebrew>) => void }) {
+  const tr = h.mods?.traits ?? {}
+  const any = Object.values(tr).some(v => v)
+  const [open, setOpen] = useState(any)
+  const setT = (t: TraitKey, n: number) => set({ mods: { ...(h.mods ?? {}), traits: { ...tr, [t]: n } } })
+  return (
+    <details className="trait-mods" open={open} onToggle={e => setOpen((e.target as HTMLDetailsElement).open)}>
+      <summary>Bonus ai tratti{any ? `: ${Object.entries(tr).filter(([, v]) => v).map(([t, v]) => `${IT.traits[t as TraitKey]} ${fmt(v!)}`).join(', ')}` : ''}</summary>
+      <div className="edit-grid">
+        {TRAITS.map(t => (
+          <div key={t} className="edit-row"><span>{IT.traits[t]}</span><Stepper value={tr[t] ?? 0} min={-5} max={5} onChange={n => setT(t, n)} /></div>
+        ))}
+      </div>
+    </details>
   )
 }

@@ -19,7 +19,7 @@ export interface Member { campaign_id: string; user_id: string; role: 'gm' | 'pl
 export interface Experience { name: string; bonus: number }
 
 export type HomebrewKind = 'weapon' | 'armor' | 'ability' | 'item'
-export interface HomebrewMods { evasion?: number; armor?: number; thresholds?: number }
+export interface HomebrewMods { evasion?: number; armor?: number; thresholds?: number; traits?: Partial<Record<TraitKey, number>> }
 /** Contenuto homebrew creato dal giocatore, salvato dentro la scheda. */
 export interface Homebrew {
   id: string

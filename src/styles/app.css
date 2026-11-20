@@ -889,3 +889,7 @@ button.dcard:hover { transform: translateY(-2px); }
 .tt-pill { position: fixed; z-index: 45; left: 50%; transform: translateX(-50%); top: calc(4.6rem + env(safe-area-inset-top, 0px)); border-radius: 999px; padding: 0.55rem 1.1rem;
   border: 1px solid var(--hope); background: rgba(44, 35, 65, 0.97); color: var(--hope-glow); font: inherit; font-weight: 700; cursor: pointer; animation: rise 0.3s; }
 @media (prefers-reduced-motion: reduce) { .tt-sigil i { animation: none; } }
+/* PF e Armatura si consumano da destra verso sinistra, come una barra che scende */
+.pips-hp, .pips-armor { flex-direction: row-reverse; justify-content: flex-end; }
+.trait-mods { margin: 0.4rem 0 0.8rem; }
+.trait-mods summary { cursor: pointer; color: var(--muted); font-size: 0.9rem; padding: 0.3rem 0; }
