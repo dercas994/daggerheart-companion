@@ -1003,3 +1003,19 @@ button.dcard:hover { transform: translateY(-2px); }
 .bd-add { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
 .feat-edit { border: 1px solid var(--line); border-radius: var(--r-s); padding: 0.5rem; margin-bottom: 0.5rem; display: grid; gap: 0.4rem; }
 .grow { flex: 1; }
+
+/* ── Bonus comprati con lo Stress (o la Paura) e tenuti pronti per il prossimo tiro ── */
+.pending-bonus {
+  display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; flex-wrap: wrap;
+  margin: 0.4rem 0; padding: 0.45rem 0.7rem; border-radius: 10px; font-size: 0.88rem;
+  border: 1px solid color-mix(in srgb, var(--hope) 55%, transparent);
+  background: color-mix(in srgb, var(--hope) 12%, transparent);
+  animation: pending-in 0.35s ease-out;
+}
+.pending-bonus b { color: var(--hope-glow); }
+.char-page > .pending-bonus { margin: 0.6rem 1rem; }
+@keyframes pending-in { from { opacity: 0; transform: translateY(-4px); } }
+.stress-uses { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.35rem; }
+.btn-stress { border-color: color-mix(in srgb, var(--stress, #c9a227) 60%, transparent); }
+.feat-edit input.short { width: 6.5rem; }
+@media (prefers-reduced-motion: reduce) { .pending-bonus { animation: none; } }

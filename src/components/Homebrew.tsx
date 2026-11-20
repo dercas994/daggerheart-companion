@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { StressButtons } from './StressUse'
+import type { StressUse } from '../lib/costs'
 import type { Character, Homebrew, HomebrewKind, SheetData, TraitKey } from '../lib/types'
 import { TRAITS } from '../lib/types'
 import { IT } from '../data'
@@ -32,7 +34,7 @@ export function homebrewStats(h: Homebrew, proficiency = 1) {
 }
 
 /** Elenco dell'homebrew del PG con creazione, modifica ed eliminazione. */
-export function HomebrewSection({ c, canEdit, patch }: { c: Character; canEdit: boolean; patch: (p: Partial<Character>) => void }) {
+export function HomebrewSection({ c, canEdit, patch, onStress }: { c: Character; canEdit: boolean; patch: (p: Partial<Character>) => void; onStress?: (u: StressUse, src: string) => void }) {
   const d = c.data
   const list = d.homebrew ?? []
   const [editing, setEditing] = useState<Homebrew | null>(null)
@@ -90,6 +92,7 @@ export function HomebrewSection({ c, canEdit, patch }: { c: Character; canEdit: 
             </header>
             {homebrewStats(h, d.proficiency) && <p className="hb-stats">{homebrewStats(h, d.proficiency)}</p>}
             {h.text && <p className="hb-text">{h.text}</p>}
+            {h.text && <StressButtons text={h.text} src={h.name} c={c} canEdit={canEdit} onUse={onStress} />}
             {(h.uses ?? 0) > 0 && (
               <div className="hb-uses"><span>Usi</span>
                 <Pips kind="stress" size="sm" max={h.uses!} value={h.used ?? 0} label={`Usi di ${h.name}`} onChange={canEdit ? n => setUsed(h, n) : undefined} />

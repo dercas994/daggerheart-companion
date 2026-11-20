@@ -22,13 +22,13 @@ export function DomainCardView({ card, selected, onClick, action, dim }: {
   )
 }
 
-export function FeatureList({ items }: { items: { name: string; text: string }[] }) {
+export function FeatureList({ items, extra }: { items: { name: string; text: string }[]; extra?: (f: { name: string; text: string }) => ReactNode }) {
   return (
     <dl className="features">
       {items.map((f, i) => (
         <div key={i}>
           {f.name && <dt>{f.name}</dt>}
-          <dd>{f.text.split('\n').map((p, j) => <p key={j}>{p}</p>)}</dd>
+          <dd>{f.text.split('\n').map((p, j) => <p key={j}>{p}</p>)}{extra?.(f)}</dd>
         </div>
       ))}
     </dl>

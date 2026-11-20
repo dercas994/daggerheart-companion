@@ -9,6 +9,8 @@ import { TopBar } from '../components/TopBar'
 import { DiceOverlay, outcomeText, rollTone } from '../components/Dice'
 import { RollSheet, type RollChoice } from '../components/RollSheet'
 import { DiceSheet, type DicePreset } from '../components/DiceSheet'
+import { bonusText, type PendingBonus, type StressUse } from '../lib/costs'
+import { parseDice } from '../lib/adversaries'
 import type { DiceRequest } from '../lib/types'
 import { GroupMoves } from '../components/GroupMoves'
 import { TagTeamFlow } from '../components/TagTeam'
@@ -36,7 +38,9 @@ export function CharacterPage({ id }: { id: string }) {
   const [rolling, setRolling] = useState(false)
   const [diceOpen, setDiceOpen] = useState(false)
   const [dicePreset, setDicePreset] = useState<DicePreset | null>(null)
-  const [rollPreset, setRollPreset] = useState<{ extra: number; label: string }>({ extra: 0, label: '' })
+  const [rollPreset, setRollPreset] = useState<{ extra: number; label: string; note?: string; adv?: -1 | 0 | 1 }>({ extra: 0, label: '' })
+  const [pending, setPending] = useState<PendingBonus | null>(null)
+  const [diceNote, setDiceNote] = useState(false)
 
   // ricavo la campagna dal PG, poi uso lo stato live della campagna
   useEffect(() => { be.getCharacter(id).then(c => setCampaignId(c.campaign_id)).catch(e => setLoadErr(e.message)) }, [be, id])
@@ -59,7 +63,20 @@ export function CharacterPage({ id }: { id: string }) {
   const ownPortrait = c.data.portrait_url
   const portrait = ownPortrait || getAncestry(c.data.ancestry_id === 'mixed' ? c.data.mixed?.[0] : c.data.ancestry_id)?.image
 
-  function openRoll(t: TraitKey | null) { setPreset(t); setRollPreset({ extra: 0, label: '' }); setRollOpen(true) }
+  function openRoll(t: TraitKey | null) {
+    setPreset(t)
+    const p = pending && (pending.roll || pending.adv) ? pending : null
+    setRollPreset(p ? { extra: p.roll ?? 0, label: '', note: `${bonusText({ roll: p.roll, adv: p.adv })} da ${p.src}`, adv: p.adv ? 1 : 0 } : { extra: 0, label: '' })
+    setRollOpen(true)
+  }
+  /** Segna lo Stress di una capacità e, se compra un bonus, lo tiene pronto per il prossimo tiro. */
+  function markStress(u: StressUse, src: string) {
+    if (!c) return
+    if (c.stress_marked + u.stress > c.stress_max) { toast({ text: 'Non hai abbastanza Stress libero', tone: 'error' }); return }
+    patch({ stress_marked: c.stress_marked + u.stress })
+    if (u.bonus) setPending({ src, ...u.bonus })
+    toast({ text: `${src}: segnat${u.stress === 1 ? 'o' : 'i'} ${u.stress} Stress${u.bonus ? `, ${bonusText(u.bonus)} al prossimo tiro` : ''}` })
+  }
 
   async function doRoll(choice: RollChoice) {
     if (!c || !campaignId || rolling) return
@@ -67,6 +84,7 @@ export function CharacterPage({ id }: { id: string }) {
     try {
       if (choice.hopeSpent > 0) await live.patchCharacter(c.id, { hope: Math.max(0, c.hope - choice.hopeSpent) })
       const r = await be.roll(campaignId, c.id, { modifier: choice.modifier, label: choice.label, advantage: choice.advantage, manual: choice.manual, reaction: choice.reaction })
+      if (rollPreset.note) setPending(p => p && (p.dmg || p.prof) ? { src: p.src, dmg: p.dmg, prof: p.prof } : null)
       live.addRoll(r)
       setOverlay({ roll: r, own: true })
       // l'aggiornamento arriva anche via realtime; rileggo per sicurezza
@@ -81,13 +99,26 @@ export function CharacterPage({ id }: { id: string }) {
     setDiceOpen(false); setRolling(true)
     try {
       const r = await be.rollDice(campaignId, c.id, req)
+      if (diceNote) setPending(p => p && (p.roll || p.adv) ? { src: p.src, roll: p.roll, adv: p.adv } : null)
       live.addRoll(r)
       setOverlay({ roll: r, own: true })
     } catch (e) {
       toast({ text: e instanceof Error ? e.message : String(e), tone: 'error' })
     } finally { setRolling(false) }
   }
-  function openDice(p: DicePreset | null) { setDicePreset(p); setRollOpen(false); setDiceOpen(true) }
+  function openDice(p: DicePreset | null) {
+    const b = p && pending && (pending.dmg || pending.prof) ? pending : null
+    if (p && b) {
+      const groups = p.groups.map((g, i) => (i === 0 && b.prof ? { ...g, n: g.n + b.prof } : g))
+      const extra = b.dmg ? parseDice(b.dmg) : { groups: [], bonus: 0 }
+      for (const g of extra.groups) {
+        const same = groups.find(x => x.sides === g.sides)
+        if (same) same.n += g.n; else groups.push({ ...g })
+      }
+      p = { ...p, groups, bonus: p.bonus + extra.bonus, label: `${p.label}, ${bonusText({ dmg: b.dmg, prof: b.prof })} da ${b.src}` }
+    }
+    setDiceNote(!!b); setDicePreset(p); setRollOpen(false); setDiceOpen(true)
+  }
 
   const allies = live.characters.filter(x => x.id !== c.id)
   async function help(ally: Character) {
@@ -149,6 +180,13 @@ export function CharacterPage({ id }: { id: string }) {
         )}
       </section>
 
+      {pending && (
+        <p className="pending-bonus panel">
+          <span>Prossimo tiro: <b>{bonusText(pending)}</b> da {pending.src}</span>
+          <button className="link-btn" onClick={() => setPending(null)}>Annulla</button>
+        </p>
+      )}
+
       <nav className="tabs" role="tablist">
         {(['scheda', 'carte', 'gruppo', 'tiri'] as Tab[]).map(t => (
           <button key={t} role="tab" aria-selected={tab === t} className={tab === t ? 'sel' : ''} onClick={() => setTab(t)}>
@@ -158,10 +196,10 @@ export function CharacterPage({ id }: { id: string }) {
       </nav>
 
       <main className="page tab-page">
-        {tab === 'scheda' && <SheetTab c={c} canEdit={canEdit} patch={patch} onRoll={openRoll} onDamage={openDice} allies={allies}
+        {tab === 'scheda' && <SheetTab c={c} canEdit={canEdit} patch={patch} onRoll={openRoll} onDamage={openDice} allies={allies} onStress={markStress}
           afterGear={canEdit && <GroupMoves c={c} allies={allies} onHelp={help} onTagTeam={proposeTagTeam}
             onGroupAction={(m, l) => { setPreset(null); setRollPreset({ extra: m, label: l }); setRollOpen(true) }} />} />}
-        {tab === 'carte' && <CardsTab c={c} canEdit={canEdit} patch={patch} />}
+        {tab === 'carte' && <CardsTab c={c} canEdit={canEdit} patch={patch} onStress={markStress} />}
         {tab === 'gruppo' && (
           <>
             <section className="panel"><FearTrack value={live.campaign.fear} /></section>
@@ -179,7 +217,7 @@ export function CharacterPage({ id }: { id: string }) {
         </button>
       )}
 
-      <RollSheet open={rollOpen} onClose={() => setRollOpen(false)} character={c} presetTrait={preset} presetExtra={rollPreset.extra} presetLabel={rollPreset.label} onRoll={doRoll} onOtherDice={() => openDice(null)} />
+      <RollSheet open={rollOpen} onClose={() => setRollOpen(false)} character={c} presetTrait={preset} presetExtra={rollPreset.extra} presetLabel={rollPreset.label} presetNote={rollPreset.note} presetAdv={rollPreset.adv ?? 0} onRoll={doRoll} onOtherDice={() => openDice(null)} />
       <FearAura fear={live.campaign.fear} enabled />
       <TagTeamFlow tag={live.tag} characters={live.characters} rolls={live.rolls} isGm={live.campaign.gm_id === user.id} onRollAdded={live.addRoll} />
       <DiceSheet open={diceOpen} onClose={() => setDiceOpen(false)} character={c} preset={dicePreset} onRoll={doDice} />

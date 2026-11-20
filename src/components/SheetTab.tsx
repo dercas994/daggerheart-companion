@@ -7,13 +7,15 @@ import type { DicePreset } from './DiceSheet'
 import { HomebrewSection } from './Homebrew'
 import { FeatureList } from './CardView'
 import { ErrorLine, Sheet, Stepper, useAsync, useToast } from './ui'
+import { StressButtons } from './StressUse'
+import type { StressUse } from '../lib/costs'
 import { useApp } from '../App'
 
 const CONDITIONS = ['Vulnerabile', 'Trattenuto', 'Nascosto', 'Distratto', 'Avvelenato', 'In fiamme']
 
-export function SheetTab({ c, canEdit, patch, onRoll, onDamage, allies = [], afterGear }: {
+export function SheetTab({ c, canEdit, patch, onRoll, onDamage, allies = [], afterGear, onStress }: {
   c: Character; canEdit: boolean; patch: (p: Partial<Character>) => void; onRoll: (t: TraitKey | null) => void; onDamage?: (p: DicePreset) => void
-  allies?: Character[]; afterGear?: ReactNode
+  allies?: Character[]; afterGear?: ReactNode; onStress?: (u: StressUse, src: string) => void
 }) {
   const toast = useToast()
   const [allyPick, setAllyPick] = useState(false)
@@ -33,6 +35,7 @@ export function SheetTab({ c, canEdit, patch, onRoll, onDamage, allies = [], aft
 
   const weapons = [getWeapon(d.primary_weapon_id, d), getWeapon(d.secondary_weapon_id, d)].filter(Boolean)
   const armor = getArmor(d.armor_id, d)
+  const sb = (f: { name: string; text: string }) => <StressButtons text={f.text} src={f.name} c={c} canEdit={canEdit} onUse={onStress} />
 
   return (
     <div className="sheet-tab">
@@ -69,6 +72,7 @@ export function SheetTab({ c, canEdit, patch, onRoll, onDamage, allies = [], aft
               </div>
               <span className="gear-stats">{IT.traits[w.trait]}, {IT.range[w.range] ?? w.range}, <b>{weaponDamage(w.damage, d.proficiency)}</b>, {IT.burden[w.burden]}</span>
               {(w.feature_it || w.feature) && <span className="gear-feat">{w.feature_it || w.feature}</span>}
+              {sb({ name: w.name, text: w.feature_it || w.feature || '' })}
             </div>
           ))}
           {armor && (
@@ -76,6 +80,7 @@ export function SheetTab({ c, canEdit, patch, onRoll, onDamage, allies = [], aft
               <div className="gear-top"><b>{armor.name}</b></div>
               <span className="gear-stats">Soglie base {armor.thresholds[0]}/{armor.thresholds[1]}, punteggio {armor.score}</span>
               {(armor.feature_it || armor.feature) && <span className="gear-feat">{armor.feature_it || armor.feature}</span>}
+              {sb({ name: armor.name, text: armor.feature_it || armor.feature || '' })}
             </div>
           )}
         </div>
@@ -103,11 +108,11 @@ export function SheetTab({ c, canEdit, patch, onRoll, onDamage, allies = [], aft
               <HopeFeatureButton c={c} classId={d.class_id} patch={patch} toast={toast} onAlly={() => setAllyPick(true)} />
             )}
           </div>
-          <FeatureList items={cls.features.map(f => ({ name: fname(f), text: ftext(f) }))} />
+          <FeatureList extra={sb} items={cls.features.map(f => ({ name: fname(f), text: ftext(f) }))} />
           {sub && (
             <>
               <p className="field-title">{sub.name} <small>({{ foundation: 'base', specialization: 'specializzazione', mastery: 'maestria' }[d.subclass_tier]})</small></p>
-              <FeatureList items={subFeatures.map(f => ({ name: fname(f), text: ftext(f) }))} />
+              <FeatureList extra={sb} items={subFeatures.map(f => ({ name: fname(f), text: ftext(f) }))} />
             </>
           )}
           {d.multiclass && (() => {
@@ -116,16 +121,16 @@ export function SheetTab({ c, canEdit, patch, onRoll, onDamage, allies = [], aft
             return mc ? (
               <>
                 <p className="field-title">Multiclasse: {className(mc.id)}{ms ? `, ${ms.name}` : ''}</p>
-                <FeatureList items={[...mc.features, ...(ms?.foundation ?? [])].map(f => ({ name: fname(f), text: ftext(f) }))} />
+                <FeatureList extra={sb} items={[...mc.features, ...(ms?.foundation ?? [])].map(f => ({ name: fname(f), text: ftext(f) }))} />
               </>
             ) : null
           })()}
           <p className="field-title">Retaggio e comunità</p>
-          <FeatureList items={[...ancFeatures, ...(getCommunity(d.community_id)?.features ?? [])].map(f => ({ name: fname(f), text: ftext(f) }))} />
+          <FeatureList extra={sb} items={[...ancFeatures, ...(getCommunity(d.community_id)?.features ?? [])].map(f => ({ name: fname(f), text: ftext(f) }))} />
         </section>
       )}
 
-      <HomebrewSection c={c} canEdit={canEdit} patch={patch} />
+      <HomebrewSection c={c} canEdit={canEdit} patch={patch} onStress={onStress} />
 
       <section>
         <h2>Condizioni</h2>

@@ -1,3 +1,4 @@
+import { bonusText, featureBonus, featureCosts, featureDamage, type PendingBonus } from '../lib/costs'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useApp } from '../App'
 import {
@@ -16,8 +17,15 @@ const TYPE_IT: Record<string, string> = {
 const fmtAtk = (a: Adversary['atk']) => (typeof a === 'number' ? (a >= 0 ? `+${a}` : `−${-a}`) : String(a))
 
 /** Tiro privato del master: niente database, nessun giocatore lo vede. */
-function localRoll(label: string, spec: { groups: { n: number; sides: number }[]; bonus: number }, kind: 'dice' | 'damage', type?: string): Roll {
-  const groups = spec.groups.map(g => ({ ...g, rolls: Array.from({ length: g.n }, () => 1 + Math.floor(Math.random() * g.sides)) }))
+function localRoll(label: string, spec: { groups: { n: number; sides: number }[]; bonus: number }, kind: 'dice' | 'damage', type?: string, adv = false): Roll {
+  const d = (sides: number) => 1 + Math.floor(Math.random() * sides)
+  const groups = spec.groups.map(g => ({ ...g, rolls: Array.from({ length: g.n }, () => d(g.sides)) }))
+  if (adv && groups[0]?.sides === 20) {
+    // vantaggio dell'avversario: due d20, tengo il più alto
+    const a = groups[0].rolls[0], b = d(20)
+    groups[0].rolls = [Math.max(a, b)]
+    label += ` (vantaggio: ${a} e ${b})`
+  }
   const sum = groups.reduce((s, g) => s + g.rolls.reduce((x, y) => x + y, 0), 0)
   return {
     id: newUid(), campaign_id: '', character_id: null, user_id: '', roller_name: '', label, hope_die: 0, fear_die: 0, adv_die: 0,
@@ -188,6 +196,7 @@ function UnitCard({ u, a, onChange, onRemove, onDefeatMinions, onRoll, onFear }:
   const [open, setOpen] = useState(false)
   const [dmg, setDmg] = useState('')
   const [last, setLast] = useState<string | null>(null)
+  const [pending, setPending] = useState<PendingBonus | null>(null)
   const minion = a.type === 'Minion'
   const mv = minionValue(a)
   const hordeHalf = a.type === 'Horde' && u.hp >= Math.ceil(a.hp / 2)
@@ -205,6 +214,32 @@ function UnitCard({ u, a, onChange, onRemove, onDefeatMinions, onRoll, onFear }:
     setLast(msg)
     if (minion && mv && Math.floor(n / mv) > 0) onDefeatMinions(Math.floor(n / mv))
     setDmg('')
+  }
+
+  const pendingDmg = pending && (pending.dmg || pending.dmgFromHp)
+    ? [pending.dmg, pending.dmgFromHp ? String(u.hp) : ''].filter(Boolean).join('+') : ''
+  const note = (b: PendingBonus) => `, ${bonusText(b, u.hp)} da ${b.src}`
+
+  function rollAttack(label: string, adv = false) {
+    const base = typeof a.atk === 'number' ? { groups: [{ n: 1, sides: 20 }], bonus: a.atk } : parseDice(`1d20+${String(a.atk).replace(/^\+/, '')}`)
+    const use = pending && (pending.roll || pending.adv) ? pending : null
+    const r = localRoll(label + (use ? note({ src: use.src, roll: use.roll, adv: use.adv }) : ''), { ...base, bonus: base.bonus + (use?.roll ?? 0) }, 'dice', undefined, adv || !!use?.adv)
+    if (use) setPending(p => p && (p.dmg || p.dmgFromHp) ? { src: p.src, dmg: p.dmg, dmgFromHp: p.dmgFromHp } : null)
+    onRoll(r)
+  }
+  function rollDamage(label: string, formula: string, type: string) {
+    const base = parseDice(formula)
+    if (pendingDmg && pending) {
+      const extra = parseDice(pendingDmg)
+      onRoll(localRoll(label + note({ src: pending.src, dmg: pending.dmg, dmgFromHp: pending.dmgFromHp }), { groups: [...base.groups, ...extra.groups], bonus: base.bonus + extra.bonus }, 'damage', type))
+      setPending(p => p && (p.roll || p.adv) ? { src: p.src, roll: p.roll, adv: p.adv } : null)
+    } else onRoll(localRoll(label, base, 'damage', type))
+  }
+  async function pay(f: Adversary['features'][number], what: 'fear' | 'stress', n: number) {
+    if (what === 'fear') { if (!(await onFear(n))) return }
+    else onChange({ stress: u.stress + n })
+    const b = featureBonus(f)
+    if (b) setPending({ src: f.name, ...b })
   }
 
   return (
@@ -227,12 +262,19 @@ function UnitCard({ u, a, onChange, onRemove, onDefeatMinions, onRoll, onFear }:
       {!minion && <div className="unit-track"><span>PF</span><Pips kind="hp" size="sm" max={a.hp} value={u.hp} onChange={hp => onChange({ hp, defeated: hp >= a.hp })} /></div>}
       {a.stress > 0 && <div className="unit-track"><span>Stress</span><Pips kind="stress" size="sm" max={a.stress} value={u.stress} onChange={stress => onChange({ stress })} /></div>}
 
+      {pending && (
+        <p className="pending-bonus">
+          <span>Prossimo tiro: <b>{bonusText(pending, u.hp)}</b> da {pending.src}</span>
+          <button className="link-btn" onClick={() => setPending(null)} aria-label="Annulla il bonus">Annulla</button>
+        </p>
+      )}
       <div className="unit-btns">
-        <button className="btn btn-ghost small" disabled={u.defeated} onClick={() => {
-          const r = localRoll(`${u.name}: attacco ${fmtAtk(a.atk)}`, typeof a.atk === 'number' ? { groups: [{ n: 1, sides: 20 }], bonus: a.atk } : parseDice(`1d20+${String(a.atk).replace(/^\+/, '')}`), 'dice')
-          onRoll(r)
-        }}>Attacca {fmtAtk(a.atk)}</button>
-        <button className="btn btn-ghost small btn-dmg" disabled={u.defeated} onClick={() => onRoll(localRoll(`${u.name}: ${a.weapon}`, parseDice(dmgDice), 'damage', a.damage_type))}>Danno {dmgDice}</button>
+        <button className="btn btn-ghost small" disabled={u.defeated} onClick={() => rollAttack(`${u.name}: attacco`)}>
+          Attacca {fmtAtk(a.atk)}{pending?.roll ? ` +${pending.roll}` : ''}{pending?.adv ? ', vantaggio' : ''}
+        </button>
+        <button className="btn btn-ghost small btn-dmg" disabled={u.defeated} onClick={() => rollDamage(`${u.name}: ${a.weapon}`, dmgDice, a.damage_type)}>
+          Danno {dmgDice}{pendingDmg ? ` +${pendingDmg}` : ''}
+        </button>
         <span className="unit-dmg">
           <input type="number" inputMode="numeric" min={0} placeholder="danni" value={dmg} onChange={e => setDmg(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && applyDamage()} aria-label={`Danni subiti da ${u.name}`} />
@@ -257,12 +299,21 @@ function UnitCard({ u, a, onChange, onRemove, onDefeatMinions, onRoll, onFear }:
             <div key={i} className={`uf uf-${f.kind}`}>
               <p><b>{f.name}</b> <span className="uf-kind">{KIND_IT[f.kind]}</span></p>
               <p className="uf-text">{f.text}</p>
-              {(f.fear || f.stress) && (
-                <div className="uf-btns">
-                  {f.fear && <button className="btn btn-ghost small btn-fear" onClick={() => onFear(f.fear!)}>Spendi {f.fear} Paura</button>}
-                  {f.stress && <button className="btn btn-ghost small" disabled={u.stress + f.stress > a.stress} onClick={() => onChange({ stress: u.stress + f.stress! })}>Segna {f.stress} Stress</button>}
-                </div>
-              )}
+              {(() => {
+                const k = featureCosts(f), b = featureBonus(f), own = featureDamage(f.text)
+                const bt = b ? `: ${bonusText(b, u.hp)}` : ''
+                if (!k.fear && !k.stress && !own) return null
+                return (
+                  <div className="uf-btns">
+                    {k.fear > 0 && <button className="btn btn-ghost small btn-fear" disabled={u.defeated} onClick={() => pay(f, 'fear', k.fear)}>Spendi {k.fear} Paura{k.stress ? '' : bt}</button>}
+                    {k.stress > 0 && <button className="btn btn-ghost small" disabled={u.defeated || u.stress + k.stress > a.stress} onClick={() => pay(f, 'stress', k.stress)}>Segna {k.stress} Stress{bt}</button>}
+                    {own && <>
+                      <button className="btn btn-ghost small" disabled={u.defeated} onClick={() => rollAttack(`${u.name}: ${f.name}`, /con vantaggio/i.test(f.text))}>Attacca</button>
+                      <button className="btn btn-ghost small btn-dmg" disabled={u.defeated} onClick={() => rollDamage(`${u.name}: ${f.name}`, own.dice, own.type)}>Danno {own.dice}</button>
+                    </>}
+                  </div>
+                )
+              })()}
             </div>
           ))}
         </div>
@@ -380,6 +431,11 @@ function AdversaryEditor({ a, onClose, onSaved, onDeleted }: { a: Adversary; onC
             <span className="hint">Costo:</span>
             <span className="bp-ctl">Paura <Stepper value={f.fear ?? 0} min={0} max={6} onChange={n => setF(i, { fear: n || undefined })} /></span>
             <span className="bp-ctl">Stress <Stepper value={f.stress ?? 0} min={0} max={6} onChange={n => setF(i, { stress: n || undefined })} /></span>
+          </div>
+          <div className="row-gap">
+            <span className="hint">Bonus al prossimo tiro:</span>
+            <span className="bp-ctl">Attacco <Stepper value={f.bonus_roll ?? 0} min={0} max={10} onChange={n => setF(i, { bonus_roll: n || undefined })} /></span>
+            <label className="bp-ctl">Danno <input className="short" value={f.bonus_dmg ?? ''} placeholder="+4 o 1d6" maxLength={12} onChange={e => setF(i, { bonus_dmg: e.target.value.trim() || undefined })} /></label>
           </div>
         </div>
       ))}

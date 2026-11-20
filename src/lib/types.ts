@@ -141,6 +141,9 @@ export interface AdversaryFeature {
   text: string
   fear?: number
   stress?: number
+  /** Bonus che la capacità dà al prossimo tiro (scritto a mano per gli homebrew). */
+  bonus_roll?: number
+  bonus_dmg?: string
 }
 /** Scheda di un avversario (dal manuale o creata dal master). */
 export interface Adversary {

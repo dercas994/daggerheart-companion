@@ -24,9 +24,9 @@ function DieGrid({ sides, value, onPick, tone, label }: { sides: number; value: 
   )
 }
 
-export function RollSheet({ open, onClose, character, presetTrait, presetExtra = 0, presetLabel = '', onRoll, onOtherDice }: {
+export function RollSheet({ open, onClose, character, presetTrait, presetExtra = 0, presetLabel = '', presetNote = '', presetAdv = 0, onRoll, onOtherDice }: {
   open: boolean; onClose: () => void; character: Character | null
-  presetTrait?: TraitKey | null; presetExtra?: number; presetLabel?: string; onRoll: (c: RollChoice) => void; onOtherDice?: () => void
+  presetTrait?: TraitKey | null; presetExtra?: number; presetLabel?: string; presetNote?: string; presetAdv?: -1 | 0 | 1; onRoll: (c: RollChoice) => void; onOtherDice?: () => void
 }) {
   const [trait, setTrait] = useState<TraitKey | null>(null)
   const [exps, setExps] = useState<number[]>([])
@@ -41,8 +41,8 @@ export function RollSheet({ open, onClose, character, presetTrait, presetExtra =
   const setMode = (m: 'app' | 'physical') => { setModeState(m); try { localStorage.setItem(MODE_KEY, m) } catch { /* niente */ } }
 
   useEffect(() => {
-    if (open) { setTrait(presetTrait ?? null); setExps([]); setAdv(0); setExtra(presetExtra); setLabel(presetLabel); setHDie(null); setFDie(null); setADie(null); setReaction(false) }
-  }, [open, presetTrait, presetExtra, presetLabel])
+    if (open) { setTrait(presetTrait ?? null); setExps([]); setAdv(presetAdv); setExtra(presetExtra); setLabel(presetLabel); setHDie(null); setFDie(null); setADie(null); setReaction(false) }
+  }, [open, presetTrait, presetExtra, presetLabel, presetAdv])
 
   const d = character?.data
   const spell = d ? spellcastTrait(d) : null
@@ -53,6 +53,7 @@ export function RollSheet({ open, onClose, character, presetTrait, presetExtra =
   const total = traitMod + expMod + extra
 
   const autoLabel = [trait ? IT.traits[trait] : '', ...exps.map(i => expList[i]?.name)].filter(Boolean).join(' + ')
+  const finalLabel = () => [label.trim() || autoLabel, presetNote].filter(Boolean).join(', ')
 
   function toggleExp(i: number) {
     setExps(x => (x.includes(i) ? x.filter(y => y !== i) : x.length < hope ? [...x, i] : x))
@@ -60,6 +61,7 @@ export function RollSheet({ open, onClose, character, presetTrait, presetExtra =
 
   return (
     <Sheet open={open} onClose={onClose} title={reaction ? 'Tiro di reazione' : 'Tiro di Dualità'}>
+      {presetNote && <p className="pending-bonus">Bonus applicato: <b>{presetNote}</b></p>}
       <div className="seg dice-mode">
         <button type="button" className={mode === 'app' ? 'sel' : ''} onClick={() => setMode('app')}>Dadi dell’app</button>
         <button type="button" className={mode === 'physical' ? 'sel' : ''} onClick={() => setMode('physical')}>Dadi fisici</button>
@@ -136,12 +138,12 @@ export function RollSheet({ open, onClose, character, presetTrait, presetExtra =
       )}
 
       {mode === 'app' ? (
-        <button type="button" className="btn btn-roll" onClick={() => onRoll({ modifier: total, label: label.trim() || autoLabel, advantage: adv, hopeSpent: exps.length, reaction })}>
+        <button type="button" className="btn btn-roll" onClick={() => onRoll({ modifier: total, label: finalLabel(), advantage: adv, hopeSpent: exps.length, reaction })}>
           Tira 2d12 {total !== 0 && <span>{fmt(total)}</span>}{adv !== 0 && <span>{adv > 0 ? '+d6' : '−d6'}</span>}
         </button>
       ) : (
         <button type="button" className="btn btn-roll" disabled={!hDie || !fDie || (adv !== 0 && !aDie)}
-          onClick={() => onRoll({ modifier: total, label: label.trim() || autoLabel, advantage: adv, hopeSpent: exps.length, reaction, manual: { hope: hDie!, fear: fDie!, adv: adv !== 0 ? aDie! : undefined } })}>
+          onClick={() => onRoll({ modifier: total, label: finalLabel(), advantage: adv, hopeSpent: exps.length, reaction, manual: { hope: hDie!, fear: fDie!, adv: adv !== 0 ? aDie! : undefined } })}>
           Registra il tiro
         </button>
       )}

@@ -1,11 +1,13 @@
 import { useMemo, useState } from 'react'
 import type { Character } from '../lib/types'
-import { CARDS, domainName, getCard, getClass, type DomainCard } from '../data'
+import { CARDS, cardName, cardText, domainName, getCard, getClass, type DomainCard } from '../data'
 import { MAX_LOADOUT } from '../lib/rules'
 import { DomainCardView } from './CardView'
 import { Sheet, useToast } from './ui'
+import { StressButtons } from './StressUse'
+import type { StressUse } from '../lib/costs'
 
-export function CardsTab({ c, canEdit, patch }: { c: Character; canEdit: boolean; patch: (p: Partial<Character>) => void }) {
+export function CardsTab({ c, canEdit, patch, onStress }: { c: Character; canEdit: boolean; patch: (p: Partial<Character>) => void; onStress?: (u: StressUse, src: string) => void }) {
   const toast = useToast()
   const d = c.data
   const [resting, setResting] = useState(false)
@@ -37,7 +39,10 @@ export function CardsTab({ c, canEdit, patch }: { c: Character; canEdit: boolean
       <div className="card-grid">
         {loadout.map(card => (
           <DomainCardView key={card.id} card={card}
-            action={canEdit && <button className="btn btn-ghost small" onClick={() => toVault(card.id)}>Metti nel Rifugio</button>} />
+            action={canEdit && <>
+              <StressButtons text={cardText(card)} src={cardName(card)} c={c} canEdit={canEdit} onUse={onStress} />
+              <button className="btn btn-ghost small" onClick={() => toVault(card.id)}>Metti nel Rifugio</button>
+            </>} />
         ))}
       </div>
 
