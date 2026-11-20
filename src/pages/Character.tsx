@@ -47,7 +47,8 @@ export function CharacterPage({ id }: { id: string }) {
     ? `${getAncestry(c.data.mixed?.[0])?.name ?? ''}/${getAncestry(c.data.mixed?.[1])?.name ?? ''}`
     : getAncestry(c.data.ancestry_id)?.name
   const [maj, sev] = thresholds(c.data, c.level)
-  const portrait = getAncestry(c.data.ancestry_id === 'mixed' ? c.data.mixed?.[0] : c.data.ancestry_id)?.image
+  const ownPortrait = c.data.portrait_url
+  const portrait = ownPortrait || getAncestry(c.data.ancestry_id === 'mixed' ? c.data.mixed?.[0] : c.data.ancestry_id)?.image
 
   function openRoll(t: TraitKey | null) { setPreset(t); setRollOpen(true) }
 
@@ -74,7 +75,8 @@ export function CharacterPage({ id }: { id: string }) {
         right={canEdit && <button className="btn btn-ghost small" onClick={() => setSheet('edit')}>Modifica</button>} />
 
       <header className="char-hero">
-        {portrait && <img className="char-portrait" src={portrait} alt="" />}
+        {portrait && <img className={`char-portrait ${ownPortrait ? 'own' : ''}`} src={portrait} alt={ownPortrait ? `Ritratto di ${c.name}` : ''} />}
+        {!ownPortrait && canEdit && <button className="btn btn-ghost small hero-add-portrait" onClick={() => setSheet('edit')}>Aggiungi il ritratto del personaggio</button>}
         <h1 className="char-name">{c.name}</h1>
         <p className="char-line">
           {className(c.data.class_id)}{sub ? `, ${sub.name}` : ''}, livello {c.level}

@@ -552,3 +552,31 @@ button.dcard:hover { transform: translateY(-2px); }
 .update-banner p { flex: 1 1 260px; margin: 0; font-size: 0.92rem; }
 .update-banner b { color: var(--hope-glow); }
 .update-actions { display: flex; gap: 0.5rem; }
+
+/* ---------- homebrew ---------- */
+.hb-add { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.hb-list { display: grid; gap: 0.5rem; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.hb-item { display: grid; gap: 0.35rem; padding: 0.75rem 0.85rem; border-radius: var(--r-m); background: var(--dusk); border: 1px dashed rgba(233, 185, 73, 0.45); }
+.hb-item header { display: flex; align-items: center; gap: 0.5rem; }
+.hb-name { flex: 1; font-family: var(--f-display); font-size: 1.05rem; }
+.hb-kind { font-size: 0.72rem; padding: 0.05rem 0.45rem; border-radius: 4px; background: var(--dusk-3); color: var(--muted); }
+.hb-stats { font-size: 0.88rem; margin: 0; }
+.hb-text { font-family: var(--f-serif); font-size: 0.95rem; color: #DCCFE6; margin: 0; white-space: pre-wrap; }
+.hb-uses { display: flex; align-items: center; gap: 0.6rem; font-size: 0.82rem; color: var(--muted); }
+.hb-item > .btn { justify-self: start; }
+
+/* ---------- ritratti ---------- */
+.avatar { display: inline-grid; place-items: center; flex: none; border-radius: 50%; object-fit: cover; object-position: center 25%; border: 2px solid var(--accent, var(--line)); background: var(--dusk-2); }
+.avatar-empty { font-family: var(--f-display); color: var(--parchment); background: color-mix(in srgb, var(--accent) 35%, var(--dusk)); }
+.portrait-picker { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.4rem 1rem; align-items: center; margin: 0.6rem 0; }
+.portrait-picker .error { grid-column: 1 / -1; }
+.portrait-actions { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
+.portrait-actions .hint { flex-basis: 100%; margin: 0; }
+.char-portrait.own { height: 220px; object-position: center 22%; }
+@media (min-width: 640px) { .char-portrait.own { height: 300px; } }
+.party-card header { display: flex; gap: 0.7rem; align-items: center; }
+.party-card header > div { min-width: 0; }
+.mine-item .avatar { margin-right: 0.8rem; }
+.mine-item { justify-content: flex-start; }
+.mine-item .mine-go { margin-left: auto; }
+.hero-add-portrait { margin-bottom: 0.6rem; }

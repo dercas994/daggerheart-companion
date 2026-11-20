@@ -11,6 +11,7 @@ import { go } from '../lib/router'
 import { ErrorLine, useAsync } from '../components/ui'
 import { TopBar } from '../components/TopBar'
 import { DomainCardView, FeatureList } from '../components/CardView'
+import { PortraitPicker } from '../components/Portrait'
 
 const STEPS = ['Classe', 'Sottoclasse', 'Retaggio', 'Comunità', 'Tratti', 'Equipaggiamento', 'Esperienze', 'Carte dominio', 'Dettagli'] as const
 const ACCENTS = ['#E9B949', '#D9774B', '#C8553D', '#C9579A', '#9A6BE0', '#5B7BD6', '#4FA3A5', '#5E9A57', '#B9AE96']
@@ -20,6 +21,7 @@ export function WizardPage({ campaignId }: { campaignId: string }) {
   const [step, setStep] = useState(0)
   const [d, setD] = useState<SheetData>(() => emptySheet())
   const [name, setName] = useState('')
+  const [portrait, setPortrait] = useState<{ blob: Blob; url: string } | null>(null)
   const save = useAsync()
   const set = (p: Partial<SheetData>) => setD(x => ({ ...x, ...p }))
 
@@ -45,6 +47,13 @@ export function WizardPage({ campaignId }: { campaignId: string }) {
       hp_max: c.hp + mods.hp, hp_marked: 0, stress_max: 6, stress_marked: 0, hope: 2,
       armor_max: armorScore(d), armor_marked: 0, data,
     }))
+    if (created && portrait) {
+      // il ritratto si carica dopo, perché serve l'id del personaggio
+      try {
+        const url = await be.uploadPortrait(campaignId, created.id, portrait.blob)
+        await be.updateCharacter(created.id, { data: { ...created.data, portrait_url: url } })
+      } catch { /* il PG è creato comunque: il ritratto si può aggiungere da Modifica */ }
+    }
     if (created) go(`/pg/${created.id}`)
   }
 
@@ -71,7 +80,7 @@ export function WizardPage({ campaignId }: { campaignId: string }) {
           {step === 5 && <StepGear d={d} set={set} />}
           {step === 6 && <StepExperiences d={d} set={set} />}
           {step === 7 && <StepCards d={d} set={set} />}
-          {step === 8 && <StepDetails d={d} set={set} name={name} setName={setName} />}
+          {step === 8 && <StepDetails d={d} set={set} name={name} setName={setName} portrait={portrait?.url} setPortrait={(blob, url) => setPortrait(blob ? { blob, url } : null)} />}
         </div>
 
         <ErrorLine error={save.error} />
@@ -324,7 +333,7 @@ function StepCards({ d, set }: StepProps) {
   )
 }
 
-function StepDetails({ d, set, name, setName }: StepProps & { name: string; setName: (s: string) => void }) {
+function StepDetails({ d, set, name, setName, portrait, setPortrait }: StepProps & { name: string; setName: (s: string) => void; portrait?: string; setPortrait: (b: Blob | null, url: string) => void }) {
   const cls = getClass(d.class_id)!
   return (
     <>
@@ -333,6 +342,8 @@ function StepDetails({ d, set, name, setName }: StepProps & { name: string; setN
         <label className="field"><span>Nome</span><input value={name} maxLength={60} onChange={e => setName(e.target.value)} autoFocus /></label>
         <label className="field"><span>Pronomi</span><input value={d.pronouns} onChange={e => set({ pronouns: e.target.value })} placeholder="lei/la" /></label>
       </div>
+      <p className="field-title">Ritratto</p>
+      <PortraitPicker current={portrait} name={name} accent={d.accent} onPick={(b, url) => setPortrait(b, url)} onRemove={() => setPortrait(null, '')} />
       <p className="field-title">Colore del personaggio</p>
       <div className="accent-row">
         {ACCENTS.map(a => <button key={a} type="button" className={`swatch ${d.accent === a ? 'sel' : ''}`} style={{ background: a }} onClick={() => set({ accent: a })} aria-label={`Colore ${a}`} />)}

@@ -18,6 +18,31 @@ export interface Member { campaign_id: string; user_id: string; role: 'gm' | 'pl
 
 export interface Experience { name: string; bonus: number }
 
+export type HomebrewKind = 'weapon' | 'armor' | 'ability' | 'item'
+export interface HomebrewMods { evasion?: number; armor?: number; thresholds?: number }
+/** Contenuto homebrew creato dal giocatore, salvato dentro la scheda. */
+export interface Homebrew {
+  id: string
+  kind: HomebrewKind
+  name: string
+  text: string
+  // arma
+  trait?: TraitKey
+  range?: 'Melee' | 'Very Close' | 'Close' | 'Far' | 'Very Far'
+  dice?: string            // es. "d8+2"
+  damageType?: 'phy' | 'mag'
+  burden?: 'One-Handed' | 'Two-Handed'
+  category?: 'primary' | 'secondary'
+  // armatura
+  thresholds?: [number, number]
+  score?: number
+  // capacità e oggetti
+  mods?: HomebrewMods
+  uses?: number            // caselle d'uso (0 = nessuna)
+  used?: number
+  quantity?: number
+}
+
 export type SubclassTier = 'foundation' | 'specialization' | 'mastery'
 
 export interface SheetData {
@@ -50,6 +75,9 @@ export interface SheetData {
   notes: string
   accent: string
   advancements: { level: number; picks: string[] }[]
+  homebrew?: Homebrew[]
+  /** URL pubblico del ritratto del PG (Supabase Storage) */
+  portrait_url?: string
   /** Slot Speranza (6 di base, alcuni retaggi ne danno di più) */
   hope_max?: number
   multiclass?: { class_id: string; domain: string; subclass_id: string }
@@ -128,6 +156,8 @@ export interface Backend {
   updateCharacter(id: string, patch: Partial<Omit<Character, 'id' | 'campaign_id' | 'owner_id'>>): Promise<Character>
   deleteCharacter(id: string): Promise<void>
 
+  uploadPortrait(campaignId: string, characterId: string, image: Blob): Promise<string>
+  deletePortrait(url: string): Promise<void>
   roll(campaignId: string, characterId: string | null, req: RollRequest): Promise<Roll>
   listRolls(campaignId: string, limit?: number): Promise<Roll[]>
   subscribe(campaignId: string, h: RealtimeHandlers): () => void

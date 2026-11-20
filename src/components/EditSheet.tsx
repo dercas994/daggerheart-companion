@@ -2,8 +2,10 @@ import { useState, type ReactNode } from 'react'
 import type { Character, SheetData } from '../lib/types'
 import { TRAITS } from '../lib/types'
 import { ARMOR, IT, WEAPONS } from '../data'
-import { armorScore, tierOf } from '../lib/rules'
-import { Sheet, Stepper } from './ui'
+import { armorScore, HB, tierOf } from '../lib/rules'
+import { ErrorLine, Sheet, Stepper, useAsync } from './ui'
+import { PortraitPicker } from './Portrait'
+import { useApp } from '../App'
 
 /** Modifica libera della scheda: per correzioni, oggetti trovati, regole della casa. */
 export function EditSheet({ open, onClose, c, patch, onDelete }: {
@@ -15,9 +17,28 @@ export function EditSheet({ open, onClose, c, patch, onDelete }: {
   const [stress, setStress] = useState(c.stress_max)
   const [d, setD] = useState<SheetData>(() => structuredClone(c.data))
   const [confirmDel, setConfirmDel] = useState(false)
+  const { be } = useApp()
+  const up = useAsync()
+  async function pickPortrait(blob: Blob) {
+    const url = await up.run(() => be.uploadPortrait(c.campaign_id, c.id, blob))
+    if (!url) return
+    const old = d.portrait_url
+    set({ portrait_url: url })
+    patch({ data: { ...c.data, portrait_url: url } })
+    if (old) be.deletePortrait(old).catch(() => {})
+  }
+  async function removePortrait() {
+    const old = d.portrait_url
+    set({ portrait_url: undefined })
+    patch({ data: { ...c.data, portrait_url: undefined } })
+    if (old) be.deletePortrait(old).catch(() => {})
+  }
   const set = (p: Partial<SheetData>) => setD(x => ({ ...x, ...p }))
   const tier = tierOf(level)
   const weapons = (cat: 'primary' | 'secondary') => WEAPONS.filter(w => w.category === cat && w.tier <= tier)
+  const hb = (kind: 'weapon' | 'armor', cat?: 'primary' | 'secondary') => (d.homebrew ?? [])
+    .filter(h => h.kind === kind && (!cat || (h.category ?? 'primary') === cat))
+    .map(h => <option key={h.id} value={HB + h.id}>★ {h.name} (homebrew)</option>)
 
   function save() {
     const newArmor = armorScore(d)
@@ -31,6 +52,9 @@ export function EditSheet({ open, onClose, c, patch, onDelete }: {
 
   return (
     <Sheet open={open} onClose={onClose} title="Modifica scheda" wide>
+      <p className="field-title">Ritratto</p>
+      <PortraitPicker current={d.portrait_url} name={name} accent={d.accent} busy={up.busy} onPick={pickPortrait} onRemove={removePortrait} />
+      <ErrorLine error={up.error} />
       <div className="two-col">
         <label className="field"><span>Nome</span><input value={name} onChange={e => setName(e.target.value)} /></label>
         <label className="field"><span>Pronomi</span><input value={d.pronouns} onChange={e => set({ pronouns: e.target.value })} /></label>
@@ -61,18 +85,21 @@ export function EditSheet({ open, onClose, c, patch, onDelete }: {
       <label className="field"><span>Arma primaria</span>
         <select value={d.primary_weapon_id} onChange={e => set({ primary_weapon_id: e.target.value })}>
           <option value="">Nessuna</option>
+          {hb('weapon', 'primary')}
           {weapons('primary').map(w => <option key={w.id} value={w.id}>R{w.tier} {w.name}, {w.damage}</option>)}
         </select>
       </label>
       <label className="field"><span>Arma secondaria</span>
         <select value={d.secondary_weapon_id} onChange={e => set({ secondary_weapon_id: e.target.value })}>
           <option value="">Nessuna</option>
+          {hb('weapon', 'secondary')}
           {weapons('secondary').map(w => <option key={w.id} value={w.id}>R{w.tier} {w.name}, {w.damage}</option>)}
         </select>
       </label>
       <label className="field"><span>Armatura</span>
         <select value={d.armor_id} onChange={e => set({ armor_id: e.target.value })}>
           <option value="">Nessuna</option>
+          {hb('armor')}
           {ARMOR.filter(a => a.tier <= tier).map(a => <option key={a.id} value={a.id}>R{a.tier} {a.name}, {a.thresholds.join('/')}, {a.score}</option>)}
         </select>
       </label>

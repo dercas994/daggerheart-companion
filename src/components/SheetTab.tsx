@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import type { Character, TraitKey } from '../lib/types'
 import { TRAITS } from '../lib/types'
-import { className, fname, ftext, getAncestry, getArmor, getClass, getCommunity, getSubclass, getWeapon, IT, type Feature } from '../data'
-import { ancestryFeatures, fmt, spellcastTrait, traitValue, weaponDamage } from '../lib/rules'
+import { className, fname, ftext, getAncestry, getClass, getCommunity, getSubclass, IT, type Feature } from '../data'
+import { ancestryFeatures, fmt, getArmor, getWeapon, spellcastTrait, traitValue, weaponDamage } from '../lib/rules'
+import { HomebrewSection } from './Homebrew'
 import { FeatureList } from './CardView'
 import { Stepper } from './ui'
 
@@ -25,8 +26,8 @@ export function SheetTab({ c, canEdit, patch, onRoll }: {
 
   const ancFeatures: Feature[] = ancestryFeatures(d)
 
-  const weapons = [getWeapon(d.primary_weapon_id), getWeapon(d.secondary_weapon_id)].filter(Boolean)
-  const armor = getArmor(d.armor_id)
+  const weapons = [getWeapon(d.primary_weapon_id, d), getWeapon(d.secondary_weapon_id, d)].filter(Boolean)
+  const armor = getArmor(d.armor_id, d)
 
   return (
     <div className="sheet-tab">
@@ -55,14 +56,14 @@ export function SheetTab({ c, canEdit, patch, onRoll }: {
                 {canEdit && <button className="btn btn-ghost small" onClick={() => onRoll(w.trait === 'spellcast' ? spell : (w.trait as TraitKey))}>Attacca</button>}
               </div>
               <span className="gear-stats">{IT.traits[w.trait]}, {IT.range[w.range] ?? w.range}, <b>{weaponDamage(w.damage, d.proficiency)}</b>, {IT.burden[w.burden]}</span>
-              {w.feature && <span className="gear-feat">{w.feature_it || w.feature}</span>}
+              {(w.feature_it || w.feature) && <span className="gear-feat">{w.feature_it || w.feature}</span>}
             </div>
           ))}
           {armor && (
             <div className="gear-item">
               <div className="gear-top"><b>{armor.name}</b></div>
               <span className="gear-stats">Soglie base {armor.thresholds[0]}/{armor.thresholds[1]}, punteggio {armor.score}</span>
-              {armor.feature && <span className="gear-feat">{armor.feature_it || armor.feature}</span>}
+              {(armor.feature_it || armor.feature) && <span className="gear-feat">{armor.feature_it || armor.feature}</span>}
             </div>
           )}
         </div>
@@ -108,6 +109,8 @@ export function SheetTab({ c, canEdit, patch, onRoll }: {
           <FeatureList items={[...ancFeatures, ...(getCommunity(d.community_id)?.features ?? [])].map(f => ({ name: fname(f), text: ftext(f) }))} />
         </section>
       )}
+
+      <HomebrewSection c={c} canEdit={canEdit} patch={patch} />
 
       <section>
         <h2>Condizioni</h2>

@@ -2,6 +2,7 @@ import type { Character, Member, Roll } from '../lib/types'
 import { className, getSubclass } from '../data'
 import { evasion, hopeMax, MAX_FEAR, thresholds } from '../lib/rules'
 import { Pips } from './ui'
+import { Avatar } from './Portrait'
 
 export function PartyCard({ c, owner, editable, onPatch, isMe, compact }: {
   c: Character; owner?: string; editable?: boolean; isMe?: boolean; compact?: boolean
@@ -13,8 +14,11 @@ export function PartyCard({ c, owner, editable, onPatch, isMe, compact }: {
   return (
     <article className={`party-card ${down ? 'down' : ''} ${isMe ? 'me' : ''}`} style={{ ['--accent' as any]: c.data.accent || 'var(--hope)' }}>
       <header>
-        <a href={`#/pg/${c.id}`} className="party-name">{c.name}</a>
-        <span className="party-sub">{className(c.data.class_id)}{sub ? `, ${sub.name}` : ''}, liv. {c.level}{owner ? ` (${owner})` : ''}</span>
+        <Avatar url={c.data.portrait_url} name={c.name} accent={c.data.accent} size={46} />
+        <div>
+          <a href={`#/pg/${c.id}`} className="party-name">{c.name}</a>
+          <span className="party-sub">{className(c.data.class_id)}{sub ? `, ${sub.name}` : ''}, liv. {c.level}{owner ? ` (${owner})` : ''}</span>
+        </div>
       </header>
       <div className="vital"><span className="vital-k">PF</span>
         <Pips kind="hp" size="sm" max={c.hp_max} value={c.hp_marked} label={`Punti ferita di ${c.name}`} onChange={editable ? n => onPatch?.({ hp_marked: n }) : undefined} />

@@ -110,6 +110,19 @@ export function createSupabaseBackend(url: string, key: string): Backend {
       fail(error)
     },
 
+    async uploadPortrait(campaignId, characterId, image) {
+      const ext = image.type === 'image/webp' ? 'webp' : 'jpg'
+      const path = `${campaignId}/${characterId}/${Date.now()}.${ext}`
+      const { error } = await sb.storage.from('portraits').upload(path, image, { contentType: image.type, upsert: false, cacheControl: '31536000' })
+      fail(error)
+      return sb.storage.from('portraits').getPublicUrl(path).data.publicUrl
+    },
+    async deletePortrait(url) {
+      const i = url.indexOf('/portraits/')
+      if (i < 0) return
+      await sb.storage.from('portraits').remove([decodeURIComponent(url.slice(i + '/portraits/'.length))])
+    },
+
     async roll(campaignId, characterId, req) {
       const { data, error } = await sb.rpc('roll_duality', {
         p_campaign: campaignId, p_character: characterId, p_modifier: req.modifier, p_label: req.label, p_advantage: req.advantage,

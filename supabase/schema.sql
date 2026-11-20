@@ -321,3 +321,40 @@ end $$;
 -- Migrazione 2: slot Speranza variabili (retaggi homebrew). Idempotente.
 alter table public.characters drop constraint if exists characters_hope_check;
 alter table public.characters add constraint characters_hope_check check (hope between 0 and 12);
+
+-- ---------------------------------------------------------------------
+--  Migrazione 3: ritratti dei personaggi (Supabase Storage)
+--  Percorso dei file: <campaign_id>/<character_id>/<timestamp>.webp
+--  Lettura pubblica (bucket public); scrittura solo per chi può
+--  modificare quel personaggio (proprietario o master della campagna).
+-- ---------------------------------------------------------------------
+create or replace function public.can_edit_character(p_campaign text, p_character text)
+returns boolean language sql stable security definer set search_path = public as $$
+  select exists (
+    select 1 from characters ch
+    where ch.id::text = p_character and ch.campaign_id::text = p_campaign
+      and (ch.owner_id = auth.uid() or is_gm(ch.campaign_id))
+  );
+$$;
+grant execute on function public.can_edit_character(text, text) to authenticated;
+
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('portraits', 'portraits', true, 2097152, array['image/webp', 'image/jpeg', 'image/png'])
+on conflict (id) do update
+  set public = true, file_size_limit = excluded.file_size_limit, allowed_mime_types = excluded.allowed_mime_types;
+
+drop policy if exists "portraits read"   on storage.objects;
+drop policy if exists "portraits insert" on storage.objects;
+drop policy if exists "portraits update" on storage.objects;
+drop policy if exists "portraits delete" on storage.objects;
+create policy "portraits read" on storage.objects for select
+  using (bucket_id = 'portraits');
+create policy "portraits insert" on storage.objects for insert to authenticated
+  with check (bucket_id = 'portraits'
+              and public.can_edit_character((storage.foldername(name))[1], (storage.foldername(name))[2]));
+create policy "portraits update" on storage.objects for update to authenticated
+  using (bucket_id = 'portraits'
+         and public.can_edit_character((storage.foldername(name))[1], (storage.foldername(name))[2]));
+create policy "portraits delete" on storage.objects for delete to authenticated
+  using (bucket_id = 'portraits'
+         and public.can_edit_character((storage.foldername(name))[1], (storage.foldername(name))[2]));

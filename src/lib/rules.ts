@@ -1,5 +1,35 @@
-import type { Character, SheetData, TraitKey } from './types'
-import { getAncestry, getArmor, getClass, getWeapon, getSubclass, type Feature, type FeatureMods } from '../data'
+import type { Character, Homebrew, SheetData, TraitKey } from './types'
+import { getAncestry, getArmor as srdArmor, getClass, getWeapon as srdWeapon, getSubclass, type Armor, type Feature, type FeatureMods, type Weapon } from '../data'
+
+export const HB = 'hb:'
+const hbFind = (d: SheetData | undefined, id?: string) => (id?.startsWith(HB) ? d?.homebrew?.find(h => HB + h.id === id) : undefined)
+
+/** Converte un'arma homebrew nel formato delle armi del manuale. */
+export function homebrewWeapon(h: Homebrew): Weapon {
+  return {
+    id: HB + h.id, name: h.name, trait: h.trait ?? 'strength', range: h.range ?? 'Melee',
+    damage: `${(h.dice || 'd6').trim()} ${h.damageType ?? 'phy'}`, burden: h.burden ?? 'One-Handed',
+    feature: '', feature_it: h.text, tier: 1, category: h.category ?? 'primary',
+  }
+}
+export function homebrewArmor(h: Homebrew): Armor {
+  return { id: HB + h.id, name: h.name, thresholds: h.thresholds ?? [5, 11], score: h.score ?? 3, feature: '', feature_it: h.text, tier: 1 }
+}
+/** Arma o armatura del PG: dal manuale o dal suo homebrew. */
+export function getWeapon(id?: string, d?: SheetData): Weapon | undefined {
+  const h = hbFind(d, id)
+  return h ? (h.kind === 'weapon' ? homebrewWeapon(h) : undefined) : srdWeapon(id)
+}
+export function getArmor(id?: string, d?: SheetData): Armor | undefined {
+  const h = hbFind(d, id)
+  return h ? (h.kind === 'armor' ? homebrewArmor(h) : undefined) : srdArmor(id)
+}
+/** Bonus fissi dati da capacità e oggetti homebrew. */
+export function homebrewMods(d: SheetData) {
+  const m = { evasion: 0, armor: 0, thresholds: 0 }
+  for (const h of d.homebrew ?? []) if (h.kind === 'ability' || h.kind === 'item') for (const k of ['evasion', 'armor', 'thresholds'] as const) m[k] += h.mods?.[k] ?? 0
+  return m
+}
 
 /** Le due capacità di retaggio del PG (gestisce anche il retaggio misto). */
 export function ancestryFeatures(d: SheetData): Feature[] {
@@ -45,7 +75,7 @@ function featureMods(text: string) {
 }
 
 export function equipmentMods(d: SheetData) {
-  const texts = [getWeapon(d.primary_weapon_id)?.feature, getWeapon(d.secondary_weapon_id)?.feature, getArmor(d.armor_id)?.feature]
+  const texts = [getWeapon(d.primary_weapon_id, d)?.feature, getWeapon(d.secondary_weapon_id, d)?.feature, getArmor(d.armor_id, d)?.feature]
   const total: Record<string, number> = {}
   for (const t of texts) if (t) for (const [k, v] of Object.entries(featureMods(t))) total[k] = (total[k] ?? 0) + (v ?? 0)
   return total
@@ -57,16 +87,16 @@ export function traitValue(d: SheetData, t: TraitKey) {
 
 export function evasion(d: SheetData) {
   const base = getClass(d.class_id)?.evasion ?? 10
-  return base + (d.evasion_bonus ?? 0) + (equipmentMods(d).evasion ?? 0) + ancestryMods(d).evasion
+  return base + (d.evasion_bonus ?? 0) + (equipmentMods(d).evasion ?? 0) + ancestryMods(d).evasion + homebrewMods(d).evasion
 }
 
 export function armorScore(d: SheetData) {
-  return Math.max(0, (getArmor(d.armor_id)?.score ?? 0) + (equipmentMods(d).armor ?? 0) + ancestryMods(d).armor)
+  return Math.max(0, (getArmor(d.armor_id, d)?.score ?? 0) + (equipmentMods(d).armor ?? 0) + ancestryMods(d).armor + homebrewMods(d).armor)
 }
 
 export function thresholds(d: SheetData, level: number): [number, number] {
-  const a = getArmor(d.armor_id)
-  const extra = (d.threshold_bonus ?? 0) + (equipmentMods(d).thresholds ?? 0) + ancestryMods(d).thresholds
+  const a = getArmor(d.armor_id, d)
+  const extra = (d.threshold_bonus ?? 0) + (equipmentMods(d).thresholds ?? 0) + ancestryMods(d).thresholds + homebrewMods(d).thresholds
   // senza armatura: Maggiore = livello, Grave = 2 × livello
   if (!a) return [level + extra, level * 2 + extra]
   return [a.thresholds[0] + level + extra, a.thresholds[1] + level + extra]

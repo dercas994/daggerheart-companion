@@ -6,6 +6,7 @@ import { ErrorLine, Sheet, Spinner, useAsync, useToast } from '../components/ui'
 import { TopBar } from '../components/TopBar'
 import { FearTrack, ownerName, PartyCard, RollLog } from '../components/Party'
 import { DiceOverlay, outcomeText } from '../components/Dice'
+import { Avatar } from '../components/Portrait'
 import type { Roll } from '../lib/types'
 
 export function CampaignPage({ id }: { id: string }) {
@@ -64,6 +65,7 @@ export function CampaignPage({ id }: { id: string }) {
               <div className="mine-list">
                 {mine.map(c => (
                   <a key={c.id} className="mine-item" href={`#/pg/${c.id}`} style={{ ['--accent' as any]: c.data.accent }}>
+                    <Avatar url={c.data.portrait_url} name={c.name} accent={c.data.accent} size={40} />
                     <span className="mine-name">{c.name}</span>
                     <span className="mine-go">Apri la scheda</span>
                   </a>
