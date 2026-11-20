@@ -1,0 +1,138 @@
+{
+"courtesan": {"desc": "Una manipolatrice consumata, maestra delle arti sociali.", "motives": "Sedurre, manovrare, assicurarsi protettori", "f": [
+ "Quando un PG entro distanza Ravvicinata effettua un Tiro di Presenza, potete marcare uno Stress per lanciare uno sguardo sulle conseguenze. Se il bersaglio fallisce, marca 2 Stress ed è Vulnerabile fino alla fine della scena o finché non riesce in un’azione sociale contro la Cortigiana. Se riesce, marca uno Stress."]},
+"cult-adept": {"desc": "Un mago esperto che maneggia ombra e paura.", "motives": "Ingraziarsi i superiori, ostacolare i nemici, scoprire conoscenze", "fn": ["Raffica Snervante", "Sudario dei Caduti", "Catene d’Ombra", "La Paura è Carburante"], "f": [
+ "Spendete una Paura per effettuare un attacco base contro un bersaglio a portata. In caso di successo, il bersaglio deve marcare uno Stress.",
+ "Marcate uno Stress per avvolgere un alleato entro distanza Ravvicinata in un sudario di Protezione finché l’Adepto non marca il suo ultimo PF. Da Protetto, il bersaglio ha resistenza a tutti i danni.",
+ "Spendete una Paura e scegliete un punto entro distanza Lontana. Tutti i bersagli entro distanza Ravvicinata da quel punto sono Trattenuti da catene di fumo finché non si liberano con un Tiro di Forza o di Istinto riuscito. Un bersaglio Trattenuto così deve spendere una Speranza per effettuare un tiro azione.",
+ "Due volte per scena, quando un PG ottiene un fallimento con Paura, eliminate uno Stress."]},
+"cult-fang": {"desc": "Un sicario professionista diventato cultista.", "motives": "Catturare vittime sacrificali, isolare la preda, scalare i ranghi", "f": [
+ "La Zanna può arrampicarsi e camminare su superfici verticali. Marcate uno Stress per spostarla da un’ombra a un’altra entro distanza Lontana.",
+ "Marcate uno Stress per costringere un bersaglio a distanza di Mischia a un Tiro Reazione di Istinto. In caso di fallimento, il bersaglio marca 2 Stress e viene teletrasportato con la Zanna in un’ombra entro distanza Lontana, diventando temporaneamente Vulnerabile. In caso di successo, marca uno Stress."]},
+"cult-initiate": {"desc": "Un cultista di basso rango in semplici vesti, smanioso di ottenere potere.", "motives": "Eseguire gli ordini, ottenere potere, cercare conoscenze proibite", "f": [
+ "L’Iniziato viene sconfitto quando subisce un danno qualsiasi. Ogni 6 danni che un PG gli infligge, sconfiggete un altro Seguace a portata contro cui l’attacco avrebbe successo.",
+ "Spendete una Paura per scegliere un bersaglio e mettere sotto i riflettori tutti gli Iniziati del Culto entro distanza Ravvicinata da lui. I Seguaci si portano a distanza di Mischia ed effettuano un unico tiro attacco condiviso. In caso di successo, infliggono 5 danni fisici ciascuno. Sommate questi danni."]},
+"demonic-hound-pack": {"desc": "Segugi innaturali illuminati dall’interno da fuoco infernale.", "motives": "Incutere paura, divorare carne, compiacere i padroni", "f": [
+ "Quando il Branco ha marcato metà o più dei suoi PF, il suo attacco base infligge invece 2d4+1 danni fisici.",
+ "Marcate uno Stress per far perdere una Speranza a tutti i bersagli entro distanza Prossima. Chi non può perdere Speranza deve invece marcare 2 Stress.",
+ "Quando il Branco attacca con successo un PG, guadagnate una Paura."]},
+"dire-pangolati": {"desc": "Un ibrido di pangolino e coati grande come una carrozza, coperto di placche corazzate. Ha una coda a lame con cui scaglia scaglie affilate come rasoi.", "motives": "Fuggire con un pasto, affettare, gettarsi nel pericolo", "f": [
+ "Quando il Pangolati attacca con successo un PG, quel PG deve marcare uno slot Armatura aggiuntivo per ridurre la gravità del danno.",
+ "Spendete una Paura: il Pangolati ruota velocemente su sé stesso. Ogni bersaglio entro distanza Prossima deve superare un Tiro Reazione di Agilità o subire 2d8 danni fisici.",
+ "Marcate uno Stress: il Pangolati schiocca la coda e scaglia una placca affilata. Effettuate un attacco contro un bersaglio entro distanza Lontana; in caso di successo infligge 2d6+10 danni fisici.",
+ "Quando il Pangolati marcherebbe PF per un attacco, potete marcare uno Stress per ridurre di 1 i PF marcati."]},
+"doppelhound": {"desc": "Un feroce canide magico dagli occhi luminosi e due code uncinate simili a fruste. Confonde i nemici evocando un duplicato illusorio di sé.", "motives": "Tendere agguati alla preda, uccidere per sport, giocare con il cibo, ingannare", "f": [
+ "All’inizio del combattimento, piazzate un duplicato entro distanza Ravvicinata dal Doppiosegugio, che occupa sia il proprio posto sia quello del duplicato. Il duplicato può muoversi quando il Doppiosegugio va sotto i riflettori, e il Doppiosegugio può attaccare come se fosse al posto del duplicato. Quando uno dei due viene attaccato, l’attaccante tira un d6: con un pari colpisce il Doppiosegugio, con un dispari colpisce il duplicato e l’attacco fallisce. Se un attacco va a segno sul Doppiosegugio, il duplicato si dissolve finché non spendete una Paura per evocarlo di nuovo.",
+ "Marcate uno Stress per effettuare due attacchi base. Se entrambi vanno a segno contro lo stesso bersaglio, sommate i danni."]},
+"dragon-knight": {"desc": "Un cavaliere in armatura di scaglie di drago, con un elmo a forma di testa di drago.", "motives": "Sfruttare un’apertura, prendere le distanze, sbilanciare i nemici, colpire dall’alto", "f": [
+ "Il Cavaliere ha vantaggio sugli attacchi contro bersagli che si trovano più in basso di lui.",
+ "Marcate uno Stress: il Cavaliere balza a distanza di Mischia da un bersaglio entro distanza Lontana ed effettua un attacco base. In caso di successo, l’attacco infligge 1d12 danni extra e il bersaglio deve marcare uno slot Armatura senza riceverne i benefici (può comunque usare l’armatura per ridurre il danno).",
+ "Quando il Cavaliere fallisce un attacco base, potete spendere una Paura per ripetere il tiro con vantaggio."]},
+"electric-eels": {"desc": "Uno sciame di anguille che circondano e folgorano.", "motives": "Evitare predatori più grandi, folgorare la preda, dilaniare", "f": [
+ "Quando le Anguille hanno marcato metà o più dei loro PF, il loro attacco base infligge invece 2d4+1 danni fisici.",
+ "Marcate uno Stress per effettuare un attacco base contro tutti i bersagli entro distanza Prossima. Guadagnate una Paura per ogni bersaglio che marca PF."]},
+"elephant": {"desc": "Un enorme pachiderma con grandi orecchie e una proboscide prensile.", "motives": "Mangiare vegetazione, proteggere il branco, socializzare", "f": [
+ "Marcate uno Stress: l’Elefante carica in linea retta fino a distanza Lontana. Ogni bersaglio sul suo percorso deve superare un Tiro Reazione di Agilità o subire 2d10+3 danni fisici.",
+ "Quando l’Elefante riesce in un attacco base, potete spendere una Paura per fargli scagliare il bersaglio in un altro punto entro distanza Ravvicinata, infliggendo 1d12 danni extra."]},
+"elite-soldier": {"desc": "Uno scudiero corazzato o un popolano esperto in cerca di avanzamento.", "motives": "Ottenere gloria, mantenere l’ordine, stringere alleanze", "f": [
+ "Marcate uno Stress: il Soldato si porta a distanza di Mischia da un alleato ed effettua un attacco base contro un bersaglio entro distanza Prossima. In caso di successo, infligge 2d10+2 danni fisici e l’alleato può eliminare uno Stress.",
+ "Quando il Soldato è entro distanza Prossima da un cavaliere o un altro nobile che starebbe per subire danni, potete marcare uno Stress per portarlo a distanza di Mischia e fargli subire il danno al suo posto."]},
+"entombed-cat-beast": {"desc": "Un grande scheletro umanoide non morto con un teschio di pantera al posto della testa.", "motives": "Attaccare di slancio, dilaniare, terrorizzare", "f": [
+ "La Bestia Felina può essere messa sotto i riflettori fino a tre volte per turno del GM. Spendete Paura come di consueto per metterla sotto i riflettori.",
+ "Un PG che marca 3 o più PF per un attacco della Bestia Felina deve marcare 1 PF aggiuntivo.",
+ "Marcate uno Stress per costringere ogni PG entro distanza Lontana a un Tiro Reazione di Presenza. Chi fallisce è Scosso finché non tira con Speranza. Quando la Bestia Felina attacca con successo un PG Scosso, tirate il danno due volte e tenete il risultato migliore, poi eliminate la condizione.",
+ "Quando la Bestia Felina compare, potete farle assorbire l’essenza dei suoi alleati. Sconfiggete subito un numero qualsiasi di alleati sul campo e guadagnate una Paura per ciascuno.",
+ "Quando la Bestia Felina subisce danni da un attacco di un PG entro distanza Prossima, potete marcare uno Stress per effettuare un attacco base contro quel PG."]},
+"entombed-elite-guard": {"desc": "Un soldato d’élite non morto, sepolto con la sua imperatrice per difendere la tomba da furti e profanazioni.", "motives": "Serrare i ranghi, proteggere l’imperatrice, colpire all’unisono", "f": [
+ "La Guardia ottiene +1 alla Difficoltà per ogni alleato entro distanza Prossima.",
+ "Effettuate un attacco contro un bersaglio entro distanza Remota. In caso di successo, infliggete 2d6+2 danni fisici."]},
+"entombed-empress": {"desc": "La sovrana non morta di un regno dimenticato. Ha ricevuto riti funebri blasfemi che impediscono alla sua anima di trapassare.", "motives": "Comandare i sottoposti, maledire gli invasori", "f": [
+ "L’Imperatrice ha resistenza ai danni fisici.",
+ "Gli organi interni dell’Imperatrice sono stati rimossi e riposti in sei contenitori di cristallo nascosti nella tomba. Ogni volta che i PG ne trovano e distruggono uno, l’Imperatrice marca 1 PF.",
+ "Marcate uno Stress: l’Imperatrice tenta di legare telecineticamente una creatura con le sue catene funebri. Effettuate un attacco contro un bersaglio entro distanza Ravvicinata. In caso di successo, lo trascina a distanza di Mischia, gli infligge 2d8 danni fisici e lo Trattiene temporaneamente.",
+ "Fino a tre volte per scena, potete spendere una Paura per mettere sotto i riflettori un numero qualsiasi di alleati entro distanza Ravvicinata. Se più attacchi vanno a segno sullo stesso bersaglio, sommate i danni.",
+ "Quando l’Imperatrice riesce in un attacco base contro un PG, potete spendere una Paura per attivare per quel PG un Conto alla rovescia della Rovina (1d6+1), che scende quando un PG tira con Paura. Quando scatta, il PG marca tutti i PF ed effettua una mossa di morte. Se l’Imperatrice viene sconfitta o i PG riposano, tutti i conti della Rovina terminano.",
+ "Cambio di fase. Quando l’Imperatrice marca il suo ultimo PF, sostituitela con la Bestia Felina Sepolta e mettetela subito sotto i riflettori."]},
+"entombed-necropriest": {"desc": "Un negromante incaricato di preservare la vita dell’imperatrice oltre la morte.", "motives": "Potenziare gli alleati, vincere il tempo, bloccare i nemici, servire l’imperatrice, usare la morte come arma", "f": [
+ "Marcate uno Stress per scegliere fino a tre alleati entro distanza Lontana. Ognuno ha vantaggio sul suo prossimo tiro attacco.",
+ "Spendete una Paura per scegliere un PG entro distanza Lontana. Mani scheletriche spuntano dal terreno ai suoi piedi e lo Trattengono finché non si libera con un Tiro di Forza riuscito. Quando un bersaglio Trattenuto così spende Speranza, guadagnate una Paura.",
+ "Marcate uno Stress per effettuare un attacco base contro un bersaglio a distanza di Mischia. In caso di successo, il bersaglio subisce il danno base e marca 1d4 Stress. Se marca il suo ultimo Stress per questo attacco, guadagnate una Paura."]},
+"entombed-skin-beetles": {"desc": "Scarabei carnivori che si scavano la strada sotto la pelle.", "motives": "Ricoprire il terreno, divorare i vivi, infilarsi sotto i vestiti", "f": [
+ "Quando gli Scarabei hanno marcato metà o più dei loro PF, il loro attacco base infligge invece 2d4+1 danni fisici.",
+ "Quando gli Scarabei attaccano con successo un PG, guadagnate una Paura.",
+ "Marcate 1 PF: 5 Scarabei si infilano sotto la pelle di un PG a distanza di Mischia, che marca uno Stress e diventa Infestato. Da Infestato, subisce 6 danni fisici diretti ogni volta che tira con Paura. La condizione termina quando il PG elimina 1 PF o 1 Stress."]},
+"entombed-stonemason": {"desc": "Uno sfortunato operaio non morto, estratto a sorte per murare dall’interno la tomba dell’imperatrice.", "motives": "Non smettere mai di lavorare, sacrificarsi per l’imperatrice", "f": [
+ "Lo Scalpellino viene sconfitto quando subisce un danno qualsiasi. Ogni 5 danni che un PG gli infligge, il PG sconfigge un altro Seguace a portata contro cui l’attacco avrebbe successo.",
+ "Spendete una Paura per scegliere un bersaglio e mettere sotto i riflettori tutti gli Scalpellini Sepolti entro distanza Ravvicinata da lui. I Seguaci si portano a distanza di Mischia ed effettuano un unico tiro attacco condiviso. In caso di successo, infliggono 5 danni fisici ciascuno. Sommate questi danni.",
+ "Quando lo Scalpellino viene sconfitto da un attacco che infligge danni fisici, potete spendere una Paura per eliminare i suoi PF e il suo Stress."]},
+"failed-experiment": {"desc": "Un esperimento magico-negromantico andato storto, che l’ha lasciato deforme e sgraziato.", "motives": "Divorare, cacciare, seguire le tracce", "f": [
+ "L’Esperimento è resistente ai danni fisici.",
+ "Quando un bersaglio attaccato dall’Esperimento ha altri avversari entro distanza Prossima, l’Esperimento infligge il doppio dei danni.",
+ "Marcate uno Stress per mettere l’Esperimento sotto i riflettori come mossa aggiuntiva del GM, invece di spendere Paura."]},
+"flock-of-feather-fiends": {"desc": "Uno stormo di cadaveri di corvi non morti, con gli occhi accesi di luce necroplasmica.", "motives": "Gracchiare senza sosta, artigliare i volti, svolazzare, cavare gli occhi", "f": [
+ "Quando lo Stormo ha marcato metà o più dei suoi PF, il suo attacco base infligge invece 1d6+1 danni magici.",
+ "Marcate uno Stress per costringere ogni PG entro distanza Prossima a un Tiro Reazione di Istinto. Chi fallisce deve spendere una Speranza o diventa Vulnerabile finché non infligge danni allo Stormo o lo Stormo viene sconfitto."]},
+"fowlbear": {"desc": "Un orso grizzly dal manto piumato e con la testa di un’oca gigante.", "motives": "Spingere la preda in un agguato, combattere fino alla morte, cacciare in coppia", "f": [
+ "L’Orsoca può essere messo sotto i riflettori fino a due volte per turno del GM. Spendete Paura come di consueto per metterlo sotto i riflettori.",
+ "Marcate uno Stress per effettuare due attacchi base. Se entrambi vanno a segno contro lo stesso bersaglio, sommate i danni.",
+ "Spendete una Paura: l’Orsoca emette un terrificante starnazzo assordante. Ogni PG entro distanza Ravvicinata effettua un Tiro Reazione di Presenza. Chi fallisce marca uno Stress, si allontana dall’Orsoca fino a distanza Lontana ed è Vulnerabile finché l’Orsoca non gli infligge danni. Chi riesce deve marcare uno Stress oppure allontanarsi fino a distanza Lontana."]},
+"fungispunj-sporeling": {"desc": "Una creatura fungo grande come un halfling, che si difende con piccoli sbuffi di spore neurotossiche.", "motives": "Evitare la violenza, spruzzare gli aggressori", "f": [
+ "La Sporina viene sconfitta quando subisce un danno qualsiasi. Ogni 6 danni che un PG le infligge, il PG sconfigge un altro Seguace a portata contro cui l’attacco avrebbe successo.",
+ "Spendete una Paura per scegliere un bersaglio e mettere sotto i riflettori tutte le Sporine entro distanza Ravvicinata da lui. I Seguaci si portano a distanza di Mischia ed effettuano un unico tiro attacco condiviso. In caso di successo, infliggono 4 danni magici ciascuno. Sommate questi danni.",
+ "Spendete una Paura per fondere tre Sporine entro un’area Ravvicinata e sostituirle con uno Sporoforo."]},
+"fungispunj-sporophore": {"desc": "Una gigantesca creatura fungo capace di comandare i morti.", "motives": "Risvegliare i caduti, difendere la colonia, diffondere spore", "f": [
+ "Marcate uno Stress: lo Sporoforo spruzza una nube di spore su tutti i bersagli entro distanza Ravvicinata. Ogni PG deve superare un Tiro Reazione di Agilità o resta Avvelenato finché non spende una Speranza per eliminare la condizione. Da Avvelenato, prima di ogni tiro azione tira un d6: con 4 o meno marca uno Stress.",
+ "Spendete una Paura: lo Sporoforo spruzza spore psichiche su un cadavere entro distanza Prossima. Il cadavere elimina tutti i PF e lo Stress e si rianima sotto il controllo psichico dello Sporoforo. Quando lo Sporoforo va sotto i riflettori, potete metterci anche tutti i cadaveri che controlla.",
+ "Marcate un numero qualsiasi di Stress per evocare altrettante Sporine entro distanza Ravvicinata.",
+ "Tutti i Fungispunj comunicano telepaticamente tra loro. Quando lo Sporoforo dovrebbe marcare Stress per un attacco, può farlo marcare al suo posto agli alleati Fungispunj nella scena, distribuendolo come preferisce."]},
+"gargoyle": {"desc": "Una statua animata dalla magia che ricorda una bestia o un demone terrificante.", "motives": "Nascondersi in bella vista, sorvegliare dall’alto, piombare in picchiata", "f": [
+ "Il Gargoyle ha resistenza ai danni magici.",
+ "Scegliete un punto entro distanza Lontana. Il Gargoyle si sposta fino a quel punto ed effettua un attacco base contro un bersaglio lungo il percorso.",
+ "Quando il Gargoyle infligge danni, il bersaglio deve superare un Tiro Reazione di Forza o diventa Vulnerabile. Se lo era già, diventa Trattenuto. Se era già Vulnerabile e Trattenuto, deve effettuare una mossa di morte. Il PG può spendere una Speranza per condizione per eliminarla."]},
+"giant-beastmaster": {"desc": "Un guerriero vestito di cuoio, armato di frusta e di un arco enorme.", "motives": "Comandare, guadagnarsi da vivere, manovrare, inchiodare, proteggere gli animali compagni", "f": [
+ "Quando il Domatore va sotto i riflettori, potete metterci anche un avversario animale di Grado 1 sotto il suo controllo.",
+ "Effettuate un attacco base contro un bersaglio. In caso di successo, potete marcare uno Stress per inchiodarlo a una superficie vicina: il bersaglio è Trattenuto finché non si libera con un Tiro di Finezza o di Forza riuscito.",
+ "Due volte per scena, evocate un Orso, un Lupo Feroce o un avversario animale di Grado 1 simile sotto il controllo del Domatore. Compare a distanza Ravvicinata e va subito sotto i riflettori."]},
+"giant-brawler": {"desc": "Un gigante particolarmente muscoloso che impugna un martello da guerra più grande di un umano.", "motives": "Guadagnarsi da vivere, sopraffare, sbattere, abbattere", "f": [
+ "Marcate uno Stress: il Picchiatore carica un oggetto inanimato entro distanza Ravvicinata che potrebbe sfondare (un muro, un carro, una bancarella) e lo distrugge. Tutti i bersagli entro distanza Prossima dall’oggetto devono superare un Tiro Reazione di Agilità o subire 2d4+3 danni fisici dalle schegge.",
+ "Quando il Picchiatore marca 2 o più PF per un attacco entro distanza Prossima, potete effettuare un attacco base contro l’attaccante. In caso di successo, infligge 2d6+15 danni fisici al posto del danno base.",
+ "Quando il Picchiatore attacca con successo un PG, guadagnate una Paura."]},
+"giant-eagle": {"desc": "Un gigantesco rapace dagli artigli macchiati di sangue.", "motives": "Cacciare prede, restare in movimento, colpire con decisione", "f": [
+ "Mentre vola, l’Aquila ottiene +3 alla Difficoltà.",
+ "Marcate uno Stress per attaccare un bersaglio entro distanza Lontana. In caso di successo, infliggete 2d10+2 danni fisici e atterrate il bersaglio, rendendolo Vulnerabile fino alla sua prossima azione.",
+ "Effettuate un attacco contro un bersaglio entro distanza Prossima. In caso di successo, infliggete 2d4+3 danni fisici e il bersaglio deve superare un Tiro Reazione di Agilità o resta temporaneamente Trattenuto tra gli artigli dell’Aquila. In tal caso, l’Aquila si alza subito in volo fino a distanza Remota sopra il campo di battaglia tenendolo stretto.",
+ "Mentre vola, l’Aquila può lasciar cadere un bersaglio Trattenuto. Il bersaglio non è più Trattenuto ma comincia a precipitare: se la caduta non viene impedita durante la prossima azione dei PG, subisce 2d20 danni fisici all’atterraggio."]},
+"giant-octopus": {"desc": "Un mostruoso mollusco acquatico con otto braccia dotate di ventose e una dura mascella a becco.", "motives": "Schiacciare e mordere, afferrare, tormentare le navi, cacciare prede", "f": [
+ "La Piovra può essere messa sotto i riflettori fino a tre volte per turno del GM. Spendete Paura come di consueto per metterla sotto i riflettori.",
+ "Quando la Piovra compare, mettete un d8 su questo blocco con l’8 rivolto verso l’alto. Quando la Piovra riesce in un attacco base contro un PG, potete aggiungere il valore del dado al danno; dopo averlo fatto, riducete il valore del dado di 1.",
+ "Quando la Piovra riesce in un attacco base, potete spendere una Paura perché Afferri il bersaglio. Da Afferrato, il bersaglio è Trattenuto e Vulnerabile finché non si libera con un Tiro di Forza o di Finezza riuscito.",
+ "Marcate uno Stress per infliggere 3d8 danni fisici diretti a un bersaglio Afferrato dalla Piovra."]},
+"giant-recruit": {"desc": "Un combattente gigante che indossa un’armatura presa in prestito.", "motives": "Percuotere, guadagnarsi da vivere, sopraffare, terrorizzare", "f": [
+ "La Recluta viene sconfitta quando subisce un danno qualsiasi. Ogni 7 danni che un PG le infligge, sconfiggete un altro Seguace a portata contro cui l’attacco avrebbe successo.",
+ "Spendete una Paura per scegliere un bersaglio e mettere sotto i riflettori tutte le Reclute Giganti entro distanza Ravvicinata da lui. I Seguaci si portano a distanza di Mischia ed effettuano un unico tiro attacco condiviso. In caso di successo, infliggono 5 danni fisici ciascuno. Sommate questi danni."]},
+"gobstalker": {"desc": "Una carnosa sfera fluttuante piena di denti, con numerosi occhi e un fascio di tentacoli-bocca che sparano raggi magici.", "motives": "Tendere agguati ai rivali, cercare ricchezze, sparare raggi", "f": [
+ "Il Gobstalker può essere messo sotto i riflettori fino a tre volte per turno del GM. Spendete Paura come di consueto per metterlo sotto i riflettori.",
+ "L’alito rancido del Gobstalker crea un miasma invisibile che annulla la magia. Un attacco, un’abilità o un incantesimo che infligge danni magici o crea un effetto magico fallisce automaticamente se usato entro distanza Ravvicinata dal Gobstalker.",
+ "Marcate uno Stress per attaccare un bersaglio entro distanza Lontana. In caso di successo, tirate un d8 per un raggio casuale, oppure spendete una Paura per sceglierlo. 1. Ammaliare: il bersaglio vede il Gobstalker come un amico e non può attaccarlo; quando un PG tira con Paura, deve marcare uno Stress o attaccare un bersaglio scelto dal Gobstalker; si libera con un Tiro di Istinto (16). 2. Corrodere: 2d8 danni magici e il bersaglio marca uno slot Armatura senza riceverne i benefici; se non può, danno raddoppiato. 3. Rovina: il bersaglio marca tutti i PF, ma può spendere Speranza per ridurli di altrettanto. 4. Ipnosi: il bersaglio cade in trance profonda e può solo tentare di svegliarsi, finché non subisce danni o riesce in un Tiro di Presenza (16). 5. Paralisi: il bersaglio è Vulnerabile e Trattenuto finché non marca 2 Stress. 6. Bruciare: 2d8 danni magici diretti. 7. Terrore: il bersaglio può solo fuggire o tentare di scuotersi, e marca uno Stress ogni volta che spendete una Paura; si libera con un Tiro di Presenza (16). 8. Lentezza: il bersaglio è Vulnerabile e deve marcare uno Stress per muoversi finché non spende 2 Speranze.",
+ "Con un attacco base riuscito, potete spendere una Paura per eliminare tanti Stress quanti sono i PF marcati dal bersaglio."]},
+"gorgon": {"desc": "Un umanoide squamoso dalla testa di serpenti, con un arco dorato, furioso perché la sua pace è stata disturbata.", "motives": "Mettere all’angolo, colpire e ritirarsi, pietrificare, vendicarsi", "f": [
+ "La Gorgone può essere messa sotto i riflettori fino a due volte per turno del GM. Spendete Paura come di consueto per metterla sotto i riflettori.",
+ "Quando la Gorgone riesce in un attacco base, il bersaglio Risplende fino alla fine della scena e non può diventare Nascosto. I tiri attacco contro un bersaglio che Risplende hanno vantaggio.",
+ "Effettuate un tiro attacco contro un bersaglio a distanza di Mischia usando i serpenti protettori della Gorgone. In caso di successo, marcate uno Stress per infliggere 2d10+4 danni fisici; il bersaglio deve marcare uno Stress.",
+ "Quando la Gorgone subisce danni da un attacco entro distanza Ravvicinata, potete spendere una Paura per costringere l’attaccante a un Tiro Reazione di Istinto. In caso di fallimento comincia a tramutarsi in pietra: marca 1 PF e parte un Conto alla rovescia di Pietrificazione (4), che scende quando la Gorgone viene attaccata. Quando scatta, il bersaglio effettua una mossa di morte. Se la Gorgone viene sconfitta, tutti i conti di pietrificazione terminano.",
+ "Quando la Gorgone attacca con successo un PG, guadagnate una Paura."]},
+"guahalan-alebrujo": {"desc": "Un’enorme bestia chimerica e variopinta formata da molti animali.", "motives": "Distruggere, non dare quartiere, devastare", "f": [
+ "L’Alebrujo ottiene ai tiri di danno un bonus pari alle Paure che avete.",
+ "Spendete una Paura: l’Alebrujo divora un Seguace entro distanza Prossima, poi elimina 1 PF o 1 Stress.",
+ "Marcate uno Stress: l’Alebrujo emette un ululato. Ogni PG entro distanza Lontana deve superare un Tiro Reazione di Presenza o è temporaneamente In Preda al Panico: in questo stato marca uno Stress quando va sotto i riflettori.",
+ "Spendete una Paura per effettuare un attacco base con vantaggio. In caso di successo, potete marcare uno Stress per attaccare un altro bersaglio a portata; potete continuare a marcare Stress per attacchi aggiuntivi finché l’Alebrujo non fallisce un tiro attacco.",
+ "Quando l’Alebrujo infligge danni Gravi, potete spendere una Paura per costringere tutti i bersagli entro distanza Ravvicinata a marcare uno Stress."]},
+"guahalan-fang-lord": {"desc": "Un signore della guerra mutaforma che guida i suoi guerrieri in battaglia.", "motives": "Sostenere gli alleati, guidare il branco, radunare le truppe", "f": [
+ "Riserva. Quando il Signore delle Zanne riesce in un attacco, aggiungete un segnalino alla Riserva Guahalan. Quando un alleato Guahalan entro distanza Ravvicinata attacca, potete spendere un segnalino per dargli vantaggio sul tiro.",
+ "Spendete una Paura: il Signore delle Zanne assume una forma bestiale. In questa forma ottiene ai tiri attacco e di danno un bonus pari agli Stress marcati, e prima di agire può muoversi fino a distanza Lontana invece che Ravvicinata.",
+ "Spendete 2 Paure per mettere sotto i riflettori tutti i Mutaforma Guahalan entro distanza Ravvicinata. Ognuno effettua un attacco base contro un bersaglio a portata; se più attacchi vanno a segno sullo stesso bersaglio, sommate i danni.",
+ "Cambio di fase. Quando il Signore delle Zanne marca il suo ultimo PF, sostituitelo con l’Alebrujo Guahalan e mettetelo subito sotto i riflettori."]},
+"guahalan-shifter": {"desc": "Un guerriero mascherato mutaforma dai tratti animaleschi.", "motives": "Fuggire, trarre profitto, lanciare fumogeni", "f": [
+ "Spendete una Paura: il Mutaforma assume una forma più bestiale. In questa forma ottiene ai tiri attacco e di danno un bonus pari agli Stress marcati, e prima di agire può muoversi fino a distanza Lontana invece che Ravvicinata.",
+ "Marcate uno Stress per effettuare un attacco base. In caso di successo, l’attacco ottiene al danno un bonus pari al numero di altri Mutaforma entro distanza Prossima dal bersaglio."]}
+}

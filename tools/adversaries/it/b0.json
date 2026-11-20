@@ -1,0 +1,122 @@
+{
+"acid-burrower": {"desc": "Un insetto grande come un cavallo, con artigli da scavo e sangue acido.", "motives": "Scavare, trascinare via, nutrirsi, riposizionarsi", "f": [
+ "Lo Scioglitierra può essere messo sotto i riflettori fino a tre volte per turno del GM. Spendete Paura come di consueto per metterlo sotto i riflettori.",
+ "Marcate uno Stress per far emergere di colpo lo Scioglitierra dal terreno. Tutte le creature entro distanza Prossima devono superare un Tiro Reazione di Agilità o vengono atterrate, diventando Vulnerabili fino alla loro prossima azione.",
+ "Effettuate un attacco contro tutti i bersagli davanti allo Scioglitierra entro distanza Ravvicinata. I bersagli colpiti subiscono 2d6 danni fisici e devono marcare uno slot Armatura senza riceverne i benefici (possono comunque usare l’armatura per ridurre il danno). Se non possono marcare uno slot Armatura, devono marcare 1 PF aggiuntivo e voi guadagnate una Paura.",
+ "Quando lo Scioglitierra subisce danni Gravi, tutte le creature entro distanza Ravvicinata vengono investite dal suo sangue acido e subiscono 1d10 danni fisici. Il sangue copre il terreno entro distanza Prossima: ogni creatura diversa dallo Scioglitierra che vi si muove attraverso subisce 1d6 danni fisici."]},
+"ahuizotl": {"desc": "Un predatore simile a un cane che tende agguati: in fondo alla lunga coda prensile ha una mano artigliata con cui trascina le vittime nei fiumi per annegarle.", "motives": "Tendere agguati, annegare, trattenere", "f": [
+ "Quando l’Ahuizotl attacca dall’acqua, ha vantaggio sull’attacco e infligge 1d6 danni aggiuntivi.",
+ "Marcate uno Stress per effettuare un attacco contro un bersaglio entro distanza Prossima. In caso di successo, infliggete 1d8+2 danni fisici.",
+ "Spendete una Paura: l’Ahuizotl afferra con la coda un bersaglio entro distanza Ravvicinata, lo trascina a distanza di Mischia e lo rende temporaneamente Trattenuto. L’Ahuizotl ha vantaggio sugli attacchi contro i bersagli trattenuti in questo modo."]},
+"atototl": {"desc": "Un maestoso uccello acquatico verde con un’apertura alare di tre metri, cacciato per la pietra divinatoria che custodisce nello stomaco.", "motives": "Evitare, fuggire, depistare", "f": [
+ "Mentre l’Atototl vola, gli attacchi contro di lui hanno svantaggio.",
+ "Dentro l’Atototl c’è una pietra che predice buona o cattiva sorte a seconda del colore. Un PG che fruga tra i resti trova la pietra e fa un tiro del fato. Con un risultato pari, il PG guadagna Speranza pari a metà del risultato, da distribuire tra i PG come preferisce. Con un risultato dispari, voi guadagnate Paura pari a metà del risultato.",
+ "Quando una creatura oltre la distanza Prossima sta per infliggere danni all’Atototl con un attacco con arma, potete spendere una Paura per effettuare un tiro attacco contro di lei. In caso di successo, venti vorticanti respingono il colpo e l’attaccante subisce il proprio danno."]},
+"bear": {"desc": "Un grosso orso dalla pelliccia folta e dagli artigli possenti.", "motives": "Arrampicarsi, difendere il territorio, percuotere, seguire le tracce", "f": [
+ "I bersagli che marcano PF per l’attacco base dell’Orso vengono respinti a distanza Prossima.",
+ "Marcate uno Stress per effettuare un attacco contro un bersaglio entro distanza di Mischia. In caso di successo, infliggete 3d4+10 danni fisici e il bersaglio è Trattenuto finché non si libera con un Tiro di Forza riuscito.",
+ "Quando l’Orso attacca con successo un PG, guadagnate una Paura."]},
+"bugboar": {"desc": "Una grossa creatura bipede dal muso zannuto e dal pelo ispido.", "motives": "Tendere agguati, fare il prepotente, cercare carneficina e oggetti luccicanti", "f": [
+ "Se il Cinghiante effettua il suo primo attacco della scena prima di aver marcato PF o Stress, ha vantaggio sull’attacco e infligge 1d8 danni aggiuntivi.",
+ "Quando il Cinghiante effettua con successo un attacco base, potete marcare uno Stress per infliggere 1d6 danni aggiuntivi.",
+ "Quando una condizione sta per essere imposta al Cinghiante, potete spendere una Paura per annullarla."]},
+"cave-ogre": {"desc": "Un enorme umanoide che vede in ogni essere senziente soltanto cibo.", "motives": "Staccare teste a morsi, banchettare, strappare arti, calpestare, lanciare nemici", "fn": ["Crescendo", "Spezzaossa", "Grandinata di Massi", "Furia Devastatrice"], "f": [
+ "Dovete spendere una Paura per mettere l’Ogre sotto i riflettori. Mentre è sotto i riflettori, può effettuare il suo attacco base contro tutti i bersagli a portata.",
+ "Gli attacchi dell’Ogre infliggono danni diretti.",
+ "Marcate uno Stress: l’Ogre raccoglie oggetti pesanti e li scaglia contro tutti i bersagli davanti a sé entro distanza Lontana. Effettuate un attacco contro di loro. I bersagli colpiti subiscono 1d10+2 danni fisici. Se colpisce più di un bersaglio, guadagnate una Paura.",
+ "Quando l’Ogre marca 2 o più PF, può scatenarsi. Spostatelo in un punto entro distanza Ravvicinata: tutti i bersagli sul suo percorso subiscono 2d6+3 danni fisici diretti."]},
+"common-ruffian": {"desc": "Un lavoratore o artigiano del posto spinto dalle circostanze ad aggredire il prossimo.", "motives": "Usare la violenza, cercare sicurezza e sopravvivenza", "f": [
+ "Spendete una Paura per scegliere un bersaglio e mettere sotto i riflettori tutti i Furfanti entro distanza Ravvicinata da lui. I Furfanti si portano a distanza di Mischia dal bersaglio ed effettuano un unico tiro attacco condiviso. In caso di successo, infliggono 1d8 danni fisici ciascuno. Sommate questi danni.",
+ "Quando il Furfante ha marcato metà dei suoi PF, tirate un d6. Con 4 o più, il Furfante fugge dalla scena. Altrimenti guadagnate una Paura."]},
+"construct": {"desc": "Un essere vagamente umanoide di pietra e acciaio, assemblato e animato dalla magia.", "motives": "Distruggere l’ambiente, servire il creatore, schiacciare il bersaglio, travolgere i gruppi", "f": [
+ "Il Costrutto può essere messo sotto i riflettori fino a due volte per turno del GM. Spendete Paura come di consueto per metterlo sotto i riflettori.",
+ "Quando il Costrutto marca PF per danni fisici, deve marcare 1 PF aggiuntivo.",
+ "Marcate uno Stress per effettuare un attacco contro tutti i bersagli sul percorso del Costrutto mentre si muove. I bersagli colpiti subiscono 1d8 danni fisici.",
+ "Prima di tirare il danno di un attacco del Costrutto, potete marcare uno Stress per ottenere +10 al tiro di danno. Il Costrutto può poi tornare subito sotto i riflettori.",
+ "Quando il Costrutto marca il suo ultimo PF, la magia che lo alimenta esplode in un’onda di forza. Effettuate un attacco con vantaggio contro tutti i bersagli entro distanza Prossima. I bersagli colpiti subiscono 1d12+2 danni magici."]},
+"courtier": {"desc": "Un mondano ambizioso dagli abiti vistosi.", "motives": "Screditare, ottenere favori, manovrare, tramare", "f": [
+ "Marcate uno Stress: il Cortigiano dice qualcosa di sprezzante e costringe un bersaglio entro distanza Ravvicinata a un Tiro Reazione di Presenza (14) per salvare la faccia. In caso di fallimento, il bersaglio marca 2 Stress ed è Vulnerabile fino alla fine della scena.",
+ "Spendete una Paura e scegliete un PG come bersaglio. Il Cortigiano convince una folla o una persona influente che il bersaglio sia la causa del conflitto o della sventura del momento."]},
+"darkweave-crawler": {"desc": "Un ragno grande quanto una testa umana, tessuto con seta d’ombra.", "motives": "Nascondersi nell’ombra, colpire gli incauti, attendere l’occasione", "f": [
+ "Lo Strisciante viene sconfitto quando subisce un danno qualsiasi. Ogni 3 danni che un PG gli infligge, il PG sconfigge un altro Seguace a portata contro cui l’attacco avrebbe successo.",
+ "Spendete una Paura per costringere tutti i PG entro distanza di Mischia dallo Strisciante a marcare uno Stress.",
+ "Spendete una Paura per scegliere un bersaglio e mettere sotto i riflettori tutti gli Striscianti di Tramascura entro distanza Ravvicinata da lui. I Seguaci si portano a distanza di Mischia ed effettuano un unico tiro attacco condiviso. In caso di successo, infliggono 2 danni fisici ciascuno. Sommate questi danni.",
+ "Quando lo Strisciante attacca con successo, potete marcare uno Stress per rendere il bersaglio Esausto finché non supera un Tiro di Forza (9). Da Esausto, il bersaglio deve marcare uno Stress ogni volta che effettua un tiro azione."]},
+"darkweave-queen": {"desc": "Un ragno grande come un carro, tessuto con seta d’ombra da un dio dimenticato. Ognuno dei suoi molti occhi porta il volto di una vittima diversa.", "motives": "Tendere agguati alle prede, camminare su pareti e soffitti, depistare, paralizzare, nascondere i corpi per dopo, rubare volti", "f": [
+ "La Regina può essere messa sotto i riflettori fino a tre volte per turno del GM. Spendete Paura come di consueto per metterla sotto i riflettori.",
+ "Quando un PG fallisce un tiro attacco contro la Regina, guadagnate una Paura.",
+ "Una volta per scena, spendete 2 Paure per evocare fino a due avversari di Tramascura (non Regine), che compaiono entro distanza Ravvicinata e vanno subito sotto i riflettori.",
+ "Spendete una Paura: la Regina si sposta fino a distanza Lontana ed effettua un attacco base con vantaggio.",
+ "Quando la Regina riesce in un attacco base, potete spendere una Paura per rendere il bersaglio Vulnerabile e Trattenuto finché non supera un Tiro di Forza (12) o fa un riposo."]},
+"darkweave-spinner": {"desc": "Un aracnide grande come un cinghiale, tessuto con seta d’ombra primordiale.", "motives": "Mordere, restare attaccato all’oscurità", "f": [
+ "Marcate uno Stress per effettuare un attacco contro un bersaglio entro distanza di Mischia. In caso di successo, il bersaglio è Vulnerabile e Trattenuto finché non supera un Tiro di Forza (10).",
+ "Quando il Tessitore attacca con successo un bersaglio entro distanza di Mischia, potete spendere una Paura per renderlo Tremante finché non supera un Tiro di Istinto (10). Da Tremante, il bersaglio ha svantaggio sui tiri attacco."]},
+"darkweave-swarmlings": {"desc": "Uno sciame brulicante di minuscoli ragni tessuti con seta d’ombra.", "motives": "Sbucare dai buchi, risalire le gambe, infilarsi nelle orecchie, zampettare sotto i vestiti", "f": [
+ "Quando gli Sciamanti hanno marcato metà o più dei loro PF, il loro attacco base infligge invece 1d4 danni fisici.",
+ "Quando un attacco degli Sciamanti fa marcare PF a un bersaglio, potete marcare uno Stress per renderlo temporaneamente Coperto di Ragni. Finché è coperto di ragni, il bersaglio tira un d6 ogni volta che effettua un tiro azione: con 4 o più, marca uno Stress oppure voi guadagnate una Paura."]},
+"deeproot-defender": {"desc": "Una robusta creatura vegetale dai viticci prensili.", "motives": "Tendere agguati, afferrare, proteggere, percuotere", "f": [
+ "Il Difensore colpisce il terreno e respinge tutti i bersagli entro distanza Prossima fino a distanza Lontana. Ogni bersaglio respinto in questo modo marca uno Stress.",
+ "Effettuate un attacco contro un bersaglio entro distanza Ravvicinata. In caso di successo, spendete una Paura per trascinarlo a distanza di Mischia, infliggergli 1d6+2 danni fisici e renderlo Trattenuto finché il Difensore non subisce danni Gravi."]},
+"dire-wolf": {"desc": "Un grosso lupo dalle zanne minacciose, raramente da solo.", "motives": "Difendere il territorio, tormentare, proteggere il branco, accerchiare, seguire le tracce", "f": [
+ "Se il Lupo riesce in un attacco base e un altro Lupo Terribile è a distanza di Mischia dal bersaglio, infligge 1d6+5 danni fisici al posto del danno base e voi guadagnate una Paura.",
+ "Marcate uno Stress per effettuare un attacco contro un bersaglio entro distanza di Mischia. In caso di successo, infliggete 3d4+10 danni fisici diretti e il bersaglio è Vulnerabile finché non recupera almeno 1 PF."]},
+"elk": {"desc": "Un grosso cervo.", "motives": "Balzare via, brucare, andare in calore, fiutare il pericolo", "f": [
+ "Quando l’Alce si muove da distanza Ravvicinata o superiore prima di un attacco base, infligge 1d12+2 danni fisici al posto del danno base.",
+ "Quando l’Alce marca PF o Stress, deve superare un Tiro Reazione (10) oppure fugge dalla scena."]},
+"falcon": {"desc": "Un rapace dalle ali lunghe e appuntite e dal becco uncinato.", "motives": "Volteggiare, ghermire, picchiare, spiare", "f": [
+ "Mentre vola, il Falco ha +3 alla Difficoltà.",
+ "Marcate uno Stress per effettuare un attacco base dall’alto contro un bersaglio. Il Falco ha +2 ai tiri attacco e di danno."]},
+"giant-mosquitoes": {"desc": "Decine di zanzare grandi come un pugno, che volano insieme per proteggersi.", "motives": "Volare via, tormentare, succhiare sangue", "f": [
+ "Quando le Zanzare hanno marcato metà o più dei loro PF, il loro attacco base infligge invece 1d4+1 danni fisici.",
+ "Mentre volano, le Zanzare hanno +2 alla Difficoltà.",
+ "Quando un attacco delle Zanzare fa marcare PF a un bersaglio, potete marcare uno Stress per costringerlo a marcare 1 PF aggiuntivo."]},
+"giant-rat": {"desc": "Un roditore grande come un gatto, abile a rovistare e a sopravvivere.", "motives": "Scavare, avere fame, rovistare, sfiancare", "f": [
+ "Il Ratto viene sconfitto quando subisce un danno qualsiasi. Ogni 3 danni che un PG gli infligge, sconfiggete un altro Seguace a portata contro cui l’attacco avrebbe successo.",
+ "Spendete una Paura per scegliere un bersaglio e mettere sotto i riflettori tutti i Ratti Giganti entro distanza Ravvicinata da lui. I Seguaci si portano a distanza di Mischia ed effettuano un unico tiro attacco condiviso. In caso di successo, infliggono 1 danno fisico ciascuno. Sommate questi danni."]},
+"giant-scorpion": {"desc": "Un aracnide grande come un essere umano, con chele laceranti e coda velenosa.", "motives": "Tendere agguati, nutrirsi, afferrare, avvelenare", "f": [
+ "Marcate uno Stress per effettuare un attacco base contro due bersagli entro distanza di Mischia.",
+ "Effettuate un attacco contro un bersaglio entro distanza Prossima. In caso di successo, spendete una Paura per infliggere 1d4+4 danni fisici e renderlo Avvelenato fino al suo prossimo riposo o finché non supera un Tiro di Conoscenza (16). Da Avvelenato, il bersaglio tira un d6 prima di ogni tiro azione: con 4 o meno, marca uno Stress.",
+ "Quando lo Scorpione attacca con successo un PG, guadagnate una Paura."]},
+"glass-snake": {"desc": "Un serpente trasparente dalla testa enorme che lascia dietro di sé una scia di schegge di vetro.", "motives": "Arrampicarsi, nutrirsi, mantenere le distanze, spaventare", "f": [
+ "Dopo un attacco riuscito contro il Serpente a distanza di Mischia, l’attaccante deve marcare uno slot Armatura. Se non può, marca invece 1 PF.",
+ "Marcate uno Stress per effettuare un attacco contro tutti i bersagli entro distanza Prossima. I bersagli colpiti subiscono 1d6+1 danni fisici.",
+ "Spendete una Paura per introdurre un Dado dello Sputo (d6). Quando il Serpente è sotto i riflettori, tirate il dado: con 5 o più, tutti i bersagli davanti al Serpente entro distanza Lontana devono superare un Tiro Reazione di Agilità o subiscono 1d4 danni fisici. Il Serpente può tornare sotto i riflettori una seconda volta in questo turno del GM."]},
+"grimmling-warband": {"desc": "Un gruppetto di creature piccole e strane, con armature fatte di rifiuti e utensili rubati.", "motives": "Tendere agguati, festeggiare troppo presto, colpire e fuggire, litigare tra loro, sabotare, seminare il caos", "f": [
+ "Quando la Banda ha marcato metà o più dei suoi PF, il suo attacco base infligge invece 1d4+1 danni fisici.",
+ "Quando la Banda marca il suo ultimo Stress o un Condottiero alleato viene sconfitto, tirate un d6. Con 2 o meno, la Banda fugge dalla scena."]},
+"archer-guard": {"desc": "Una guardia alta con arco lungo e faretra di frecce impennate con i colori dell’insediamento.", "motives": "Arrestare, chiudere i cancelli, arrivare a fine giornata, inchiodare sul posto", "f": [
+ "Effettuate un attacco contro un bersaglio entro distanza Lontana. In caso di successo, marcate uno Stress per infliggere 1d12+3 danni fisici. Se il bersaglio marca PF per questo attacco, ha svantaggio sui Tiri di Agilità finché non recupera almeno 1 PF."]},
+"bladed-guard": {"desc": "Una guardia corazzata con spada e scudo dipinto con i colori dell’insediamento.", "motives": "Arrestare, chiudere i cancelli, arrivare a fine giornata, inchiodare sul posto", "f": [
+ "Una creatura che tenta di avvicinarsi entro distanza Prossima dalla Guardia deve superare un Tiro di Agilità. Se altre Guardie Armate sono schierate in fila con la prima, ciascuna a distanza di Mischia da un’altra guardia della fila, la Difficoltà aumenta del numero totale di guardie nella fila.",
+ "Effettuate un attacco contro un bersaglio entro distanza Prossima. In caso di successo, marcate uno Stress per renderlo Trattenuto finché non si libera con un attacco riuscito, un Tiro di Astuzia o un Tiro di Forza."]},
+"head-guard": {"desc": "Una guardia esperta con mazza, fischietto e voce tonante.", "motives": "Arrestare, chiudere i cancelli, inchiodare sul posto, cercare la gloria", "f": [
+ "Spendete 2 Paure per mettere sotto i riflettori il Capo delle Guardie e fino a 2d4 alleati entro distanza Lontana.",
+ "Conto alla rovescia (5). La prima volta che il Capo delle Guardie è sotto i riflettori, attivate il conto alla rovescia: scende ogni volta che un PG effettua un tiro attacco. Quando scatta, tutte le Guardie Arciere entro distanza Lontana effettuano un attacco base con vantaggio contro il bersaglio più vicino a portata. Se più attacchi colpiscono lo stesso bersaglio, sommate i danni.",
+ "Quando il Capo delle Guardie attacca con successo un PG, guadagnate una Paura."]},
+"harpy": {"desc": "Un uccello feroce e maleodorante con un’apertura alare di due metri e mezzo, il busto e il volto di un essere umano.", "motives": "Difendere il nido, lasciar cadere i nemici da grandi altezze, razziare dal cielo, stridere senza sosta", "f": [
+ "L’Arpia emana un fetore rivoltante che rende Vulnerabile chiunque non sia un’Arpia mentre si trova entro distanza Prossima.",
+ "Marcate uno Stress: l’Arpia si muove in linea retta fino a un punto entro distanza Lontana ed effettua un attacco contro un bersaglio sul suo percorso. In caso di successo, infligge 3d6 danni fisici."]},
+"harrier": {"desc": "Un combattente agile armato di giavellotti.", "motives": "Aggirare, tormentare, colpire da lontano, trarre profitto", "f": [
+ "Dopo un attacco base, lo Schermagliatore può spostarsi ovunque entro distanza Lontana.",
+ "Quando una creatura si porta a distanza di Mischia per attaccarlo, potete marcare uno Stress prima del tiro attacco: lo Schermagliatore si sposta ovunque entro distanza Ravvicinata ed effettua un attacco contro quella creatura. In caso di successo, infligge 1d10+2 danni fisici."]},
+"jagged-knife-bandit": {"desc": "Un criminale astuto avvolto in un mantello, armato di uno dei celebri coltelli della banda.", "motives": "Fuggire, trarre profitto, rubare, lanciare fumogeni", "fn": ["Scalatore", "Dall’Alto"], "f": [
+ "Il Bandito si arrampica con la stessa facilità con cui corre.",
+ "Quando il Bandito riesce in un attacco base dall’alto contro un bersaglio, infligge 1d10+1 danni fisici al posto del danno base."]},
+"jagged-knife-hexer": {"desc": "Un bandito armato di bastone, con un mantello adorno di amuleti magici, che usa maledizioni per tormentare i nemici.", "motives": "Comandare, maledire, trarre profitto", "f": [
+ "Scegliete un bersaglio entro distanza Lontana e rendetelo temporaneamente Maledetto. Finché è maledetto, quando il bersaglio tira con Speranza potete marcare uno Stress per trasformare il tiro in un tiro con Paura.",
+ "Effettuate un attacco contro fino a tre bersagli entro distanza Prossima. Marcate uno Stress per infliggere 2d6+3 danni magici ai bersagli colpiti."]},
+"jagged-knife-kneebreaker": {"desc": "Un picchiatore imponente armato di una grossa clava.", "motives": "Afferrare, intimidire, trarre profitto, rubare", "f": [
+ "Le creature Trattenute dal Picchiatore subiscono danni doppi dagli attacchi degli altri avversari.",
+ "Effettuate un attacco contro un bersaglio entro distanza di Mischia. In caso di successo, il bersaglio non subisce danni ma è Trattenuto e Vulnerabile. Si libera, eliminando entrambe le condizioni, con un Tiro di Forza riuscito, oppure automaticamente se il Picchiatore subisce danni Maggiori o superiori."]},
+"jagged-knife-lackey": {"desc": "Un ladruncolo con abiti semplici e piccoli pugnali, ansioso di mettersi in mostra.", "motives": "Fuggire, trarre profitto, lanciare fumogeni", "f": [
+ "Il Lacchè viene sconfitto quando subisce un danno qualsiasi. Ogni 3 danni che un PG gli infligge, sconfiggete un altro Seguace a portata contro cui l’attacco avrebbe successo.",
+ "Spendete una Paura per scegliere un bersaglio e mettere sotto i riflettori tutti i Lacchè dei Coltelli Seghettati entro distanza Ravvicinata da lui. I Seguaci si portano a distanza di Mischia ed effettuano un unico tiro attacco condiviso. In caso di successo, infliggono 2 danni fisici ciascuno. Sommate questi danni."]},
+"jagged-knife-lieutenant": {"desc": "Un bandito navigato, con cuoio di qualità, voce decisa e occhi astuti.", "motives": "Fare il prepotente, comandare, trarre profitto, rinforzare", "f": [
+ "Quando mettete sotto i riflettori il Luogotenente, marcate uno Stress per metterci anche due alleati entro distanza Ravvicinata.",
+ "Evocate tre Lacchè dei Coltelli Seghettati, che compaiono a distanza Lontana.",
+ "Spendete una Paura per effettuare un attacco contro un bersaglio Vulnerabile entro distanza Ravvicinata. In caso di successo, infliggete 2d6+12 danni fisici e il bersaglio marca uno Stress.",
+ "Quando il Luogotenente attacca con successo un PG, guadagnate una Paura."]},
+"jagged-knife-shadow": {"desc": "Un furfante agile con un coltello malvagio, che usa la magia d’ombra per isolare i bersagli.", "motives": "Tendere agguati, nascondersi, dividere, trarre profitto", "f": [
+ "Quando l’Ombra riesce in un attacco base con vantaggio, infligge 1d6+6 danni fisici al posto del danno base.",
+ "L’Ombra diventa Nascosta fino a dopo il suo prossimo attacco. Gli attacchi effettuati mentre è nascosta grazie a questa caratteristica hanno vantaggio."]}
+}

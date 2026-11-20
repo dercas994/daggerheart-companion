@@ -1,0 +1,134 @@
+{
+"skeleton-knight": {"desc": "Un grande scheletro corazzato armato di un’enorme lama.", "motives": "Abbattere i vivi, rubare la pelle, seminare il caos", "f": [
+ "Quando il Cavaliere riesce in un attacco, tutti i PG entro distanza Ravvicinata perdono una Speranza e guadagnate una Paura.",
+ "Marcate uno Stress per effettuare un attacco contro tutti i bersagli entro distanza Prossima. I bersagli colpiti subiscono 1d8+2 danni fisici e devono marcare uno Stress.",
+ "Quando il Cavaliere viene sconfitto, effettua un attacco contro un bersaglio entro distanza Prossima (dando priorità a chi l’ha abbattuto). In caso di successo, il bersaglio subisce 1d4+8 danni fisici e perde 1d4 Speranza."]},
+"skeleton-warrior": {"desc": "Uno scheletro coperto di terra, armato di una lama arrugginita.", "motives": "Fingersi morto, fare branco, rubare la pelle", "f": [
+ "Il Guerriero è resistente ai danni fisici.",
+ "Quando il Guerriero viene sconfitto, potete metterlo sotto i riflettori e tirare un d6. Con un 6, se sul campo ci sono altri avversari, il Guerriero si ricompone senza PF marcati."]},
+"soul-shattered-mage": {"desc": "Un incantatore con la psiche spezzata da conoscenze che era meglio lasciare nascoste.", "motives": "Farfugliare in una lingua sconosciuta, ridere in modo inquietante, maneggiare un potere fuori controllo", "f": [
+ "Il Mago può essere messo sotto i riflettori fino a tre volte per turno del GM. Spendete Paura come di consueto per metterlo sotto i riflettori.",
+ "Marcate uno Stress per tirare un d6. Il Mago usa la mossa corrispondente. 1–2: Squarcio Dimensionale. Scegliete un bersaglio entro distanza Lontana: viene teletrasportato in un punto a vostra scelta entro distanza Ravvicinata dalla posizione originale e subisce 2d6 danni magici diretti mentre corpo e mente si ricompongono. 3–4: Dilatazione Temporale. Scegliete un gruppo di PG entro distanza Lontana: ogni bersaglio è Rallentato finché non tira con Speranza. Da Rallentato è Vulnerabile e deve marcare uno Stress quando si muove. 5–6: Visioni Discordanti. Effettuate un attacco contro fino a tre bersagli entro distanza Ravvicinata: i bersagli colpiti subiscono 2d8 danni magici diretti.",
+ "Quando il Mago marca PF, tirate tanti d6 quanti sono gli Stress che il Mago ha marcato. Il Mago infligge danni magici diretti pari al totale a tutti i PG entro distanza Prossima."]},
+"spellblade": {"desc": "Un mercenario che fonde scherma e magia con effetti letali.", "motives": "Folgorare, comandare, resistere", "f": [
+ "Il danno dell’attacco base della Lama Incantata è considerato sia fisico sia magico.",
+ "Marcate uno Stress e prendete di mira un gruppo entro distanza Lontana. Tutti i bersagli devono superare un Tiro Reazione di Agilità o subire 1d8+2 danni magici. Guadagnate una Paura per ogni bersaglio che marca PF per questo attacco.",
+ "Spendete 2 Paure per mettere sotto i riflettori fino a cinque alleati entro distanza Lontana.",
+ "Quando la Lama Incantata attacca con successo un PG, guadagnate una Paura."]},
+"spellbound-armor": {"desc": "Un’armatura completa vuota che brilla di una debole corona di luce spettrale.", "motives": "Sferragliare rumorosamente, muoversi come un congegno, osservare in silenzio", "f": [
+ "L’Armatura non può essere costretta a marcare Stress. Quando un effetto le farebbe marcare Stress, ignora quella parte dell’effetto.",
+ "Una volta per scena, quando l’Armatura viene sconfitta, potete spendere una Paura per riattivarla. Eliminate 2 PF e mettetela subito sotto i riflettori."]},
+"swarm-of-rats": {"desc": "Una massa brulicante di comuni roditori che si muove come un’unica onda famelica.", "motives": "Divorare, oscurare, sciamare", "f": [
+ "Quando lo Sciame ha marcato metà o più dei suoi PF, il suo attacco base infligge invece 1d4+1 danni fisici.",
+ "Tutti i bersagli entro distanza di Mischia hanno svantaggio sugli attacchi contro bersagli diversi dallo Sciame."]},
+"sylvan-soldier": {"desc": "Un guerriero fatato con un’armatura di foglie e corteccia.", "motives": "Tendere agguati, nascondersi, sopraffare, proteggere, pedinare", "f": [
+ "Se il Soldato effettua un attacco base e un altro Soldato Silvano è a distanza di Mischia dal bersaglio, infligge 1d8+5 danni fisici al posto del danno base.",
+ "Spendete una Paura per abbattere un albero entro distanza Ravvicinata. Una creatura colpita dall’albero deve superare un Tiro Reazione di Agilità (15) o subire 1d10 danni fisici.",
+ "Quando il Soldato riesce in un attacco, potete marcare uno Stress per renderlo Nascosto fino al suo prossimo attacco o finché un PG non lo trova con un Tiro di Istinto (14) riuscito."]},
+"tangle-bramble-swarm": {"desc": "Un ammasso di cespugli rotolanti animati e assetati di sangue, ciascuno grande come una zucca.", "motives": "Digerire, avviluppare, immobilizzare", "f": [
+ "Quando lo Sciame ha marcato metà o più dei suoi PF, il suo attacco base infligge invece 1d4+2 danni fisici.",
+ "Marcate uno Stress per infliggere 2d6+8 danni fisici diretti a un bersaglio con 3 o più segnalini rovo.",
+ "Quando lo Sciame riesce in un attacco, date al bersaglio un segnalino rovo. Un bersaglio con almeno un segnalino è Trattenuto; con 3 o più è anche Vulnerabile. Tutti i segnalini si rimuovono superando un Tiro di Finezza (12 + numero di segnalini) o infliggendo allo Sciame danni Maggiori o superiori. Se i segnalini vengono rimossi con un Tiro di Finezza, compaiono a distanza di Mischia tanti Grovigli Avviluppanti Seguaci quanti sono i segnalini rimossi."]},
+"tangle-bramble": {"desc": "Un cespuglio rotolante animato e assetato di sangue.", "motives": "Unirsi, prosciugare, avviluppare", "fn": ["Seguace (4)", "Attacco in Massa", "Prosciugare e Moltiplicarsi"], "f": [
+ "Il Groviglio viene sconfitto quando subisce un danno qualsiasi. Ogni 4 danni che un PG gli infligge, sconfiggete un altro Seguace a portata contro cui l’attacco avrebbe successo.",
+ "Spendete una Paura per scegliere un bersaglio e mettere sotto i riflettori tutti i Grovigli Avviluppanti entro distanza Ravvicinata da lui. I Seguaci si portano a distanza di Mischia ed effettuano un unico tiro attacco condiviso. In caso di successo, infliggono 2 danni fisici ciascuno. Sommate questi danni.",
+ "Quando un attacco del Groviglio fa marcare PF a un bersaglio e ci sono tre o più Grovigli Seguaci entro distanza Ravvicinata, potete fonderli in un’Orda di Sciame di Grovigli Avviluppanti. I PF dell’Orda sono pari al numero di Seguaci fusi."]},
+"viper": {"desc": "Un piccolo serpente che avvelena la preda con zanne retrattili.", "motives": "Attendere in agguato, strisciare, colpire", "f": [
+ "La Vipera viene sconfitta quando subisce un danno qualsiasi. Ogni 4 danni che un PG le infligge, il PG sconfigge un altro Seguace a portata contro cui l’attacco avrebbe successo.",
+ "Quando la Vipera riesce in un attacco base, il bersaglio è temporaneamente Avvelenato. Da Avvelenato, deve marcare uno Stress ogni volta che effettua un tiro azione.",
+ "Spendete una Paura per scegliere un bersaglio e mettere sotto i riflettori tutte le Vipere entro distanza Ravvicinata da lui. I Seguaci si portano a distanza di Mischia ed effettuano un unico tiro attacco condiviso. In caso di successo, infliggono 1 danno fisico ciascuno. Sommate questi danni."]},
+"waxwork-creation": {"desc": "Un costrutto di cera di candela alto tre metri, semisolido (e semisenziente).", "motives": "Avanzare minaccioso, gemere per il dolore della non-vita, soffocare", "f": [
+ "La Creazione può essere messa sotto i riflettori fino a due volte per turno del GM. Spendete Paura come di consueto per metterla sotto i riflettori.",
+ "La Creazione non subisce danni extra dagli attacchi che ottengono un successo critico contro di lei.",
+ "Marcate uno Stress: la Creazione scaglia una palla di cera contro un bersaglio entro distanza Lontana. Effettuate un attacco: in caso di successo, il bersaglio subisce 1d12+2 danni fisici ed è Trattenuto finché non supera un Tiro di Forza (15).",
+ "Quando un PG a distanza di Mischia dalla Creazione la attacca con un’arma, tirate un d6. Con 5 o più, l’arma resta incastrata nella Creazione e si può estrarre solo con un Tiro di Forza (15) riuscito.",
+ "Quando la Creazione riesce in un attacco base contro un bersaglio a distanza di Mischia, potete spendere una Paura per Intrappolarlo nel suo corpo di cera. Da Intrappolato, il bersaglio è Trattenuto e deve marcare uno Stress e muoversi con la Creazione ogni volta che questa va sotto i riflettori. Viene liberato quando la Creazione subisce danni Maggiori o superiori."]},
+"weaponmaster": {"desc": "Un maestro d’armi che impugna una spada grande il doppio di lui.", "motives": "Agire per primo, puntare al più debole, intimidire", "f": [
+ "Effettuate un attacco base contro un bersaglio. In caso di successo, marcate uno Stress per Provocarlo fino al suo prossimo attacco riuscito. La prossima volta che il bersaglio Provocato attacca, ha svantaggio contro bersagli diversi dal Maestro d’Armi.",
+ "Una volta per scena, spendete una Paura per eliminare 2 PF e 2 Stress.",
+ "Quando il Maestro d’Armi attacca con successo un PG, guadagnate una Paura."]},
+"will-o-the-wisps": {"desc": "Globi di luce cangiante che fluttuano pigramente.", "motives": "Abbagliare e distrarre, disorientare, sviare", "f": [
+ "Quando i Fuochi Fatui hanno marcato metà o più dei loro PF, il loro attacco base infligge invece 1d4−1 danni magici.",
+ "I Fuochi Fatui pulsano e danzano in motivi ipnotici e cangianti che incantano chiunque li guardi. Tutti i bersagli entro distanza Prossima dai Fuochi Fatui sono Vulnerabili.",
+ "Spendete una Paura: i Fuochi Fatui tracciano nell’aria scie di luce ad anello, lasciando immagini persistenti che implorano di essere decifrate. Ogni PG entro distanza Lontana deve superare un Tiro Reazione di Istinto (13) o marcare uno Stress e spostarsi fino a distanza Ravvicinata verso i Fuochi Fatui."]},
+"young-dryad": {"desc": "Un imperioso essere-albero che guida le difese della propria foresta.", "motives": "Comandare, nutrire, potare gli indesiderati", "f": [
+ "Marcate uno Stress per mettere sotto i riflettori 1d4 alleati a portata di un bersaglio che possono attaccare senza muoversi. In caso di successo, i loro attacchi infliggono metà danni.",
+ "Spendete una Paura per formare una gabbia attorno a un bersaglio entro distanza Prossima e Trattenerlo finché non viene liberato con un Tiro di Forza riuscito. Quando una creatura effettua un tiro azione contro la gabbia, deve marcare uno Stress.",
+ "Quando la Driade attacca con successo un PG, guadagnate una Paura."]},
+"yufo": {"desc": "Una grande creatura interdimensionale simile a una medusa, che entra ed esce dal flusso del tempo.", "motives": "Scambiare informazioni su possibili linee temporali, nutrirsi di emozioni intense, osservare dall’ombra", "fn": ["Telepatico", "Cassaforte Psichica", "Onda di Anomalia", "Corrosione Temporale"], "f": [
+ "Lo Yufo può comunicare mentalmente con le creature entro distanza Remota.",
+ "Lo Yufo è immune ad abilità e caratteristiche che influenzerebbero o altererebbero i suoi pensieri o le sue emozioni.",
+ "Spendete una Paura e scegliete fino a tre bersagli entro distanza Ravvicinata. Ognuno deve superare un Tiro Reazione di Istinto o si desincronizza dalla realtà e ha svantaggio sui Tiri di Istinto finché non usa una mossa di pausa per ancorare la psiche al presente.",
+ "Quando lo Yufo riesce in un attacco base, potete marcare uno Stress perché secerna dalla pelle un acido entropico: il bersaglio ha −2 alle soglie di danno finché non usa una mossa di pausa per riparare l’armatura."]},
+"brawny-zombie": {"desc": "Un grosso cadavere, gonfio di putrefazione e furioso.", "motives": "Schiacciare, distruggere, scagliare detriti, sbattere", "f": [
+ "Quando mettete lo Zombi sotto i riflettori e non ha un segnalino sul blocco statistiche, non può ancora agire: mettete un segnalino e descrivete cosa si prepara a fare. Quando lo mettete sotto i riflettori e ha un segnalino, toglietelo: ora può agire.",
+ "Effettuate un attacco base con vantaggio contro un bersaglio che lo Zombi ha Trattenuto. In caso di successo, l’attacco infligge danni diretti.",
+ "Quando lo Zombi riesce in un attacco base, potete marcare uno Stress per Trattenere temporaneamente il bersaglio e costringerlo a marcare 2 Stress."]},
+"patchwork-zombie-hulk": {"desc": "Un’imponente massa di cadaveri che si muove come un tutt’uno, con arti grandi come busti e pugni grandi quanto un halfling adulto.", "motives": "Assorbire cadaveri, menare colpi a casaccio, avere fame, terrorizzare", "fn": ["Smontabile", "Arti Scomposti", "Un Altro nel Mucchio", "Urla Tormentate"], "f": [
+ "Quando lo Zombi subisce danni Maggiori o superiori, marca 1 PF aggiuntivo.",
+ "Quando lo Zombi effettua un attacco base, può attaccare tutti i bersagli entro distanza Prossima.",
+ "Quando lo Zombi è entro distanza Prossima da un cadavere, può incorporarlo in sé, eliminando 1 PF e 1 Stress.",
+ "Marcate uno Stress per costringere tutti i PG entro distanza Lontana a un Tiro Reazione di Presenza (13). Chi fallisce perde una Speranza e guadagnate una Paura per ciascuno; chi riesce deve marcare uno Stress."]},
+"rotted-zombie": {"desc": "Un cadavere in decomposizione che arranca verso la preda.", "motives": "Mangiare carne, avere fame, sbranare, circondare", "fn": ["Seguace (3)", "Attacco in Massa"], "f": [
+ "Lo Zombi viene sconfitto quando subisce un danno qualsiasi. Ogni 3 danni che un PG gli infligge, sconfiggete un altro Seguace a portata contro cui l’attacco avrebbe successo.",
+ "Spendete una Paura per scegliere un bersaglio e mettere sotto i riflettori tutti gli Zombi Marci entro distanza Ravvicinata da lui. I Seguaci si portano a distanza di Mischia ed effettuano un unico tiro attacco condiviso. In caso di successo, infliggono 2 danni fisici ciascuno. Sommate questi danni."]},
+"shambling-zombie": {"desc": "Un cadavere animato che si muove barcollando, spinto solo dalla fame.", "motives": "Divorare, avere fame, accerchiare il nemico, lacerare la carne", "f": [
+ "Quando lo Zombi è a distanza di Mischia da una creatura e almeno un altro Zombi è entro distanza Ravvicinata, tutti gli attacchi contro quella creatura hanno vantaggio.",
+ "I bersagli che marcano PF per gli attacchi dello Zombi devono anche marcare uno Stress."]},
+"zombie-pack": {"desc": "Un gruppo di cadaveri barcollanti che si muovono insieme d’istinto.", "motives": "Consumare carne, avere fame, sbranare", "f": [
+ "Quando gli Zombi hanno marcato metà o più dei loro PF, il loro attacco base infligge invece 1d4+2 danni fisici.",
+ "Quando gli Zombi marcano PF per un attacco entro distanza di Mischia, potete marcare uno Stress per effettuare un attacco base contro l’attaccante."]},
+"archer-squadron": {"desc": "Un gruppo di arcieri addestrati con archi enormi.", "motives": "Restare uniti, sopravvivere, tirare a raffica", "f": [
+ "Quando lo Squadrone ha marcato metà o più dei suoi PF, il suo attacco base infligge invece 1d6+3 danni fisici.",
+ "Spendete una Paura per prendere di mira un punto entro distanza Lontana. Effettuate un attacco con vantaggio contro tutti i bersagli entro distanza Ravvicinata da quel punto. I bersagli colpiti subiscono 1d10+4 danni fisici.",
+ "Marcate uno Stress per prendere di mira un punto entro distanza Lontana. Fino al prossimo tiro con Paura, una creatura che si muove entro distanza Ravvicinata da quel punto deve effettuare un Tiro Reazione di Agilità. In caso di fallimento subisce 2d6+3 danni fisici, in caso di successo metà danni."]},
+"apprentice-assassin": {"desc": "Un giovane apprendista smanioso di mettersi alla prova.", "motives": "Agire in modo avventato, uccidere, dimostrare il proprio valore, mettersi in mostra", "f": [
+ "L’Assassino viene sconfitto quando subisce un danno qualsiasi. Ogni 6 danni che un PG gli infligge, sconfiggete un altro Seguace a portata contro cui l’attacco avrebbe successo.",
+ "Spendete una Paura per scegliere un bersaglio e mettere sotto i riflettori tutti gli Assassini Apprendisti entro distanza Ravvicinata da lui. I Seguaci si portano a distanza di Mischia ed effettuano un unico tiro attacco condiviso. In caso di successo, infliggono 4 danni fisici ciascuno. Sommate questi danni."]},
+"assassin-poisoner": {"desc": "Un furfante astuto, esperto di veleni e di agguati.", "motives": "Anticipare, farsi pagare, uccidere, contaminare cibo e acqua", "f": [
+ "I bersagli che marcano PF per gli attacchi dell’Assassino sono Vulnerabili finché non eliminano 1 PF.",
+ "L’Assassino ha vantaggio sugli attacchi se è Nascosto.",
+ "Lancia una bomba fumogena che riempie di fumo l’area entro distanza Ravvicinata, Stordendo tutti i bersagli nell’area. I bersagli Storditi hanno svantaggio sul loro prossimo tiro azione, poi la condizione svanisce."]},
+"master-assassin": {"desc": "Un killer navigato dalla voce minacciosa e dalla lama letale.", "motives": "Tendere agguati, uscirne vivo, uccidere, prepararsi a ogni evenienza", "f": [
+ "L’Assassino infligge danni diretti mentre è Nascosto.",
+ "Marcate uno Stress per mettere sotto i riflettori un numero di altri Assassini pari agli Stress non marcati dell’Assassino.",
+ "Quando l’Assassino riesce in un attacco base contro un bersaglio Vulnerabile, potete spendere una Paura per infliggere danni Gravi al posto del danno base.",
+ "Quando l’Assassino attacca con successo un PG, guadagnate una Paura."]},
+"banshee": {"desc": "Uno spirito fatato corrotto che infesta la notte come uno spettro sottile avvolto in una veste luminosa.", "motives": "Tendere agguati dagli oggetti solidi, spaventare a morte, piangere la vita e la bellezza perdute, urlare sinistramente", "f": [
+ "La Banshee ha resistenza ai danni fisici. Marcate uno Stress per spostarla fino a distanza Ravvicinata attraverso gli oggetti solidi.",
+ "Quando la Banshee riesce in un attacco, tutti i PG entro distanza Ravvicinata perdono una Speranza e guadagnate una Paura.",
+ "Fino a tre volte per scena, spendete una Paura: la Banshee si teletrasporta fino a distanza Remota e spaventa un PG a distanza di Mischia. Il PG marca 1d4 Stress; se questo gli fa marcare PF, perde anche una Speranza.",
+ "Marcate uno Stress: la Banshee emette un urlo lugubre di dolore e angoscia. Ogni PG entro distanza Ravvicinata effettua un Tiro Reazione di Presenza. Chi riesce subisce 1d12+1 danni magici; chi fallisce subisce il doppio dei danni e viene respinto a distanza Ravvicinata."]},
+"basilisk": {"desc": "Una lucertola a sei zampe con la testa da avvoltoio, una spina dorsale irta di aculei e uno sguardo pietrificante.", "motives": "Avanzare lento e costante, gustarsi le prede pietrificate, trasformare tutti in pietra, osservare e attendere", "f": [
+ "Spendete una Paura per costringere un PG entro distanza Lontana a un Tiro Reazione di Istinto. In caso di successo, il bersaglio marca uno Stress. In caso di fallimento diventa Irrigidito; se lo era già, diventa Pietrificato. Da Irrigidito, il PG deve marcare uno Stress ogni volta che agisce, finché non riposa o il Basilisco viene sconfitto. Da Pietrificato non può agire; la condizione si elimina solo applicandogli saliva di Basilisco.",
+ "Marcate uno Stress: il Basilisco azzanna un PG Pietrificato a distanza di Mischia. Il bersaglio deve effettuare una mossa di morte."]},
+"battle-box": {"desc": "Un costrutto a forma di cubo con una runa diversa su ciascuna delle sei facce.", "motives": "Cambiare tattica, travolgere i nemici, attendere camuffato", "f": [
+ "Il Cubo può essere messo sotto i riflettori fino a due volte per turno del GM. Spendete Paura come di consueto per metterlo sotto i riflettori.",
+ "Marcate uno Stress e tirate un d6. Il Cubo usa la mossa corrispondente. 1. Raggio di Mana: attacco contro un bersaglio entro distanza Lontana; in caso di successo, 2d10+2 danni magici. 2. Getti di Fuoco: il Cubo si lancia in aria roteando e sprigiona fiamme; attacco contro tutti i bersagli entro distanza Ravvicinata, i colpiti subiscono 2d8 danni fisici. 3. Travolgere: il Cubo sfreccia in modo imprevedibile; attacco contro tutti i PG entro distanza Ravvicinata, i colpiti subiscono 1d6+5 danni fisici e sono Vulnerabili fino al loro prossimo tiro con Speranza. 4. Gas Folgorante: tutti i bersagli entro distanza Ravvicinata devono superare un Tiro Reazione di Finezza o marcare 3 Stress. 5. Battito Assordante: tutti i bersagli entro distanza Prossima devono superare un Tiro Reazione di Forza o diventano Vulnerabili finché il Cubo non viene sconfitto. 6. Ronzio Psionico: tutti i bersagli entro distanza Ravvicinata devono superare un Tiro Reazione di Presenza o subire 2d4+9 danni magici diretti.",
+ "Prima di tirare il danno di un attacco del Cubo, potete marcare uno Stress per aggiungere un d6 al tiro. Inoltre guadagnate una Paura.",
+ "Quando il Cubo marca il suo ultimo PF, la magia che lo alimenta esplode in un’onda di forza. Tutti i bersagli entro distanza Ravvicinata devono superare un Tiro Reazione di Istinto o subire 2d8+1 danni magici."]},
+"berserker-alpha": {"desc": "Un comandante veterano che beve elisir magici per trasformarsi in bestia e guidare il branco a caccia.", "motives": "Abbracciare la trasformazione, ululare alla luna, guidare il branco, inseguire i nemici", "f": [
+ "L’Alfa ottiene +1 ai tiri attacco per ogni alleato entro distanza Prossima dal bersaglio dell’attacco.",
+ "Una volta per scena, spendete una Paura: ogni alleato entro distanza Ravvicinata dall’Alfa elimina 1 PF e 1 Stress.",
+ "La prima volta nella scena in cui l’Alfa marca il suo ultimo Stress, ottiene +6 ai tiri di danno."]},
+"berserker-initiate": {"desc": "Un guerriero furioso che beve intrugli rituali per assumere tratti di una bestia predatrice.", "motives": "Coordinarsi con il branco, danzare attorno al fuoco, ululare alla luna", "f": [
+ "L’Iniziato ottiene +1 ai tiri attacco per ogni alleato entro distanza Prossima dal bersaglio dell’attacco.",
+ "La prima volta nella scena in cui l’Iniziato marca il suo ultimo Stress, ottiene +4 ai tiri di danno."]},
+"centaur-warden": {"desc": "Un guardiano metà umano e metà cavallo che pattuglia i confini di terre idilliache non corrotte dalla civiltà.", "motives": "Vivere in armonia con la natura, proteggere le terre selvagge, usare mobilità e distanza per scacciare gli intrusi", "f": [
+ "Quando il Guardiano effettua un attacco base contro un bersaglio a distanza di Mischia da uno o più suoi alleati, ottiene +2 al tiro attacco.",
+ "Marcate uno Stress per effettuare un attacco base. Il Guardiano ha vantaggio sul tiro e ottiene un successo critico con 19–20.",
+ "Spendete una Paura: il Guardiano galoppa in linea retta fino a distanza Lontana. Ogni bersaglio sul suo percorso effettua un Tiro Reazione di Agilità. Chi riesce subisce 1d6+2 danni fisici; chi fallisce subisce il doppio dei danni e deve marcare uno Stress.",
+ "Quando il Guardiano effettua un attacco base, potete marcare un numero qualsiasi di Stress per colpire altrettante creature aggiuntive a portata."]},
+"chaos-skull": {"desc": "Un teschio umanoide fluttuante, animato da una magia scintillante.", "motives": "Sghignazzare, consumare la magia, servire il proprio creatore", "f": [
+ "Il Teschio levita a qualche metro da terra e non può essere Trattenuto.",
+ "Il Teschio è resistente ai danni magici.",
+ "Marcate uno Stress per effettuare un attacco contro tutti i bersagli entro distanza Ravvicinata. I bersagli colpiti subiscono 2d6+4 danni magici.",
+ "Spendete una Paura per effettuare un attacco contro un PG con un tratto da Incantatore entro distanza Prossima. In caso di successo, il bersaglio marca 1d4 Stress e il Teschio ne elimina altrettanti; inoltre il Teschio può essere subito rimesso sotto i riflettori."]},
+"chicken-foot-hut": {"desc": "Un’alta capanna di legno che si sposta su gigantesche zampe di gallina.", "motives": "Artigliare, proteggere il padrone, correre e saltare, calpestare", "fn": ["Veloce", "Doppio Attacco", "Inchiodare"], "f": [
+ "Quando va sotto i riflettori, il Capanno può muoversi fino a distanza Lontana.",
+ "Marcate uno Stress per effettuare due attacchi base. Se entrambi vanno a segno contro lo stesso bersaglio, sommate i danni.",
+ "Quando il Capanno riesce in un attacco base, potete marcare uno Stress per Trattenere temporaneamente il bersaglio. Il Capanno trascina con sé il bersaglio Trattenuto quando si muove."]},
+"conscript": {"desc": "Un civile malamente addestrato, costretto alla guerra.", "motives": "Eseguire gli ordini, fare branco, sopravvivere", "f": [
+ "Il Coscritto viene sconfitto quando subisce un danno qualsiasi. Ogni 6 danni che un PG gli infligge, sconfiggete un altro Seguace a portata contro cui l’attacco avrebbe successo.",
+ "Spendete una Paura per scegliere un bersaglio e mettere sotto i riflettori tutti i Coscritti entro distanza Ravvicinata da lui. I Seguaci si portano a distanza di Mischia ed effettuano un unico tiro attacco condiviso. In caso di successo, infliggono 6 danni fisici ciascuno. Sommate questi danni."]}
+}

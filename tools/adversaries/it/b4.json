@@ -1,0 +1,145 @@
+{
+"guahalan-spirit-beast": {"desc": "Uno spirito dai colori sgargianti con la forma di un animale.", "motives": "Proteggere, sacrificarsi, circondare", "f": [
+ "La Bestia Spirituale viene sconfitta quando subisce un danno qualsiasi. Ogni 5 danni che un PG le infligge, il PG sconfigge un altro Seguace a portata contro cui l’attacco avrebbe successo.",
+ "La Bestia Spirituale ha resistenza ai danni fisici.",
+ "Spendete una Paura per scegliere un bersaglio e mettere sotto i riflettori tutte le Bestie Spirituali Guahalan entro distanza Ravvicinata da lui. I Seguaci si portano a distanza di Mischia ed effettuano un unico tiro attacco condiviso. In caso di successo, infliggono 5 danni magici ciascuno. Sommate questi danni.",
+ "Quando la Bestia Spirituale viene sconfitta, esplode in una fiamma bianca e infligge 5 danni magici alle creature a distanza di Mischia."]},
+"guahalan-spirit-singer": {"desc": "Un evocatore mutaforma dai tratti animaleschi.", "motives": "Abiurare, rafforzare, evocare", "f": [
+ "Spendete una Paura: il Cantore assume una forma più bestiale. In questa forma ottiene ai tiri attacco e di danno un bonus pari agli Stress marcati, e prima di agire può muoversi fino a distanza Lontana invece che Ravvicinata.",
+ "Spendete una Paura: il Cantore evoca 2d4 Bestie Spirituali Guahalan entro distanza Prossima e ne mette subito una sotto i riflettori.",
+ "Marcate uno Stress per mettere sotto i riflettori un numero qualsiasi di Bestie Spirituali entro distanza Prossima: ognuna si porta a distanza di Mischia dal PG più vicino ed effettua un attacco base. Se più attacchi vanno a segno sullo stesso bersaglio, sommate i danni.",
+ "Quando il Cantore subirebbe danni mentre è entro distanza Prossima da una Bestia Spirituale, potete spendere una Paura per sacrificarla e annullare il danno."]},
+"hill-titan": {"desc": "Un golia vestito di pelli d’animale e circondato da uno sciame di insetti.", "motives": "Mangiare, fare disastri, pattugliare il proprio territorio", "f": [
+ "Il Titano può essere messo sotto i riflettori fino a tre volte per turno del GM. Spendete Paura come di consueto per metterlo sotto i riflettori.",
+ "Quando il Titano attacca con successo un PG, guadagnate una Paura.",
+ "I PG hanno vantaggio sui tiri azione per ingannare o manipolare emotivamente il Titano.",
+ "I PG sono Vulnerabili mentre sono entro distanza Prossima.",
+ "Spendete una Paura per effettuare un attacco base contro tutti i bersagli entro distanza Prossima."]},
+"hive-walker": {"desc": "Un cadavere riempito e manovrato da una colonia di api necrofaghe.", "motives": "Imprigionare le prede nel miele, proteggere l’alveare", "f": [
+ "Il Camminatore rigurgita un denso miele cremisi su tutti i bersagli tra sé e un punto entro distanza Ravvicinata. Ogni bersaglio sulla linea deve superare un Tiro Reazione di Agilità o subire 2d8 danni magici e restare temporaneamente Trattenuto mentre il miele si indurisce.",
+ "Quando il Camminatore marca PF, api vendicative erompono dal suo corpo per proteggerlo. Ogni bersaglio entro distanza Prossima deve superare un Tiro Reazione di Istinto o subire 1d8 danni fisici diretti per ogni PF marcato dal Camminatore. I bersagli Trattenuti falliscono automaticamente."]},
+"jack-o-lantern": {"desc": "Una zucca fluttuante con un volto intagliato. L’anima intrappolata al suo interno emana un bagliore inquietante.", "motives": "Mordere, fluttuare, ridere, raccontare storie di paura", "f": [
+ "La Lanterna viene sconfitta quando subisce un danno qualsiasi. Ogni 4 danni che un PG le infligge, il PG sconfigge un altro Seguace a portata contro cui l’attacco avrebbe successo.",
+ "Spendete una Paura per scegliere un bersaglio e mettere sotto i riflettori tutte le Lanterne entro distanza Ravvicinata da lui. I Seguaci si portano a distanza di Mischia ed effettuano un unico tiro attacco condiviso. In caso di successo, infliggono 6 danni fisici ciascuno. Sommate questi danni.",
+ "Quando un PG entro distanza Prossima tira con Paura, potete marcare uno Stress per guadagnare una Paura aggiuntiva."]},
+"juvenile-flickerfly": {"desc": "Un insetto grande come un cavallo, con scaglie iridescenti e ali cristalline più veloci dell’occhio.", "motives": "Collezionare cose luccicanti, cacciare, piombare in picchiata", "f": [
+ "La Farfalampo può essere messa sotto i riflettori fino a tre volte per turno del GM. Spendete Paura come di consueto per metterla sotto i riflettori.",
+ "Prima che la Farfalampo attacchi, tirate un d6. Con 4 o più, l’Evasione del bersaglio è dimezzata contro questo attacco.",
+ "Marcate uno Stress per creare uno spettacolo magico abbagliante che avvince la mente dei nemici vicini. Tutti i bersagli entro distanza Ravvicinata effettuano un Tiro Reazione di Istinto. Per ogni bersaglio che fallisce guadagnate una Paura e la Farfalampo scopre una delle sue paure.",
+ "Conto alla rovescia (ciclico 1d6). La prima volta che la Farfalampo subisce danni, attivate il conto. Quando scatta, soffia un gas allucinogeno su tutti i bersagli davanti a sé fino a distanza Lontana. I bersagli devono superare un Tiro Reazione di Istinto o vengono tormentati da allucinazioni; chi ha una paura nota alla Farfalampo tira con svantaggio. Chi fallisce marca uno Stress e perde una Speranza."]},
+"knight-of-the-realm": {"desc": "Un soldato decorato con un’armatura pesante e un possente destriero.", "motives": "Travolgere, cercare la gloria, mostrare la propria superiorità", "f": [
+ "Finché è in sella, il Cavaliere ottiene +2 alla Difficoltà. Quando subisce danni Gravi viene disarcionato e perde questo beneficio fino alla prossima volta che va sotto i riflettori.",
+ "Quando il Cavaliere subisce danni fisici, riduceteli di 3.",
+ "Se è in sella, il Cavaliere si muove fino a distanza Lontana ed effettua un attacco base contro un bersaglio. In caso di successo, infligge 2d8+4 danni fisici e il bersaglio deve marcare uno Stress.",
+ "Marcate uno Stress per mettere sotto i riflettori 1d4+1 alleati. Gli attacchi che effettuano in questo modo infliggono metà danni."]},
+"landshark": {"desc": "Uno squalo quadrupede che nuota attraverso il terreno.", "motives": "Scavare, erompere dal terreno, girare attorno alla preda", "f": [
+ "Lo Squalo di Terra si muove attraverso il terreno con la stessa facilità con cui ci cammina sopra. Quando si muove, può scegliere di immergersi o riemergere. Sottoterra ha resistenza a tutti i danni ma non può attaccare.",
+ "Quando lo Squalo di Terra dovrebbe marcare PF, potete marcare invece altrettanti Stress.",
+ "Quando lo Squalo di Terra attacca con successo un PG a distanza di Mischia, potete spendere una Paura per costringere il bersaglio a marcare uno slot Armatura senza riceverne i benefici (può comunque usare l’armatura per ridurre il danno)."]},
+"landshark-behemoth": {"desc": "Uno squalo di terra vissuto abbastanza a lungo da diventare un’enorme mostruosità scavatrice, con la pelle d’acciaio e denti affilati come rasoi.", "motives": "Mordere, scavare, erompere dal terreno", "f": [
+ "Il Behemoth può essere messo sotto i riflettori fino a tre volte per turno del GM. Spendete Paura come di consueto per metterlo sotto i riflettori.",
+ "Il Behemoth si muove attraverso il terreno con la stessa facilità con cui ci cammina sopra. Quando si muove, può scegliere di immergersi o riemergere. Sottoterra è immune ai danni ma non può attaccare.",
+ "Tutti i danni inflitti al Behemoth sono ridotti di una soglia.",
+ "Il Behemoth erompe dal terreno: ogni PG entro distanza Prossima deve superare un Tiro Reazione di Agilità o viene atterrato, restando Vulnerabile finché non effettua un tiro azione. Guadagnate una Paura per ogni PG reso Vulnerabile così."]},
+"masked-thief": {"desc": "Un ladro astuto, acrobata provetto con un gusto per la teatralità.", "motives": "Sfuggire, nascondersi, sgraffignare, trarre profitto", "f": [
+ "Effettuate un attacco contro un bersaglio a distanza di Mischia. In caso di successo, infliggete 1d8+2 danni fisici e il Ladro ruba un oggetto o un consumabile dall’inventario del bersaglio.",
+ "Marcate uno Stress per rivelare una trappola a laccio piazzata dal Ladro in un punto qualsiasi del campo. Tutti i bersagli entro distanza Prossima dalla trappola devono superare un Tiro Reazione di Agilità (13) o vengono sollevati e appesi a testa in giù: sono Trattenuti e Vulnerabili finché non si liberano con un Tiro di Finezza o di Forza (13) riuscito."]},
+"merchant-baron": {"desc": "Un mercante affermato con una grande impresa al suo comando.", "motives": "Abusare del potere, accumulare risorse, mobilitare i sottoposti", "f": [
+ "Spendete una Paura per offrire a un bersaglio un patto pericoloso in cambio di qualcosa che desidera o di cui ha bisogno. Se è un PG, effettua un Tiro Reazione di Presenza (17): in caso di fallimento deve marcare 2 Stress o accettare l’accordo.",
+ "Una volta per scena, marcate uno Stress per evocare 1d4+1 avversari di Grado 1, che compaiono a distanza Lontana per far rispettare la volontà del Barone."]},
+"minotaur-wrecker": {"desc": "Un enorme firbolg dalla testa di toro e dal temperamento irascibile.", "motives": "Divorare, incornare, orientarsi, sopraffare, inseguire", "f": [
+ "Dovete spendere una Paura per mettere il Minotauro sotto i riflettori. Mentre è sotto i riflettori, può effettuare il suo attacco base contro tutti i bersagli a portata.",
+ "Marcate uno Stress per caricare attraverso un gruppo entro distanza Ravvicinata ed effettuare un attacco contro tutti i bersagli sul percorso. I bersagli colpiti subiscono 2d6+8 danni fisici e vengono respinti a distanza Remota. Se un bersaglio sbatte contro un oggetto solido o un’altra creatura, subisce 1d6 danni extra (sommate i danni).",
+ "Effettuate un attacco contro un bersaglio entro distanza Prossima, portando il Minotauro a distanza di Mischia. In caso di successo, infliggete 2d8 danni fisici diretti."]},
+"mortal-hunter": {"desc": "Una figura non morta con un pesante cappotto di cuoio, occhi indagatori e una crudeltà disinvolta.", "motives": "Divorare, cacciare, seguire le tracce", "f": [
+ "Quando il Cacciatore riesce in un attacco, tutti i PG entro distanza Lontana perdono una Speranza e guadagnate una Paura.",
+ "Spendete una Paura per maledire un bersaglio entro distanza Prossima con un Sigillo Mortale necrotico fino alla fine della scena. Gli attacchi del Cacciatore contro di lui infliggono danni diretti. Il Cacciatore può mantenere un solo Sigillo alla volta.",
+ "Marcate uno Stress per mettere sotto i riflettori 1d4 alleati. Gli attacchi che effettuano in questo modo infliggono metà danni.",
+ "Conto alla rovescia (ciclico 1d6). La prima volta che il Cacciatore va sotto i riflettori, attivate il conto. Quando scatta, il Cacciatore si muove in linea retta fino a un punto entro distanza Lontana e attacca tutti i bersagli sul percorso. I bersagli colpiti subiscono 2d8+2 danni fisici."]},
+"ravenous-mockery": {"desc": "Un predatore mutaforma che assume l’aspetto di oggetti inanimati per attirare le prede incaute a portata.", "motives": "Tendere agguati, attendere in agguato, inghiottire senza masticare, assumere una forma innocua", "f": [
+ "Marcate uno Stress per attaccare una creatura entro distanza Ravvicinata. In caso di successo, il bersaglio viene trascinato a distanza di Mischia ed è Trattenuto finché non si libera con un Tiro di Forza riuscito; potete spendere una Paura per attivare «Divorare» contro di lui.",
+ "Attaccate un bersaglio a distanza di Mischia. In caso di successo, la Contraffazione lo Inghiotte. Da Inghiottito, il bersaglio è Trattenuto e marca 1 PF ogni volta che la Contraffazione va sotto i riflettori. La Contraffazione rigurgita tutte le creature inghiottite quando subisce danni Maggiori o Gravi.",
+ "Spendete una Paura per rivelare che un altro oggetto sul campo era per tutto il tempo una Contraffazione Famelica, poi mettetela subito sotto i riflettori."]},
+"royal-advisor": {"desc": "Un cortigiano di alto rango che ha l’orecchio della nobiltà locale.", "motives": "Ingraziarsi i potenti, fabbricare prove, tramare", "f": [
+ "Un PG che ottiene meno di 17 su un tiro azione contro il Consigliere deve marcare uno Stress.",
+ "Marcate uno Stress per influenzare con parole sussurrate un PNG a distanza di Mischia. L’opinione del bersaglio su una questione si sposta verso le preferenze del Consigliere, a meno che non contrasti direttamente con i suoi moventi.",
+ "Spendete una Paura per convincere una folla o una persona importante che un individuo o un gruppo è responsabile di un problema che la affligge. Il bersaglio diventa ostile al capro espiatorio finché non viene convinto della sua innocenza con un Tiro di Presenza (17) riuscito."]},
+"rust-eater": {"desc": "Uno scarafaggio grande come un pony, coperto da una chitina corrosiva che trasforma il metallo in ruggine.", "motives": "Evitare di farsi notare, mangiare ruggine, fiutare il metallo", "f": [
+ "Un PG che effettua un tiro azione entro distanza Prossima dal Mangiaruggine deve superare un Tiro Reazione di Istinto o marcare uno Stress.",
+ "Il carapace del Mangiaruggine è ricoperto da un acido che corrode e arrugginisce il metallo. Quando un PG a distanza di Mischia riesce ad attaccarlo con un’arma di metallo, il dado di danno dell’arma scende di un passo (per esempio da d8 a d6, o da d6 a d4). Se scende sotto il d4, l’arma si sbriciola in ruggine: il Mangiaruggine la divora ed elimina 1 PF."]},
+"scarecrow": {"desc": "Un fascio di paglia legato in forma umanoide, vestito di stracci e animato da un’anima intrappolata.", "motives": "Rimettersi in sesto, graffiare e artigliare", "f": [
+ "Lo Spaventapasseri ha resistenza ai danni fisici ma subisce il doppio dei danni dal fuoco.",
+ "Spendete una Paura: lo Spaventapasseri fissa negli occhi un PG entro distanza Prossima, infliggendogli 2d8 danni magici e rendendolo Vulnerabile finché non tira con Speranza."]},
+"secret-keeper": {"desc": "Un capo clandestino con un canale diretto verso gli Dèi Caduti.", "motives": "Accumulare grande potere, tramare, prendere il comando", "f": [
+ "Spendete 2 Paure per mettere sotto i riflettori 1d4 alleati. Gli attacchi che effettuano in questo modo infliggono metà danni.",
+ "Quando mettete sotto i riflettori un alleato entro distanza Lontana, marcate uno Stress per guadagnare una Paura.",
+ "Conto alla rovescia (6). La prima volta che il Custode va sotto i riflettori, attivate il conto. Quando marca PF, fate scendere il conto di altrettanto. Quando scatta, evocate un Demone Minore che compare a distanza Ravvicinata.",
+ "Una volta per scena, quando il Custode marca 2 o più PF, potete marcare uno Stress per evocare un Branco di Segugi Demoniaci, che compare a distanza Ravvicinata e va subito sotto i riflettori."]},
+"shark": {"desc": "Un grande predatore acquatico, sempre in movimento.", "motives": "Trovare il sangue, isolare la preda, colpire i deboli", "f": [
+ "Quando lo Squalo riesce in un attacco, tutti i PG entro distanza Lontana perdono una Speranza e guadagnate una Paura.",
+ "Quando lo Squalo riesce in un attacco, il bersaglio deve marcare uno slot Armatura senza riceverne i benefici (può comunque usare l’armatura per ridurre il danno). Se non può, marca 1 PF aggiuntivo.",
+ "Quando una creatura entro distanza Ravvicinata dallo Squalo marca PF per l’attacco di un’altra creatura, potete marcare uno Stress per mettere subito lo Squalo sotto i riflettori: si porta a distanza di Mischia dal bersaglio ed effettua un attacco base."]},
+"siren": {"desc": "Una creatura metà pesce dalle scaglie scintillanti e dalla voce irresistibile.", "motives": "Divorare, attirare le prede, soggiogare con il canto", "f": [
+ "Se la Sirena effettua un attacco base contro un bersaglio Ammaliato dal suo canto, l’attacco infligge 2d10+1 danni al posto del danno base.",
+ "Spendete una Paura per intonare un canto che colpisce tutti i bersagli entro distanza Ravvicinata. I bersagli devono superare un Tiro Reazione di Istinto o restano Ammaliati finché non marcano 2 Stress. Le altre Sirene entro distanza Ravvicinata dal bersaglio possono marcare uno Stress ciascuna per aggiungere +1 alla Difficoltà del tiro. Da Ammaliato, il bersaglio non può agire ed è Vulnerabile."]},
+"spectral-archer": {"desc": "Un combattente spettrale con un arco etereo, incapace di trapassare finché ciò che protegge è in pericolo.", "motives": "Attraversare gli oggetti solidi, restare fuori dalla mischia, rivivere antiche battaglie", "f": [
+ "L’Arciere ha resistenza ai danni fisici. Marcate uno Stress per spostarlo fino a distanza Ravvicinata attraverso gli oggetti solidi.",
+ "Spendete una Paura per effettuare un attacco entro distanza Lontana contro un PG che si trova entro distanza Prossima da almeno altri due PG. In caso di successo, il bersaglio subisce 2d8+12 danni fisici."]},
+"spectral-captain": {"desc": "Un comandante spettrale che guida le sue truppe oltre la morte.", "motives": "Attraversare gli oggetti solidi, radunare le truppe, rivivere antiche battaglie", "f": [
+ "Il Capitano ha resistenza ai danni fisici. Marcate uno Stress per spostarlo fino a distanza Ravvicinata attraverso gli oggetti solidi.",
+ "Spendete 2 Paure per riportare in battaglia fino a 1d4+1 alleati Spettrali sconfitti, nei punti in cui sono comparsi la prima volta (senza PF o Stress marcati).",
+ "Quando gli alleati Spettrali del Capitano devono effettuare un tiro reazione, potete marcare uno Stress per dare loro +2 al tiro.",
+ "Quando il Capitano attacca con successo un PG, guadagnate una Paura."]},
+"spectral-guardian": {"desc": "Un combattente spettrale armato di lance e spade, ancorato al proprio dovere.", "motives": "Attraversare gli oggetti solidi, proteggere il tesoro, rivivere antiche battaglie", "f": [
+ "Il Guardiano ha resistenza ai danni fisici. Marcate uno Stress per spostarlo fino a distanza Ravvicinata attraverso gli oggetti solidi.",
+ "Spendete una Paura per effettuare un attacco contro un bersaglio entro distanza Prossima. In caso di successo, infliggete 2d10+6 danni fisici e il bersaglio deve marcare uno Stress."]},
+"sprite": {"desc": "Un minuscolo guerriero alato che attacca gli intrusi con frecce dalla punta avvelenata.", "motives": "Evitare di farsi notare, lasciare che il veleno faccia effetto, proteggere le terre selvagge", "f": [
+ "Il Folletto viene sconfitto quando subisce un danno qualsiasi. Ogni 5 danni che un PG gli infligge, il PG sconfigge un altro Seguace a portata contro cui l’attacco avrebbe successo.",
+ "Spendete una Paura per rendere il Folletto Nascosto finché non attacca.",
+ "Quando il Folletto riesce in un attacco base, potete spendere una Paura per rendere il bersaglio Assonnato finché non subisce danni. Da Assonnato, prima di ogni tiro azione deve effettuare un Tiro Reazione di Presenza: in caso di fallimento marca 2 Stress oppure si addormenta finché non subisce danni."]},
+"spy": {"desc": "Un abile agente di spionaggio con il talento di trovarsi sempre nel posto giusto per origliare segreti.", "motives": "Colpire e fuggire, travestirsi, origliare", "fn": ["Scovare Segreti", "Mosca sul Muro"], "f": [
+ "Spendete una Paura per descrivere come la Spia conosce un segreto su un PG presente nella scena.",
+ "Quando un PG o un gruppo discute qualcosa di delicato, potete marcare uno Stress per rivelare che la Spia è presente nella scena e li sta osservando. Se la Spia fugge dalla scena per riferire ciò che ha scoperto, guadagnate 1d4 Paure."]},
+"stone-titan": {"desc": "Un golia dalla pelle grigia che vive sottoterra ed è specializzato nel forgiare oggetti potenti intarsiati di rune magiche.", "motives": "Mimetizzarsi tra le rocce, creare e meditare, inseguire profezie e solitudine", "f": [
+ "Il Titano può essere messo sotto i riflettori fino a tre volte per turno del GM. Spendete Paura come di consueto per metterlo sotto i riflettori.",
+ "Prima che il Titano attacchi, potete marcare uno Stress e tirare un d6. Con 3 o più, l’Evasione del bersaglio è dimezzata contro questo attacco.",
+ "La prima volta che il Titano compare in superficie, tirate un d4 e marcate altrettanti Stress. Il Titano ottiene ai tiri attacco e di danno un bonus pari agli Stress marcati così.",
+ "Quando un PG marca PF per l’attacco base del Titano, potete spendere una Paura per costringerlo a marcare uno slot Armatura senza riceverne i benefici (può comunque usare l’armatura per ridurre il danno)."]},
+"stonewraith": {"desc": "Un cacciatore furtivo simile a un puma, con un corpo di pietra grigio ardesia.", "motives": "Difendere il territorio, isolare la preda, braccare", "f": [
+ "Lo Spettro di Pietra si muove attraverso pietra e terra con la stessa facilità che nell’aria. Mentre è dentro pietra o terra, è Nascosto e immune a tutti i danni.",
+ "Mentre è Nascosto, marcate uno Stress per farlo balzare a distanza di Mischia da un bersaglio entro distanza Prossima. Il bersaglio deve superare un Tiro Reazione di Agilità o di Istinto (15) o subire 2d8 danni fisici e restare temporaneamente Trattenuto.",
+ "Spendete una Paura: lo Spettro di Pietra ruggisce dentro una caverna e provoca un crollo. Tutti i bersagli entro distanza Ravvicinata devono superare un Tiro Reazione di Agilità (14) o subire 2d10 danni fisici. Le macerie si sgomberano con un Conto alla rovescia di progresso (8).",
+ "Quando lo Spettro di Pietra attacca con successo un PG, guadagnate una Paura."]},
+"triceratops": {"desc": "Un grande dinosauro con un collare corazzato e tre corna.", "motives": "Mangiare felci, muoversi in branco per proteggersi, pattugliare la pozza d’acqua", "f": [
+ "Quando il Triceratopo dovrebbe marcare PF, potete marcare un numero qualsiasi di Stress al posto di altrettanti PF.",
+ "Marcate uno Stress per scegliere fino a tre bersagli entro distanza Prossima. Ognuno effettua un Tiro Reazione di Agilità: chi fallisce subisce 5d6 danni fisici, chi riesce subisce metà danni.",
+ "Marcate uno Stress per scegliere un bersaglio entro distanza Ravvicinata. Il Triceratopo si porta a distanza di Mischia ed effettua un attacco: in caso di successo infligge 3d10 danni fisici diretti."]},
+"tyrannosaurus": {"desc": "Un enorme dinosauro carnivoro che cammina su due zampe.", "motives": "Sfondare il limitare del bosco, mangiare, calpestare tutto", "f": [
+ "Spendete una Paura per costringere ogni PG entro distanza Ravvicinata a un Tiro Reazione di Presenza. In caso di fallimento, deve scegliere se perdere una Speranza o marcare 1d4 Stress.",
+ "Marcate uno Stress per attaccare un bersaglio a distanza di Mischia. In caso di successo, il bersaglio subisce 3d12 danni fisici diretti.",
+ "Quando il Tirannosauro riesce in un attacco base, potete spendere una Paura per costringere il bersaglio a marcare 1 PF aggiuntivo."]},
+"urco": {"desc": "Un segugio dal pelo nero proveniente da oltre il velo della morte, che preannuncia la morte e si nutre di paura.", "motives": "Nutrirsi, spaventare, cacciare", "f": [
+ "Quando un PG entro distanza Prossima ottiene un fallimento con Speranza, guadagnate una Paura.",
+ "L’Urco ottiene ai tiri attacco e di danno un bonus pari alle Paure che avete.",
+ "Spendete un numero qualsiasi di Paure per eliminare altrettanti Stress. Se l’Urco non ha Stress marcati, potete spendere Paure per eliminare altrettanti PF.",
+ "Quando l’Urco subisce danni da un attacco, potete spendere una Paura per dare all’attaccante −1 alle soglie di danno fino alla fine della scena. Questo effetto è cumulabile."]},
+"valdenhax": {"desc": "Una malvagia strega dei boschi dai lunghi capelli muschiosi, che vola su un mortaio e un pestello enormi.", "motives": "Collezionare anime, volare, tormentare gli intrusi", "f": [
+ "Una volta per scena, evocate 2d4 Orde di Grado 2, che compaiono a distanza Lontana. Guadagnate una Paura per ogni Orda evocata così.",
+ "Marcate uno Stress per attaccare un bersaglio entro distanza Lontana. In caso di successo, l’ombra della mano della Valdenhax si allunga sul terreno fino ad afferrare l’ombra del bersaglio e prosciugarne l’essenza: il bersaglio marca 1d4 Stress e guadagnate altrettante Paure.",
+ "Spendete una Paura: la Valdenhax chiama lo spirito di un alleato caduto entro distanza Ravvicinata. Tirate un d6. Con un pari, lo resuscita con metà dei PF eliminati; con un dispari, ne assorbe gli ultimi residui vitali ed elimina uno Stress.",
+ "Dopo che un PG effettua un tiro, potete marcare uno Stress per costringerlo a ripeterlo. Non si può usare se il PG ottiene un successo critico."]},
+"war-wizard": {"desc": "Un mago temprato dalla battaglia, addestrato nella magia distruttiva.", "motives": "Sviluppare nuovi incantesimi, cercare il potere, spezzare le formazioni", "f": [
+ "Prima o dopo un attacco base, potete marcare uno Stress per teletrasportare il Mago in un punto entro distanza Lontana.",
+ "Marcate uno Stress per ricaricare la reazione «Sfera di Protezione» del Mago.",
+ "Spendete una Paura e scegliete un punto entro distanza Lontana. Un’area Prossima attorno a quel punto erutta diventando terreno invalicabile. Tutti i bersagli nell’area effettuano un Tiro Reazione di Agilità (14): chi fallisce subisce 2d10 danni fisici e viene sbalzato fuori dall’area, chi riesce subisce metà danni e non si sposta.",
+ "Spendete una Paura per scatenare una precisa grandinata di esplosioni magiche. Tutti i bersagli nella scena effettuano un Tiro Reazione di Agilità: chi fallisce subisce 2d12 danni magici, chi riesce subisce metà danni.",
+ "Quando il Mago subisce danni da un attacco entro distanza Ravvicinata, infligge 2d6 danni magici all’attaccante. La reazione non può essere riusata finché il Mago non la ricarica con l’azione «Ricaricare la Sfera di Protezione»."]},
+"adult-flickerfly": {"desc": "Un insetto alato grande come una casa, con scaglie iridescenti e ali troppo veloci da seguire.", "motives": "Collezionare cose luccicanti, cacciare, nidificare, piombare in picchiata", "f": [
+ "La Farfalampo può essere messa sotto i riflettori fino a quattro volte per turno del GM. Spendete Paura come di consueto per metterla sotto i riflettori.",
+ "Quando la Farfalampo attacca, l’Evasione del bersaglio è dimezzata contro l’attacco.",
+ "Mentre vola, prima di agire la Farfalampo può muoversi fino a distanza Lontana invece che Ravvicinata.",
+ "Spendete una Paura: la Farfalampo vortica ed effettua un attacco contro tutti i bersagli entro distanza Prossima. I bersagli colpiti subiscono 3d8 danni fisici diretti.",
+ "Marcate uno Stress per creare uno spettacolo magico abbagliante che avvince la mente dei nemici vicini. Tutti i bersagli entro distanza Ravvicinata effettuano un Tiro Reazione di Istinto. Per ogni bersaglio che fallisce guadagnate una Paura e la Farfalampo scopre una delle sue paure.",
+ "Conto alla rovescia (ciclico 1d6). La prima volta che la Farfalampo subisce danni, attivate il conto. Quando scatta, soffia un gas allucinogeno su tutti i bersagli davanti a sé fino a distanza Lontana. I bersagli effettuano un Tiro Reazione di Istinto o vengono tormentati da allucinazioni; chi ha una paura nota alla Farfalampo tira con svantaggio. Chi fallisce perde 2 Speranze e subisce 3d8+3 danni magici diretti.",
+ "Quando la Farfalampo subisce danni da un attacco entro distanza Ravvicinata, potete marcare uno Stress per subirne solo metà."]}
+}

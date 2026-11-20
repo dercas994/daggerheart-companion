@@ -1,0 +1,128 @@
+{
+"jagged-knife-sniper": {"desc": "Un bandito allampanato che colpisce da posizione coperta con un arco corto.", "motives": "Tendere agguati, nascondersi, trarre profitto, riposizionarsi", "f": [
+ "Se il Cecchino è Nascosto quando riesce in un attacco base contro un bersaglio, infligge 1d10+4 danni fisici al posto del danno base."]},
+"kelpie": {"desc": "Un mutaforma che vive nei fiumi e predilige un’affascinante forma equina, dentro e fuori dall’acqua.", "motives": "Assumere una forma attraente o utile, annegare e divorare, attirare i viandanti incauti", "f": [
+ "Un PG deve marcare uno Stress per allontanarsi dalla distanza di Mischia del Kelpie.",
+ "Dopo aver interagito con una creatura o averla osservata per almeno un centinaio di battiti del cuore, il Kelpie conosce la forma fisica che quella creatura troverebbe più gradevole o seducente.",
+ "Marcate uno Stress per trasformare il Kelpie in qualsiasi creatura od oggetto più piccolo di un carro. Una creatura ha svantaggio sui tiri contro il Kelpie mentre questi ha una forma che lei trova gradevole o seducente.",
+ "Spendete una Paura: il Kelpie ammalia un PG entro distanza Ravvicinata. Il PG deve superare un Tiro Reazione di Istinto o resta Ammaliato finché non subisce danni. Da Ammaliato, il PG vede il Kelpie come un amico fidato e fa ciò che gli dice, a meno che non vada contro i suoi principi morali più profondi."]},
+"masque-muerte": {"desc": "L’anima furiosa di un lottatore mascherato malvagio.", "motives": "Sfidare a gran voce, umiliare, infiammare il pubblico, schiacciare gli avversari al tappeto", "f": [
+ "La Maschera di Morte non può essere Trattenuta.",
+ "Marcate uno Stress per effettuare un attacco contro un PG entro distanza Ravvicinata. In caso di successo, il bersaglio marca uno Stress ed è temporaneamente Vulnerabile, investito da una raffica di insulti e provocazioni.",
+ "Spendete una Paura: la Maschera di Morte esegue un suplex su un PG Trattenuto, infliggendogli 1d10+6 danni magici.",
+ "Spendete una Paura: la Maschera di Morte si toglie per un istante la maschera, rivelando il volto orribile che nasconde. Ogni PG entro distanza Ravvicinata deve superare un Tiro Reazione di Presenza o marcare uno Stress.",
+ "Quando la Maschera di Morte infligge danni a un PG, potete spendere una Paura per far comparire un lottatore spettrale che Immobilizza il bersaglio finché non si libera con un Tiro di Forza riuscito. Da immobilizzato, il bersaglio è Trattenuto e subisce 1d12 danni magici aggiuntivi dagli attacchi della Maschera di Morte."]},
+"mechanorb": {"desc": "Una sfera a orologeria fluttuante dagli arti telescopici, proveniente da un reame di macchine e metallo.", "motives": "Coordinarsi, (s)montare, muoversi ad angolo retto, parlare in binario", "f": [
+ "La Meccanosfera ottiene +1 alla Difficoltà per ogni altra Meccanosfera entro distanza Ravvicinata.",
+ "Riserva. Quando una Meccanosfera fallisce un tiro attacco, aggiungete un segnalino alla Riserva delle Meccanosfere. Tutte le Meccanosfere nella scena ottengono un bonus ai tiri attacco pari ai segnalini nella Riserva. Eliminate tutti i segnalini quando una qualsiasi Meccanosfera subisce danni Gravi o viene sconfitta."]},
+"merchant": {"desc": "Un commerciante elegante con un occhio infallibile per il guadagno.", "motives": "Comprare a poco e vendere a tanto, creare domanda, gonfiare i prezzi, cercare profitto", "f": [
+ "Un PG che supera un Tiro di Presenza contro il Mercante ottiene uno sconto sugli acquisti. Un PG che lo fallisce paga di più e ha svantaggio sui successivi Tiri di Presenza contro il Mercante.",
+ "Quando un PG ottiene 14 o meno su un Tiro di Presenza contro il Mercante, marca uno Stress."]},
+"minor-chaos-elemental": {"desc": "Una massa scintillante di magia incontrollabile.", "motives": "Confondere, destabilizzare, trasmutare", "f": [
+ "L’Elementale è resistente ai danni magici.",
+ "Marcate 1 PF per costringere tutti i bersagli entro distanza Ravvicinata a marcare uno Stress e a diventare Vulnerabili fino al loro prossimo riposo o finché non recuperano 1 PF.",
+ "Spendete una Paura per trasformare l’area entro distanza Prossima in un bioma diverso. Tutti i bersagli nell’area subiscono 2d6+3 danni magici diretti.",
+ "Quando l’Elementale subisce danni da un attacco entro distanza Ravvicinata, l’attaccante subisce danni pari alla metà di quelli inflitti.",
+ "Quando l’Elementale attacca con successo un PG, guadagnate una Paura."]},
+"minor-fire-elemental": {"desc": "Una fiamma vivente grande quanto un falò.", "motives": "Circondare i nemici, crescere, intimidire, appiccare incendi", "f": [
+ "L’Elementale può essere messo sotto i riflettori fino a due volte per turno del GM. Spendete Paura come di consueto per metterlo sotto i riflettori.",
+ "Marcate uno Stress e scegliete un punto entro distanza Lontana: il terreno entro distanza Prossima da quel punto prende fuoco all’istante. Tutte le creature nell’area effettuano un Tiro Reazione di Agilità. Chi fallisce subisce 2d8 danni magici dalle fiamme, chi riesce subisce metà danni.",
+ "Spendete una Paura: l’Elementale esplode in una vampata. Effettuate un attacco contro tutti i bersagli entro distanza Ravvicinata. I bersagli colpiti subiscono 1d8 danni magici e vengono respinti a distanza Lontana.",
+ "Tre volte per scena, quando l’Elementale si sposta su oggetti molto infiammabili, li consuma per recuperare 1 PF o 1 Stress.",
+ "Quando l’Elementale attacca con successo un PG, guadagnate una Paura."]},
+"minor-demon": {"desc": "Una creatura cremisi dei Circoli Inferiori, divorata dalla rabbia verso tutti i mortali.", "motives": "Agire in modo imprevedibile, radunare i bersagli, godere del dolore, tormentare", "f": [
+ "Il Demone può essere messo sotto i riflettori fino a due volte per turno del GM. Spendete Paura come di consueto per metterlo sotto i riflettori.",
+ "Quando un PG entro distanza Ravvicinata dal Demone ottiene un fallimento con Paura, perde una Speranza.",
+ "Spendete una Paura per far piovere fuoco infernale entro distanza Lontana. Tutti i bersagli nell’area effettuano un Tiro Reazione di Agilità. Chi fallisce subisce 1d20+3 danni magici, chi riesce subisce metà danni.",
+ "Prima di tirare il danno di un attacco del Demone, potete marcare uno Stress per ottenere un bonus al tiro di danno pari ai PF che il Demone ha marcato.",
+ "Quando il Demone attacca con successo un PG, guadagnate una Paura."]},
+"minor-treant": {"desc": "Un alberello ambulante che si leva a difesa della sua foresta.", "motives": "Schiacciare, sopraffare, proteggere", "f": [
+ "Il Treant viene sconfitto quando subisce un danno qualsiasi. Ogni 5 danni che un PG gli infligge, sconfiggete un altro Seguace a portata contro cui l’attacco avrebbe successo.",
+ "Spendete una Paura per scegliere un bersaglio e mettere sotto i riflettori tutti i Treant Minori entro distanza Ravvicinata da lui. I Seguaci si portano a distanza di Mischia ed effettuano un unico tiro attacco condiviso. In caso di successo, infliggono 4 danni fisici ciascuno. Sommate questi danni."]},
+"mountain-troll": {"desc": "Un gigante orrendo nato da un’enorme roccia. Indossa armature rubate e una cintura di teste mozzate o teschi.", "motives": "Tendere agguati, ruggire, scagliare massi, fracassare, calpestare", "f": [
+ "Il Troll può essere messo sotto i riflettori fino a tre volte per turno del GM. Spendete Paura come di consueto per metterlo sotto i riflettori.",
+ "Conto alla rovescia. Quando inizia il combattimento, attivate un conto alla rovescia pari al numero di PG. Quando il Troll subisce danni, riducete la gravità di una soglia, poi fate scendere il conto. Quando scatta, il Troll si evolve (vedi «Troll di Montagna Infuriato»).",
+ "Marcate uno Stress per effettuare un attacco contro tutti i bersagli davanti al Troll entro distanza Prossima. I bersagli colpiti subiscono 2d8+2 danni fisici. Troll di Montagna Infuriato (evoluzione): il Troll perde «Armatura Rubata» e «Colpo di Mazzafrusto» e ottiene +1 alla Difficoltà. Inoltre ottiene «Doppio Fendente» e sostituisce il suo attacco base con: Artigliata, Prossima, 1d10+3 fis.",
+ "Spendete una Paura: il Troll si sposta fino a distanza Ravvicinata ed effettua due attacchi base contro un bersaglio entro distanza di Mischia. Se entrambi vanno a segno, sommate i danni e il bersaglio perde una Speranza."]},
+"octopus": {"desc": "Un mollusco acquatico dal corpo molle, con otto braccia dotate di ventose e una dura mascella a becco.", "motives": "Strisciare sul fondale, mangiare pesci, spruzzare inchiostro per fuggire", "f": [
+ "Effettuate un tiro attacco contro un bersaglio entro distanza Ravvicinata. In caso di successo, il bersaglio è Trattenuto e Vulnerabile finché non si libera con un Tiro di Forza riuscito.",
+ "Marcate uno Stress: la Piovra spruzza inchiostro. Sulla terraferma, l’inchiostro copre il terreno entro distanza Prossima: chi lo attraversa deve superare un Tiro Reazione di Agilità o scivola e cade, restando Vulnerabile finché non esce dall’area. Sott’acqua crea invece una nube oscura che riempie un’area entro distanza Prossima e blocca la linea di vista."]},
+"green-ooze": {"desc": "Un cumulo semovente di melma verde e traslucida.", "motives": "Mimetizzarsi, consumare e moltiplicarsi, avvicinarsi di soppiatto, avvolgere", "f": [
+ "Quando mettete la Melma sotto i riflettori e non ha un segnalino sul blocco statistiche, non può ancora agire: mettete un segnalino e descrivete cosa si prepara a fare. Quando la mettete sotto i riflettori e ha un segnalino, toglietelo: ora può agire.",
+ "Quando la Melma attacca con successo, il bersaglio deve marcare uno slot Armatura senza riceverne i benefici (può comunque usare l’armatura per ridurre il danno). Se non può, marca 1 PF aggiuntivo.",
+ "Effettuate un attacco base contro un bersaglio entro distanza di Mischia. In caso di successo, la Melma lo avvolge: il bersaglio marca 2 Stress e marca uno Stress aggiuntivo ogni volta che effettua un tiro azione. Se la Melma subisce danni Gravi, il bersaglio è libero.",
+ "Quando la Melma ha 3 o più PF marcati, potete spendere una Paura per dividerla in due Melme Verdi Piccole (senza PF o Stress marcati). Mettetele subito entrambe sotto i riflettori."]},
+"tiny-green-ooze": {"desc": "Un piccolo cumulo semovente di melma verde e traslucida.", "motives": "Mimetizzarsi, avvicinarsi di soppiatto", "f": [
+ "Quando la Melma attacca con successo, il bersaglio deve marcare uno slot Armatura senza riceverne i benefici (può comunque usare l’armatura per ridurre il danno). Se non può, marca 1 PF aggiuntivo."]},
+"red-ooze": {"desc": "Un cumulo semovente di melma rossa traslucida e fiammeggiante.", "motives": "Mimetizzarsi, consumare e moltiplicarsi, incendiare, appiccare fuochi", "f": [
+ "Con il movimento normale la Melma si sposta solo entro distanza Prossima. Incendia ogni oggetto infiammabile che tocca.",
+ "Effettuate un attacco contro un bersaglio entro distanza Prossima. In caso di successo, il bersaglio subisce 1d8 danni magici e prende Fuoco finché non viene spento con un Tiro di Astuzia (14) riuscito. Finché brucia, subisce 1d4 danni magici ogni volta che effettua un tiro azione.",
+ "Quando la Melma ha 3 o più PF marcati, potete spendere una Paura per dividerla in due Melme Rosse Piccole (senza PF o Stress marcati). Mettetele subito entrambe sotto i riflettori."]},
+"tiny-red-ooze": {"desc": "Un piccolo cumulo semovente di melma rossa traslucida e fiammeggiante.", "motives": "Divampare, mimetizzarsi", "f": [
+ "Quando una creatura entro distanza di Mischia infligge danni alla Melma, subisce 1d6 danni magici diretti."]},
+"panther": {"desc": "Un grande felino predatore che bracca la preda dall’ombra.", "motives": "Arrampicarsi sugli alberi, balzare, braccare", "f": [
+ "Mentre è Nascosta, la Pantera ha +2 ai tiri attacco.",
+ "Marcate uno Stress: la Pantera balza a distanza di Mischia da un bersaglio entro distanza Lontana e lo attacca. In caso di successo, infligge 1d12+2 danni fisici."]},
+"petty-noble": {"desc": "Un aristocratico riccamente vestito e ingioiellato, traboccante di arroganza.", "motives": "Abusare del potere, accumulare risorse, mobilitare i sottoposti", "f": [
+ "Tutte le azioni sociali contro il Nobile sulle sue terre hanno svantaggio.",
+ "Una volta per scena, marcate uno Stress per evocare 1d4 Guardie Armate, che compaiono a distanza Lontana per far rispettare la volontà del Nobile.",
+ "Spendete una Paura e scegliete un PG come bersaglio. Il Nobile proclama che il bersaglio e i suoi alleati sono esiliati dal suo territorio. Da esiliati, hanno svantaggio nelle situazioni sociali entro i domini del Nobile."]},
+"phantom": {"desc": "L’eco di un’anima perduta sotto forma di ombra ectoplasmatica.", "motives": "Creare punti gelidi, sfrecciare nell’aria, sussurrare presagi oscuri", "fn": ["Incorporeo", "Aura di Paura", "Presenza Persistente"], "f": [
+ "Lo Spettro ha resistenza ai danni fisici e può attraversare gli oggetti solidi.",
+ "Un PG che va sotto i riflettori entro distanza Prossima dallo Spettro deve superare un Tiro Reazione di Presenza (10) o marcare uno Stress.",
+ "Conto alla rovescia (1d6). Quando lo Spettro viene sconfitto, potete spendere una Paura per attivare il conto alla rovescia: scende quando un PG tira con Paura. Quando scatta, lo Spettro recupera tutti i PF e va subito sotto i riflettori."]},
+"pirate-captain": {"desc": "Un lupo di mare carismatico con un cappello vistoso, smanioso di razziare e saccheggiare.", "motives": "Comandare, far camminare sull’asse, saccheggiare, razziare", "f": [
+ "Quando il Capitano marca 2 PF o meno per un attacco entro distanza di Mischia, l’attaccante marca uno Stress.",
+ "Una volta per scena, marcate uno Stress per evocare un’Orda di Pirati Predoni, che compare a distanza Lontana.",
+ "Spendete una Paura e scegliete un bersaglio che abbia tre o più Pirati a distanza di Mischia. Il Capitano guida i Pirati in un coro di minacce e promesse di una tomba d’acqua. Il bersaglio effettua un Tiro Reazione di Presenza: in caso di fallimento marca 1d4+1 Stress, in caso di successo marca uno Stress.",
+ "Quando il Capitano attacca con successo un PG, guadagnate una Paura."]},
+"pirate-raiders": {"desc": "Furfanti di mare che si muovono in un branco devastatore.", "motives": "Fare branco, saccheggiare, razziare", "f": [
+ "Quando i Predoni hanno marcato metà o più dei loro PF, il loro attacco base infligge invece 1d4+1 danni fisici.",
+ "Quando i Predoni marcano 2 PF o meno per un attacco entro distanza di Mischia, l’attaccante marca uno Stress."]},
+"pirate-tough": {"desc": "Un pirata muscoloso e tatuato, con pugni grandi come meloni.", "motives": "Saccheggiare, razziare, fracassare, terrorizzare", "f": [
+ "Quando il Pirata marca 2 PF o meno per un attacco entro distanza di Mischia, l’attaccante marca uno Stress.",
+ "Effettuate un attacco contro un bersaglio entro distanza Prossima. In caso di successo, marcate uno Stress: il Pirata si porta a distanza di Mischia, infligge 3d4 danni fisici e respinge il bersaglio a distanza Ravvicinata."]},
+"poltergeist": {"desc": "Uno spirito maligno e traslucido che possiede gli oggetti inanimati.", "motives": "Far tremolare le candele, scuotere catene e finestre, scaraventare le persone per la stanza", "f": [
+ "Il Poltergeist ha resistenza ai danni fisici. Marcate uno Stress per spostarlo fino a distanza Ravvicinata attraverso gli oggetti solidi.",
+ "Marcate uno Stress: il Poltergeist si insinua in un oggetto non magico interamente entro distanza Ravvicinata, che si illumina di un bagliore spettrale. La prossima volta che il Poltergeist subirebbe danni, viene invece distrutto l’oggetto e il Poltergeist ne viene espulso.",
+ "Spendete una Paura: il Poltergeist trascina tutti gli oggetti non magici non impugnati entro distanza Prossima in un vortice violento. Ogni bersaglio nell’area effettua un Tiro Reazione di Agilità. Chi fallisce subisce 1d12+2 danni fisici, chi riesce subisce metà danni."]},
+"rabble-mawb": {"desc": "Palle di pelo, zampe e denti grandi come gatti, che si muovono in una marmaglia di una dozzina.", "motives": "Squittire e masticare, ammucchiarsi, rotolare", "f": [
+ "Quando la Marmaglia ha marcato metà o più dei suoi PF, il suo attacco base infligge invece 1d4+1 danni fisici.",
+ "Quando la Marmaglia viene sconfitta, potete spendere una Paura per riportarla in vita, eliminando tutti i PF e lo Stress marcati. La Marmaglia ottiene un bonus a tutti i tiri pari al numero di volte in cui ha usato questa caratteristica."]},
+"redcap-biters": {"desc": "Una truppa di folletti grandi come un pugno, con denti aguzzi come aghi e berretti rossi a cono sigillati in testa con cera di candela.", "motives": "Buttare giù il nemico, festeggiare piccole vittorie, ridacchiare e squittire, sgattaiolare tra le pareti", "f": [
+ "Quando gli Azzannatori hanno marcato metà o più dei loro PF, il loro attacco base infligge invece 1d4+2 danni fisici.",
+ "Un PG deve marcare uno Stress per allontanarsi dalla distanza di Mischia degli Azzannatori."]},
+"redcap-breaker": {"desc": "Un grosso folletto brutale con un berretto rosso a cono sigillato in testa con cera di candela.", "motives": "Battersi il petto e ruggire, sballottare i nemici gracili, caricare a testa bassa", "f": [
+ "Marcate uno Stress per effettuare un attacco contro un bersaglio entro distanza di Mischia. In caso di successo, infliggete 3d4+10 danni fisici. Un bersaglio che marca PF per questo attacco è Trattenuto finché non recupera 1 PF.",
+ "Quando il Bruto riesce in un attacco base, potete spendere una Paura per rendere il bersaglio temporaneamente Vulnerabile."]},
+"redcap-butcher": {"desc": "Un folletto della taglia di un halfling che fa a pezzi le vittime con utensili da taglio di ogni sorta. Porta un berretto rosso a cono sigillato in testa con cera di candela.", "motives": "Sogghignare in modo inquietante, menare fendenti, arrampicarsi in fretta", "f": [
+ "Marcate uno Stress per effettuare un attacco base contro fino a tre bersagli. Per ogni bersaglio che marca PF, guadagnate una Paura.",
+ "Marcate uno Stress per effettuare un attacco base contro un bersaglio entro distanza Lontana. Se il Macellaio è Nascosto, attacca con vantaggio."]},
+"redcap-candlemaker": {"desc": "Un capo setta pallido ed emaciato con un berretto rosso a cono sigillato in testa con cera di candela. Impugna una lunga asta sormontata da una candela fatta con la mano di un impiccato.", "motives": "Proiettare lunghe ombre, restare fuori dalla mischia, mostrare loro la luce", "f": [
+ "Quando il Candelaio compare, mettete 5 segnalini su questo blocco statistiche. Toglietene uno ogni volta che il Candelaio marca 1 PF. Finché ha almeno un segnalino, il Candelaio è Nascosto.",
+ "La luce della Mano della Gloria accende la sete di sangue degli alleati. Finché questo blocco ha almeno un segnalino, ogni avversario del Cappuccio Rosso entro distanza Ravvicinata ottiene +1 ai tiri di danno.",
+ "Spendete un segnalino da questo blocco: il Candelaio evoca una palla di fuoco su un gruppo di PG entro distanza Lontana. Ogni bersaglio effettua un Tiro Reazione di Agilità. Chi fallisce subisce 2d10 danni magici, chi riesce subisce metà danni."]},
+"redcap-skinner": {"desc": "Un folletto grande come un gatto, armato di rasoio e con un berretto rosso a cono sigillato in testa con cera di candela.", "motives": "Scuoiare, ridacchiare, raschiare, affettare", "f": [
+ "Lo Scuoiatore viene sconfitto quando subisce un danno qualsiasi. Ogni 4 danni che un PG gli infligge, il PG sconfigge un altro Seguace a portata contro cui l’attacco avrebbe successo.",
+ "Quando un PG fallisce un tiro, subisce 1 danno fisico per ogni Scuoiatore a distanza di Mischia. Sommate questi danni.",
+ "Spendete una Paura per scegliere un bersaglio e mettere sotto i riflettori tutti gli Scuoiatori del Cappuccio Rosso entro distanza Ravvicinata da lui. I Seguaci si portano a distanza di Mischia ed effettuano un unico tiro attacco condiviso. In caso di successo, infliggono 2 danni fisici ciascuno. Sommate questi danni."]},
+"rugaru": {"desc": "Un umanoide dalla testa di lupo, maledetto dagli dèi a vagare nelle paludi in cerca di sangue.", "motives": "Bestemmiare, mirare alla gola, braccare, terrorizzare", "f": [
+ "Il Rugaru può essere messo sotto i riflettori fino a tre volte per turno del GM. Spendete Paura come di consueto per metterlo sotto i riflettori.",
+ "Al chiaro di luna, il Rugaru ha +2 alla Difficoltà.",
+ "Quando un PG marca PF per l’attacco base del Rugaru, aggiungete un segnalino a questo blocco. Il Rugaru ha un bonus ai tiri attacco pari ai segnalini. Eliminate tutti i segnalini quando subisce danni Gravi.",
+ "Marcate uno Stress per costringere ogni PG entro distanza Lontana a un Tiro Reazione di Presenza (15). Chi fallisce perde una Speranza; guadagnate una Paura per ogni Speranza persa. Se un PG non ha Speranza, marca uno Stress e diventa Vulnerabile finché non tira con Speranza.",
+ "Marcate uno Stress per effettuare un attacco contro un bersaglio entro distanza di Mischia. In caso di successo, infliggete 1d12+2 danni fisici diretti."]},
+"sawtoothed-gillbeast": {"desc": "Una tozza creatura pesce con file di denti affilati come rasoi.", "motives": "Arrampicarsi a riva, colpire e fuggire, sbirciare dal pelo dell’acqua", "f": [
+ "Marcate uno Stress per attaccare un bersaglio entro distanza di Mischia. In caso di successo, il bersaglio subisce 1d12 danni fisici e deve marcare uno slot Armatura senza riceverne i benefici (può comunque usare l’armatura per ridurre il danno).",
+ "Quando una creatura marca PF, potete spendere una Paura per mettere sotto i riflettori tutte le Branchiobestie entro distanza Prossima da lei. Si portano a distanza di Mischia e ognuna effettua un attacco base contro di lei. Se più attacchi vanno a segno, sommate i danni.",
+ "Quando la Branchiobestia sta per marcare PF, tirate un d6. Con un 6, potete invece marcare uno Stress."]},
+"sellsword": {"desc": "Un mercenario armato che tenta la sorte.", "motives": "Caricare, lacerare, sopraffare, trarre profitto", "f": [
+ "Il Mercenario viene sconfitto quando subisce un danno qualsiasi. Ogni 4 danni che un PG gli infligge, sconfiggete un altro Seguace a portata contro cui l’attacco avrebbe successo.",
+ "Spendete una Paura per scegliere un bersaglio e mettere sotto i riflettori tutti i Mercenari entro distanza Ravvicinata da lui. I Seguaci si portano a distanza di Mischia ed effettuano un unico tiro attacco condiviso. In caso di successo, infliggono 3 danni fisici ciascuno. Sommate questi danni."]},
+"skeleton-archer": {"desc": "Uno scheletro fragile con arco corto e frecce.", "motives": "Bersagliare chi è distratto, fingersi morto, rubare la pelle", "f": [
+ "Quando due o più avversari sono entro distanza Prossima da una creatura, tutti i danni che il Tiratore infligge a quella creatura sono raddoppiati.",
+ "Effettuate un attacco contro un bersaglio Vulnerabile entro distanza Lontana. In caso di successo, marcate uno Stress per infliggere 3d4+8 danni fisici."]},
+"skeleton-dredge": {"desc": "Un mucchio di ossa che sferraglia.", "motives": "Andare in pezzi, sopraffare, fingersi morto, rubare la pelle", "f": [
+ "La Catasta viene sconfitta quando subisce un danno qualsiasi. Ogni 4 danni che un PG le infligge, sconfiggete un altro Seguace a portata contro cui l’attacco avrebbe successo.",
+ "Spendete una Paura per scegliere un bersaglio e mettere sotto i riflettori tutte le Cataste entro distanza Ravvicinata da lui. I Seguaci si portano a distanza di Mischia ed effettuano un unico tiro attacco condiviso. In caso di successo, infliggono 1 danno fisico ciascuno. Sommate questi danni."]}
+}
