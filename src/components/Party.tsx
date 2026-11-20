@@ -1,6 +1,6 @@
 import type { Character, Member, Roll } from '../lib/types'
 import { className, getSubclass } from '../data'
-import { evasion, MAX_FEAR, thresholds } from '../lib/rules'
+import { evasion, hopeMax, MAX_FEAR, thresholds } from '../lib/rules'
 import { Pips } from './ui'
 
 export function PartyCard({ c, owner, editable, onPatch, isMe, compact }: {
@@ -23,7 +23,7 @@ export function PartyCard({ c, owner, editable, onPatch, isMe, compact }: {
         <Pips kind="stress" size="sm" max={c.stress_max} value={c.stress_marked} label={`Stress di ${c.name}`} onChange={editable ? n => onPatch?.({ stress_marked: n }) : undefined} />
       </div>
       <div className="vital"><span className="vital-k">Speranza</span>
-        <Pips kind="hope" size="sm" max={6} value={c.hope} label={`Speranza di ${c.name}`} onChange={editable ? n => onPatch?.({ hope: n }) : undefined} />
+        <Pips kind="hope" size="sm" max={hopeMax(c.data)} value={c.hope} label={`Speranza di ${c.name}`} onChange={editable ? n => onPatch?.({ hope: n }) : undefined} />
       </div>
       {!compact && (
         <div className="party-stats">

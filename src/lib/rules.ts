@@ -1,5 +1,22 @@
 import type { Character, SheetData, TraitKey } from './types'
-import { getArmor, getClass, getWeapon, getSubclass } from '../data'
+import { getAncestry, getArmor, getClass, getWeapon, getSubclass, type Feature, type FeatureMods } from '../data'
+
+/** Le due capacità di retaggio del PG (gestisce anche il retaggio misto). */
+export function ancestryFeatures(d: SheetData): Feature[] {
+  if (d.ancestry_id === 'mixed') {
+    return [getAncestry(d.mixed?.[0])?.features[0], getAncestry(d.mixed?.[1])?.features[1]].filter(Boolean) as Feature[]
+  }
+  return getAncestry(d.ancestry_id)?.features ?? []
+}
+
+/** Bonus fissi dati dal retaggio (carte homebrew con `mods`). */
+export function ancestryMods(d: SheetData): Required<FeatureMods> {
+  const m = { armor: 0, thresholds: 0, hp: 0, hope: 0, evasion: 0 }
+  for (const f of ancestryFeatures(d)) for (const [k, v] of Object.entries(f.mods ?? {})) m[k as keyof typeof m] += v ?? 0
+  return m
+}
+
+export const hopeMax = (d: SheetData) => d.hope_max ?? 6
 
 export const MAX_HOPE = 6
 export const MAX_FEAR = 12
@@ -40,18 +57,19 @@ export function traitValue(d: SheetData, t: TraitKey) {
 
 export function evasion(d: SheetData) {
   const base = getClass(d.class_id)?.evasion ?? 10
-  return base + (d.evasion_bonus ?? 0) + (equipmentMods(d).evasion ?? 0)
+  return base + (d.evasion_bonus ?? 0) + (equipmentMods(d).evasion ?? 0) + ancestryMods(d).evasion
 }
 
 export function armorScore(d: SheetData) {
-  return Math.max(0, (getArmor(d.armor_id)?.score ?? 0) + (equipmentMods(d).armor ?? 0))
+  return Math.max(0, (getArmor(d.armor_id)?.score ?? 0) + (equipmentMods(d).armor ?? 0) + ancestryMods(d).armor)
 }
 
 export function thresholds(d: SheetData, level: number): [number, number] {
   const a = getArmor(d.armor_id)
-  const base = a ? a.thresholds : [level, level * 2]
-  const bonus = level + (d.threshold_bonus ?? 0) + (equipmentMods(d).thresholds ?? 0)
-  return a ? [base[0] + bonus, base[1] + bonus] : [base[0] + (d.threshold_bonus ?? 0), base[1] + (d.threshold_bonus ?? 0)]
+  const extra = (d.threshold_bonus ?? 0) + (equipmentMods(d).thresholds ?? 0) + ancestryMods(d).thresholds
+  // senza armatura: Maggiore = livello, Grave = 2 × livello
+  if (!a) return [level + extra, level * 2 + extra]
+  return [a.thresholds[0] + level + extra, a.thresholds[1] + level + extra]
 }
 
 export function spellcastTrait(d: SheetData): TraitKey | null {

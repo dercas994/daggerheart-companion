@@ -44,7 +44,7 @@ create table if not exists public.characters (
   hp_marked     int  not null default 0  check (hp_marked >= 0),
   stress_max    int  not null default 6  check (stress_max between 1 and 12),
   stress_marked int  not null default 0  check (stress_marked >= 0),
-  hope          int  not null default 2  check (hope between 0 and 6),
+  hope          int  not null default 2  check (hope between 0 and 12),
   armor_max     int  not null default 0  check (armor_max between 0 and 12),
   armor_marked  int  not null default 0  check (armor_marked >= 0),
   data          jsonb not null default '{}'::jsonb,
@@ -109,7 +109,7 @@ begin
   new.hp_marked     := least(greatest(new.hp_marked, 0), new.hp_max);
   new.stress_marked := least(greatest(new.stress_marked, 0), new.stress_max);
   new.armor_marked  := least(greatest(new.armor_marked, 0), new.armor_max);
-  new.hope          := least(greatest(new.hope, 0), 6);
+  new.hope          := least(greatest(new.hope, 0), coalesce((new.data->>'hope_max')::int, 6));
   return new;
 end $$;
 
@@ -210,7 +210,7 @@ begin
     update campaigns set fear = least(fear + 1, 12) where id = p_campaign;
   elsif p_character is not null then
     update characters
-       set hope = least(hope + 1, 6),
+       set hope = least(hope + 1, coalesce((data->>'hope_max')::int, 6)),
            stress_marked = case when res = 'crit' then greatest(stress_marked - 1, 0)
                                 else stress_marked end
      where id = p_character;
@@ -297,3 +297,7 @@ begin
     end if;
   end loop;
 end $$;
+
+-- Migrazione 2: slot Speranza variabili (retaggi homebrew). Idempotente.
+alter table public.characters drop constraint if exists characters_hope_check;
+alter table public.characters add constraint characters_hope_check check (hope between 0 and 12);

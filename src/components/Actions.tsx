@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { Character } from '../lib/types'
-import { thresholds, tierOf } from '../lib/rules'
+import { hopeMax, thresholds, tierOf } from '../lib/rules'
 import { Sheet, useToast } from './ui'
 
 export function DamageSheet({ open, onClose, c, patch }: { open: boolean; onClose: () => void; c: Character; patch: (p: Partial<Character>) => void }) {
@@ -51,7 +51,7 @@ export function RestSheet({ open, onClose, c, patch }: { open: boolean; onClose:
     if (id === 'wounds') { const v = long ? c.hp_marked : Math.min(roll, c.hp_marked); p = { hp_marked: c.hp_marked - v }; text = `Curi ${v} PF${long ? '' : ` (1d4+${tier} = ${roll})`}` }
     if (id === 'stress') { const v = long ? c.stress_marked : Math.min(roll, c.stress_marked); p = { stress_marked: c.stress_marked - v }; text = `Liberi ${v} Stress${long ? '' : ` (1d4+${tier} = ${roll})`}` }
     if (id === 'armor') { const v = long ? c.armor_marked : Math.min(roll, c.armor_marked); p = { armor_marked: c.armor_marked - v }; text = `Ripari ${v} slot Armatura${long ? '' : ` (1d4+${tier} = ${roll})`}` }
-    if (id === 'prepare') { p = { hope: Math.min(6, c.hope + 1) }; text = '+1 Speranza' }
+    if (id === 'prepare') { p = { hope: Math.min(hopeMax(c.data), c.hope + 1) }; text = '+1 Speranza' }
     patch(p)
     toast({ text, tone: 'hope' })
     setUsed(u => [...u, id])

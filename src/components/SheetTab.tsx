@@ -2,7 +2,7 @@ import { useState } from 'react'
 import type { Character, TraitKey } from '../lib/types'
 import { TRAITS } from '../lib/types'
 import { className, fname, ftext, getAncestry, getArmor, getClass, getCommunity, getSubclass, getWeapon, IT, type Feature } from '../data'
-import { fmt, spellcastTrait, traitValue, weaponDamage } from '../lib/rules'
+import { ancestryFeatures, fmt, spellcastTrait, traitValue, weaponDamage } from '../lib/rules'
 import { FeatureList } from './CardView'
 import { Stepper } from './ui'
 
@@ -23,9 +23,7 @@ export function SheetTab({ c, canEdit, patch, onRoll }: {
     ...(d.subclass_tier === 'mastery' ? sub.mastery : []),
   ] : []
 
-  const ancFeatures: Feature[] = d.ancestry_id === 'mixed'
-    ? [getAncestry(d.mixed?.[0])?.features[0], getAncestry(d.mixed?.[1])?.features[1]].filter(Boolean) as Feature[]
-    : getAncestry(d.ancestry_id)?.features ?? []
+  const ancFeatures: Feature[] = ancestryFeatures(d)
 
   const weapons = [getWeapon(d.primary_weapon_id), getWeapon(d.secondary_weapon_id)].filter(Boolean)
   const armor = getArmor(d.armor_id)

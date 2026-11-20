@@ -6,7 +6,7 @@ import {
   ANCESTRIES, ARMOR, CARDS, CLASSES, COMMUNITIES, WEAPONS, className, domainName, DOMAIN_COLOR, getAncestry, getArmor,
   getClass, getCommunity, getSubclass, getWeapon, IT,
 } from '../data'
-import { armorScore, emptySheet, evasion, fmt, thresholds, TRAIT_ARRAY, weaponDamage } from '../lib/rules'
+import { ancestryMods, armorScore, emptySheet, evasion, fmt, thresholds, TRAIT_ARRAY, weaponDamage } from '../lib/rules'
 import { go } from '../lib/router'
 import { ErrorLine, useAsync } from '../components/ui'
 import { TopBar } from '../components/TopBar'
@@ -38,10 +38,12 @@ export function WizardPage({ campaignId }: { campaignId: string }) {
 
   async function create() {
     const c = getClass(d.class_id)!
+    const mods = ancestryMods(d)
+    const data = { ...d, hope_max: 6 + mods.hope }
     const created = await save.run(() => be.createCharacter({
       campaign_id: campaignId, name: name.trim(), level: 1,
-      hp_max: c.hp, hp_marked: 0, stress_max: 6, stress_marked: 0, hope: 2,
-      armor_max: armorScore(d), armor_marked: 0, data: d,
+      hp_max: c.hp + mods.hp, hp_marked: 0, stress_max: 6, stress_marked: 0, hope: 2,
+      armor_max: armorScore(d), armor_marked: 0, data,
     }))
     if (created) go(`/pg/${created.id}`)
   }
@@ -149,8 +151,9 @@ function HeritagePicker({ items, value, onPick, label }: { items: typeof ANCESTR
       <input className="search" placeholder={`Cerca ${label}`} value={q} onChange={e => setQ(e.target.value)} />
       <div className="list-pick">
         {list.map(a => (
-          <button key={a.id} type="button" className={`list-item ${value === a.id ? 'sel' : ''}`} onClick={() => onPick(a.id)}>
-            <span className="pick-title">{a.name}</span>
+          <button key={a.id} type="button" className={`list-item heritage ${value === a.id ? 'sel' : ''} ${a.image ? 'has-img' : ''}`} onClick={() => onPick(a.id)}>
+            {a.image && <img src={a.image} alt="" loading="lazy" />}
+            <span className="pick-title">{a.name}{a.custom && <span className="hb-tag">del tavolo</span>}</span>
             <span className="list-feats">{a.features.map(f => f.name).join(', ') || 'Due retaggi combinati'}</span>
           </button>
         ))}
@@ -167,7 +170,10 @@ function StepAncestry({ d, set }: StepProps) {
       <h2>Retaggio</h2>
       <HeritagePicker items={ANCESTRIES} value={d.ancestry_id} label="un retaggio" onPick={id => set({ ancestry_id: id, mixed: id === 'mixed' ? ['', ''] : undefined })} />
       {a && a.id !== 'mixed' && (
-        <div className="panel detail"><h3>{a.name}</h3><p className="lore">{a.description}</p><FeatureList items={a.features} /></div>
+        <div className={`panel detail ${a.card ? 'with-card' : ''}`}>
+          {a.card && <img className="heritage-card" src={a.card} alt={`Carta del retaggio ${a.name}`} />}
+          <div><h3>{a.name}</h3><p className="lore">{a.description}</p><FeatureList items={a.features} /></div>
+        </div>
       )}
       {a?.id === 'mixed' && (
         <div className="panel detail">

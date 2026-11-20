@@ -3,7 +3,7 @@ import { useApp } from '../App'
 import type { Character, Roll, TraitKey } from '../lib/types'
 import { useCampaignLive } from '../lib/live'
 import { className, getAncestry, getCommunity, getSubclass } from '../data'
-import { evasion, MAX_HOPE, thresholds } from '../lib/rules'
+import { evasion, hopeMax, thresholds } from '../lib/rules'
 import { ErrorLine, Pips, Spinner, useToast } from '../components/ui'
 import { TopBar } from '../components/TopBar'
 import { DiceOverlay, outcomeText } from '../components/Dice'
@@ -47,6 +47,7 @@ export function CharacterPage({ id }: { id: string }) {
     ? `${getAncestry(c.data.mixed?.[0])?.name ?? ''}/${getAncestry(c.data.mixed?.[1])?.name ?? ''}`
     : getAncestry(c.data.ancestry_id)?.name
   const [maj, sev] = thresholds(c.data, c.level)
+  const portrait = getAncestry(c.data.ancestry_id === 'mixed' ? c.data.mixed?.[0] : c.data.ancestry_id)?.image
 
   function openRoll(t: TraitKey | null) { setPreset(t); setRollOpen(true) }
 
@@ -73,6 +74,7 @@ export function CharacterPage({ id }: { id: string }) {
         right={canEdit && <button className="btn btn-ghost small" onClick={() => setSheet('edit')}>Modifica</button>} />
 
       <header className="char-hero">
+        {portrait && <img className="char-portrait" src={portrait} alt="" />}
         <h1 className="char-name">{c.name}</h1>
         <p className="char-line">
           {className(c.data.class_id)}{sub ? `, ${sub.name}` : ''}, livello {c.level}
@@ -94,7 +96,7 @@ export function CharacterPage({ id }: { id: string }) {
         </div>
         <Track label="Punti Ferita" kind="hp" max={c.hp_max} value={c.hp_marked} onChange={canEdit ? n => patch({ hp_marked: n }) : undefined} />
         <Track label="Stress" kind="stress" max={c.stress_max} value={c.stress_marked} onChange={canEdit ? n => patch({ stress_marked: n }) : undefined} />
-        <Track label="Speranza" kind="hope" max={MAX_HOPE} value={c.hope} onChange={canEdit ? n => patch({ hope: n }) : undefined} />
+        <Track label="Speranza" kind="hope" max={hopeMax(c.data)} value={c.hope} onChange={canEdit ? n => patch({ hope: n }) : undefined} />
         {c.armor_max > 0 && <Track label="Armatura" kind="armor" max={c.armor_max} value={c.armor_marked} onChange={canEdit ? n => patch({ armor_marked: n }) : undefined} />}
         {canEdit && (
           <div className="quick-actions">

@@ -3,9 +3,11 @@
 // I testi delle carte sono in inglese come nell'SRD: per tradurli aggiungi i campi
 // `name_it` / `text_it` agli oggetti in srd.json, l'app li userà automaticamente.
 import raw from './srd.json'
+import { CUSTOM_ANCESTRIES } from './custom'
 import type { TraitKey } from '../lib/types'
 
-export interface Feature { name: string; text: string; name_it?: string; text_it?: string }
+export interface FeatureMods { armor?: number; thresholds?: number; hp?: number; hope?: number; evasion?: number }
+export interface Feature { name: string; text: string; name_it?: string; text_it?: string; mods?: FeatureMods }
 export interface Subclass {
   id: string; name: string; description: string; spellcast: TraitKey | null
   foundation: Feature[]; specialization: Feature[]; mastery: Feature[]
@@ -16,7 +18,7 @@ export interface ClassDef {
   hope_feature: Feature; features: Feature[]; subclasses: Subclass[]
   background_questions: string[]; connections: string[]
 }
-export interface Heritage { id: string; name: string; description: string; features: Feature[] }
+export interface Heritage { id: string; name: string; description: string; features: Feature[]; custom?: boolean; image?: string; card?: string }
 export interface Weapon {
   id: string; name: string; trait: TraitKey | 'spellcast'; range: string; damage: string
   burden: 'One-Handed' | 'Two-Handed'; feature: string; tier: number; category: 'primary' | 'secondary'
@@ -33,7 +35,12 @@ const data = raw as unknown as {
 }
 
 export const CLASSES = data.classes
-export const ANCESTRIES = data.ancestries
+// retaggi homebrew: sostituiscono quelli SRD con lo stesso id, poi ordine alfabetico (Misto in fondo)
+const customIds = new Set(CUSTOM_ANCESTRIES.map(a => a.id))
+export const ANCESTRIES: Heritage[] = [
+  ...data.ancestries.filter(a => a.id !== 'mixed' && !customIds.has(a.id)),
+  ...CUSTOM_ANCESTRIES,
+].sort((a, b) => a.name.localeCompare(b.name)).concat(data.ancestries.filter(a => a.id === 'mixed'))
 export const COMMUNITIES = data.communities
 export const WEAPONS = data.weapons
 export const ARMOR = data.armor

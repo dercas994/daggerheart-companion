@@ -50,6 +50,8 @@ export interface SheetData {
   notes: string
   accent: string
   advancements: { level: number; picks: string[] }[]
+  /** Slot Speranza (6 di base, alcuni retaggi ne danno di più) */
+  hope_max?: number
   multiclass?: { class_id: string; domain: string; subclass_id: string }
 }
 
