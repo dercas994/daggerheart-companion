@@ -36,7 +36,7 @@ export function PartyCard({ c, owner, editable, onPatch, isMe, compact }: {
         <div className="party-stats">
           <span>Evasione <b>{evasion(c.data)}</b></span>
           <span>Armatura <b>{c.armor_max - c.armor_marked}/{c.armor_max}</b></span>
-          <span>Soglie <b>{maj}/{sev}</b></span>
+          <span>Soglie <b>{maj}/{sev}/{sev * 2}</b></span>
         </div>
       )}
       {c.data.conditions?.length > 0 && <p className="conditions">{c.data.conditions.join(', ')}</p>}

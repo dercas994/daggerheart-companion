@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { Character } from '../lib/types'
-import { hopeMax, thresholds, tierOf } from '../lib/rules'
+import { hopeMax, thresholds, tierOf, damageMarks, massiveThreshold } from '../lib/rules'
 import { Sheet, useToast } from './ui'
 
 export function DamageSheet({ open, onClose, c, patch }: { open: boolean; onClose: () => void; c: Character; patch: (p: Partial<Character>) => void }) {
@@ -9,21 +9,21 @@ export function DamageSheet({ open, onClose, c, patch }: { open: boolean; onClos
   useEffect(() => { if (open) { setDmg(''); setArmorUse(0) } }, [open])
   const [maj, sev] = thresholds(c.data, c.level)
   const n = parseInt(dmg, 10) || 0
-  const base = n <= 0 ? 0 : n >= sev ? 3 : n >= maj ? 2 : 1
+  const base = damageMarks(n, maj, sev)
   const armorLeft = c.armor_max - c.armor_marked
   // Valoroso (Guardiano), "Volontà di Ferro": contro i danni fisici si può marcare uno slot Armatura in più
   const ironWill = c.data.subclass_id === 'stalwart' || c.data.multiclass?.subclass_id === 'stalwart'
   const maxSlots = Math.min(armorLeft, ironWill ? 2 : 1)
   const used = Math.min(armorUse, maxSlots)
   const marks = Math.max(0, base - used)
-  const names = ['nessun danno', 'Minore', 'Maggiore', 'Grave']
+  const names = ['nessun danno', 'Minore', 'Maggiore', 'Grave', 'Massiccio']
 
   return (
     <Sheet open={open} onClose={onClose} title="Subisci danno">
       <label className="field"><span>Danno ricevuto</span>
         <input type="number" inputMode="numeric" min={0} value={dmg} onChange={e => setDmg(e.target.value)} autoFocus className="big-input" />
       </label>
-      <p className="hint">Soglie: Maggiore da {maj}, Grave da {sev}.</p>
+      <p className="hint">Soglie: Maggiore da {maj}, Grave da {sev}, Massiccio da {massiveThreshold(sev)} (4 PF).</p>
       {maxSlots === 1 && (
         <label className="toggle"><input type="checkbox" checked={used === 1} onChange={e => setArmorUse(e.target.checked ? 1 : 0)} /> Marca uno slot Armatura per ridurre di una soglia ({armorLeft} disponibili)</label>
       )}

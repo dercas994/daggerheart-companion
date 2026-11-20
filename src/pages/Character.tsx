@@ -3,7 +3,7 @@ import { useApp } from '../App'
 import type { Character, Roll, TraitKey } from '../lib/types'
 import { useCampaignLive } from '../lib/live'
 import { className, getAncestry, getCommunity, getSubclass } from '../data'
-import { evasion, hopeMax, thresholds } from '../lib/rules'
+import { evasion, hopeMax, thresholds, massiveThreshold } from '../lib/rules'
 import { ErrorLine, Pips, Spinner, useToast } from '../components/ui'
 import { TopBar } from '../components/TopBar'
 import { DiceOverlay, outcomeText, rollTone } from '../components/Dice'
@@ -132,6 +132,8 @@ export function CharacterPage({ id }: { id: string }) {
             <span className="th-seg"><small>Maggiore</small><em>2 PF</em></span>
             <b>{sev}</b>
             <span className="th-seg"><small>Grave</small><em>3 PF</em></span>
+            <b>{massiveThreshold(sev)}</b>
+            <span className="th-seg"><small>Massiccio</small><em>4 PF</em></span>
           </div>
         </div>
         <Track label="Punti Ferita" kind="hp" max={c.hp_max} value={c.hp_marked} onChange={canEdit ? n => patch({ hp_marked: n }) : undefined} />

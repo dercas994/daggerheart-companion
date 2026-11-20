@@ -109,6 +109,15 @@ export function thresholds(d: SheetData, level: number): [number, number] {
   return [a.thresholds[0] + level + extra, a.thresholds[1] + level + extra]
 }
 
+/**
+ * PF da segnare per un danno. Regola del manuale sui danni massicci:
+ * un danno pari ad almeno il doppio della soglia Grave fa segnare 4 PF.
+ */
+export const massiveThreshold = (sev: number) => sev * 2
+export function damageMarks(n: number, maj: number, sev: number) {
+  return n <= 0 ? 0 : n >= massiveThreshold(sev) ? 4 : n >= sev ? 3 : n >= maj ? 2 : 1
+}
+
 export function spellcastTrait(d: SheetData): TraitKey | null {
   return getSubclass(d.class_id, d.subclass_id)?.spellcast ?? null
 }

@@ -272,7 +272,7 @@ function StepGear({ d, set }: StepProps) {
           </button>
         ))}
       </div>
-      {d.armor_id && <p className="notice">Con questa scelta: Evasione {evasion(d)}, Armatura {armorScore(d)}, soglie {maj} e {sev}.</p>}
+      {d.armor_id && <p className="notice">Con questa scelta: Evasione {evasion(d)}, Armatura {armorScore(d)}, soglie {maj}, {sev} e {sev * 2} (danno massiccio).</p>}
     </>
   )
 }

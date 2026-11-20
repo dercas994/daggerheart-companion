@@ -175,7 +175,7 @@ function ArmorPreview({ d, level }: { d: SheetData; level: number }) {
         <span><small>Punteggio</small>{a.score}</span>
       </p>}
       {a && (a.feature_it || a.feature) && <p className="ep-feat">{a.feature_it || a.feature}</p>}
-      <p className="ep-result">Con questo equipaggiamento: Evasione {evasion(d)}, Armatura {armorScore(d)}, soglie {maj} e {sev}.</p>
+      <p className="ep-result">Con questo equipaggiamento: Evasione {evasion(d)}, Armatura {armorScore(d)}, soglie {maj}, {sev} e {sev * 2} (danno massiccio).</p>
     </div>
   )
 }

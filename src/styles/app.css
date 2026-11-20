@@ -929,3 +929,14 @@ button.dcard:hover { transform: translateY(-2px); }
 .cd-mini .dial-n { font-size: 40px; }
 .cd-mini .dial path { stroke-width: 13; }
 @media (prefers-reduced-motion: reduce) { .cd-card.fired, .cd-mini.fired, .dial.fired { animation: none; } }
+/* con la soglia del danno massiccio le soglie sono quattro: su telefono vanno su una riga intera */
+@media (max-width: 600px) {
+  .defense { flex-direction: column; gap: 0.45rem; }
+  .def-box { display: flex; justify-content: space-between; align-items: baseline; padding: 0.35rem 0.8rem; }
+  .def-box span { font-size: 0.85rem; }
+  .def-box b { font-size: 1.5rem; }
+  .thresholds { padding: 0.35rem 0.4rem; gap: 0.15rem; }
+  .thresholds b { font-size: 1.2rem; padding: 0 0.25rem; }
+  .th-seg small { font-size: 0.7rem; }
+  .th-seg em { font-size: 0.72rem; }
+}
