@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react'
 import type { Backend } from '../lib/types'
 import { ErrorLine, useAsync } from '../components/ui'
 import { Emblem } from '../components/Emblem'
+import { AppDownload } from '../components/AppDownload'
 
 export function AuthPage({ be }: { be: Backend }) {
   const [mode, setMode] = useState<'in' | 'up'>('in')
@@ -27,6 +28,7 @@ export function AuthPage({ be }: { be: Backend }) {
         <Emblem />
         <h1 className="brand">Daggerheart<br /><span>Companion</span></h1>
         <p className="auth-tag">Schede, dadi di Dualità e il gruppo sott’occhio, mentre giocate.</p>
+        <AppDownload />
       </div>
       <form className="panel auth-form" onSubmit={submit}>
         <div className="seg">

@@ -513,3 +513,12 @@ button.dcard:hover { transform: translateY(-2px); }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
   .fx-sparks { display: none; }
 }
+
+/* ---------- download APK ---------- */
+.app-download { display: inline-flex; align-items: center; gap: 0.7rem; margin-top: 1.4rem; padding: 0.7rem 1rem; border: 1px solid var(--line); border-radius: var(--r-m); color: var(--parchment); text-decoration: none; background: rgba(33, 26, 49, 0.6); transition: border-color 0.2s; }
+.app-download:hover { border-color: var(--hope); }
+.app-download svg { color: #8FD16A; flex: none; }
+.app-download span { display: grid; }
+.app-download small { color: var(--muted); font-size: 0.82rem; }
+.app-download.compact { margin-top: 0; padding: 0.5rem 0.9rem; }
+.home-foot { margin-top: 2.5rem; padding-top: 1.2rem; border-top: 1px solid var(--line); }

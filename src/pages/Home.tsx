@@ -4,6 +4,7 @@ import type { CampaignWithRole } from '../lib/types'
 import { go } from '../lib/router'
 import { ErrorLine, Sheet, Spinner, useAsync } from '../components/ui'
 import { TopBar } from '../components/TopBar'
+import { AppDownload } from '../components/AppDownload'
 
 export function HomePage() {
   const { be, user } = useApp()
@@ -67,6 +68,7 @@ export function HomePage() {
             </section>
           </>
         )}
+        <footer className="home-foot"><AppDownload compact /></footer>
       </main>
 
       <Sheet open={creating} onClose={() => setCreating(false)} title="Nuova campagna">
