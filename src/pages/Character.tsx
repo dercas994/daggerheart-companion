@@ -6,8 +6,10 @@ import { className, getAncestry, getCommunity, getSubclass } from '../data'
 import { evasion, hopeMax, thresholds } from '../lib/rules'
 import { ErrorLine, Pips, Spinner, useToast } from '../components/ui'
 import { TopBar } from '../components/TopBar'
-import { DiceOverlay, outcomeText } from '../components/Dice'
+import { DiceOverlay, outcomeText, rollTone } from '../components/Dice'
 import { RollSheet, type RollChoice } from '../components/RollSheet'
+import { DiceSheet, type DicePreset } from '../components/DiceSheet'
+import type { DiceRequest } from '../lib/types'
 import { FearTrack, ownerName, PartyCard, RollLog } from '../components/Party'
 import { SheetTab } from '../components/SheetTab'
 import { CardsTab } from '../components/CardsTab'
@@ -28,12 +30,14 @@ export function CharacterPage({ id }: { id: string }) {
   const [overlay, setOverlay] = useState<{ roll: Roll; own: boolean } | null>(null)
   const [sheet, setSheet] = useState<null | 'damage' | 'rest' | 'level' | 'edit'>(null)
   const [rolling, setRolling] = useState(false)
+  const [diceOpen, setDiceOpen] = useState(false)
+  const [dicePreset, setDicePreset] = useState<DicePreset | null>(null)
 
   // ricavo la campagna dal PG, poi uso lo stato live della campagna
   useEffect(() => { be.getCharacter(id).then(c => setCampaignId(c.campaign_id)).catch(e => setLoadErr(e.message)) }, [be, id])
 
   const live = useCampaignLive(be, campaignId, user.id, r => {
-    toast({ text: outcomeText(r), tone: r.outcome })
+    toast({ text: outcomeText(r), tone: rollTone(r) })
   })
   const c = live.characters.find(x => x.id === id)
 
@@ -66,6 +70,19 @@ export function CharacterPage({ id }: { id: string }) {
       toast({ text: e instanceof Error ? e.message : String(e), tone: 'error' })
     } finally { setRolling(false) }
   }
+
+  async function doDice(req: DiceRequest) {
+    if (!c || !campaignId || rolling) return
+    setDiceOpen(false); setRolling(true)
+    try {
+      const r = await be.rollDice(campaignId, c.id, req)
+      live.addRoll(r)
+      setOverlay({ roll: r, own: true })
+    } catch (e) {
+      toast({ text: e instanceof Error ? e.message : String(e), tone: 'error' })
+    } finally { setRolling(false) }
+  }
+  function openDice(p: DicePreset | null) { setDicePreset(p); setRollOpen(false); setDiceOpen(true) }
 
   const others = live.characters.filter(x => x.id !== c.id)
 
@@ -118,7 +135,7 @@ export function CharacterPage({ id }: { id: string }) {
       </nav>
 
       <main className="page tab-page">
-        {tab === 'scheda' && <SheetTab c={c} canEdit={canEdit} patch={patch} onRoll={openRoll} />}
+        {tab === 'scheda' && <SheetTab c={c} canEdit={canEdit} patch={patch} onRoll={openRoll} onDamage={openDice} />}
         {tab === 'carte' && <CardsTab c={c} canEdit={canEdit} patch={patch} />}
         {tab === 'gruppo' && (
           <>
@@ -137,7 +154,8 @@ export function CharacterPage({ id }: { id: string }) {
         </button>
       )}
 
-      <RollSheet open={rollOpen} onClose={() => setRollOpen(false)} character={c} presetTrait={preset} onRoll={doRoll} />
+      <RollSheet open={rollOpen} onClose={() => setRollOpen(false)} character={c} presetTrait={preset} onRoll={doRoll} onOtherDice={() => openDice(null)} />
+      <DiceSheet open={diceOpen} onClose={() => setDiceOpen(false)} character={c} preset={dicePreset} onRoll={doDice} />
       {overlay && <DiceOverlay roll={overlay.roll} ownRoll={overlay.own} onClose={() => setOverlay(null)} />}
       <DamageSheet open={sheet === 'damage'} onClose={() => setSheet(null)} c={c} patch={patch} />
       <RestSheet open={sheet === 'rest'} onClose={() => setSheet(null)} c={c} patch={patch} />

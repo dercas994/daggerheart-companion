@@ -480,7 +480,7 @@ begin
   select * into r from rolls where id = p_roll;
   if not found then return; end if;
   if not is_gm(r.campaign_id) then raise exception 'Solo il master può annullare i tiri'; end if;
-  if p_revert then
+  if p_revert and r.kind = 'duality' then
     if r.outcome = 'fear' then
       update campaigns set fear = greatest(fear - coalesce(r.fear_gain, 1), 0) where id = r.campaign_id;
     elsif r.character_id is not null then
@@ -502,3 +502,91 @@ returns boolean language sql stable security definer set search_path = public as
 $$;
 revoke all on function public.is_drive_audio(text) from public;
 grant execute on function public.is_drive_audio(text) to anon, authenticated;
+
+-- ---------------------------------------------------------------------
+--  Migrazione 7: tiri di danno e dadi liberi (d4…d20), nella stessa cronologia.
+--  dice = {"groups":[{"sides":10,"rolls":[3,7]}],"bonus":3,"crit_bonus":20}
+-- ---------------------------------------------------------------------
+alter table public.rolls add column if not exists kind text not null default 'duality';
+alter table public.rolls drop constraint if exists rolls_kind_check;
+alter table public.rolls add constraint rolls_kind_check check (kind in ('duality','damage','dice'));
+alter table public.rolls add column if not exists dice jsonb;
+alter table public.rolls add column if not exists damage_type text;
+alter table public.rolls add column if not exists crit boolean not null default false;
+alter table public.rolls alter column outcome drop not null;
+
+create or replace function public.roll_dice(
+  p_campaign  uuid,
+  p_character uuid,
+  p_label     text,
+  p_groups    jsonb,             -- [{"n":2,"sides":10}, ...]
+  p_bonus     int  default 0,
+  p_kind      text default 'damage',
+  p_type      text default null, -- 'phy' | 'mag'
+  p_crit      boolean default false,
+  p_manual    int  default null  -- dadi fisici: somma dei dadi letta sul tavolo
+) returns public.rolls language plpgsql security definer set search_path = public as $$
+declare
+  ch characters;
+  r rolls;
+  who text;
+  g jsonb;
+  n int; s int; v int; i int;
+  rolls_arr int[];
+  out_groups jsonb := '[]'::jsonb;
+  dice_sum int := 0;
+  crit_bonus int := 0;
+  count_all int := 0;
+begin
+  if not is_member(p_campaign) then raise exception 'Non fai parte di questa campagna'; end if;
+  if p_kind not in ('damage','dice') then raise exception 'Tipo di tiro non valido'; end if;
+  if p_type is not null and p_type not in ('phy','mag') then raise exception 'Tipo di danno non valido'; end if;
+
+  if p_character is not null then
+    select * into ch from characters where id = p_character and campaign_id = p_campaign;
+    if not found then raise exception 'Personaggio non trovato'; end if;
+    if ch.owner_id <> auth.uid() and not is_gm(p_campaign) then
+      raise exception 'Non puoi tirare per questo personaggio';
+    end if;
+    who := ch.name;
+  else
+    select display_name into who from profiles where id = auth.uid();
+  end if;
+
+  if jsonb_typeof(p_groups) <> 'array' or jsonb_array_length(p_groups) = 0 then
+    raise exception 'Scegli almeno un dado';
+  end if;
+
+  for g in select * from jsonb_array_elements(p_groups) loop
+    n := (g->>'n')::int; s := (g->>'sides')::int;
+    if n is null or n < 1 or s not in (4,6,8,10,12,20,100) then raise exception 'Dadi non validi'; end if;
+    count_all := count_all + n;
+    if count_all > 40 then raise exception 'Massimo 40 dadi per tiro'; end if;
+    rolls_arr := '{}';
+    if p_manual is null then
+      for i in 1..n loop
+        v := 1 + floor(random() * s)::int;
+        rolls_arr := rolls_arr || v;
+        dice_sum := dice_sum + v;
+      end loop;
+    end if;
+    if p_crit then crit_bonus := crit_bonus + n * s; end if;
+    out_groups := out_groups || jsonb_build_object('sides', s, 'n', n, 'rolls', to_jsonb(rolls_arr));
+  end loop;
+
+  if p_manual is not null then
+    if p_manual < count_all then raise exception 'La somma dei dadi è troppo bassa'; end if;
+    dice_sum := p_manual;
+  end if;
+
+  insert into rolls (campaign_id, character_id, user_id, roller_name, label,
+                     hope_die, fear_die, adv_die, modifier, total, outcome, manual,
+                     kind, dice, damage_type, crit)
+  values (p_campaign, p_character, auth.uid(), coalesce(who,''), coalesce(p_label,''),
+          0, 0, 0, coalesce(p_bonus,0), dice_sum + crit_bonus + coalesce(p_bonus,0), null, p_manual is not null,
+          p_kind, jsonb_build_object('groups', out_groups, 'bonus', coalesce(p_bonus,0), 'crit_bonus', crit_bonus),
+          case when p_kind = 'damage' then coalesce(p_type, 'phy') end, p_crit)
+  returning * into r;
+  return r;
+end $$;
+grant execute on function public.roll_dice(uuid, uuid, text, jsonb, int, text, text, boolean, int) to authenticated;

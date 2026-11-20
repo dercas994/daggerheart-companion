@@ -5,7 +5,7 @@ import { go } from '../lib/router'
 import { ErrorLine, Sheet, Spinner, useAsync, useToast } from '../components/ui'
 import { TopBar } from '../components/TopBar'
 import { FearTrack, ownerName, PartyCard, RollLog, UndoRollSheet } from '../components/Party'
-import { DiceOverlay, outcomeText } from '../components/Dice'
+import { DiceOverlay, outcomeText, rollTone } from '../components/Dice'
 import { Avatar } from '../components/Portrait'
 import type { Roll } from '../lib/types'
 import type { CampaignTab } from '../lib/router'
@@ -13,6 +13,7 @@ import { useLiveList } from '../lib/liveList'
 import { Chronicle } from '../components/Chronicle'
 import { Gallery } from '../components/Gallery'
 import { MiniPlayer, Music, usePlayer } from '../components/Music'
+import { DiceSheet } from '../components/DiceSheet'
 
 const TAB_LABEL: Record<CampaignTab, string> = { tavolo: 'Tavolo', storia: 'Storia', galleria: 'Galleria', musica: 'Musica' }
 
@@ -21,13 +22,15 @@ export function CampaignPage({ id, tab }: { id: string; tab: CampaignTab }) {
   const toast = useToast()
   const [watching, setWatching] = useState<Roll | null>(null)
   const live = useCampaignLive(be, id, user.id, r => {
-    toast({ text: outcomeText(r), tone: r.outcome })
+    toast({ text: outcomeText(r), tone: rollTone(r) })
     if (isGm) setWatching(r)
   })
   const { campaign, characters, members, rolls } = live
   const isGm = campaign?.gm_id === user.id
   const [settings, setSettings] = useState(false)
   const [undoing, setUndoing] = useState<Roll | null>(null)
+  const [gmDice, setGmDice] = useState(false)
+  const [ownRoll, setOwnRoll] = useState(false)
   const media = useLiveList(be, id, cid => be.listMedia(cid), 'onMedia')
   const player = usePlayer(media.items)
 
@@ -71,7 +74,10 @@ export function CampaignPage({ id, tab }: { id: string; tab: CampaignTab }) {
               <button className="btn btn-ghost" onClick={() => go(`/c/${id}/nuovo`)}>Crea un PNG alleato</button>
             </section>
             <section className="gm-log">
-              <h2>Tiri della sessione</h2>
+              <div className="section-head">
+                <h2>Tiri della sessione</h2>
+                <button className="btn btn-ghost small" onClick={() => setGmDice(true)}>Tira i dadi</button>
+              </div>
               <RollLog rolls={rolls} limit={20} onUndo={setUndoing} />
             </section>
           </div>
@@ -112,7 +118,12 @@ export function CampaignPage({ id, tab }: { id: string; tab: CampaignTab }) {
         live.removeRoll(undoing!.id)
         toast({ text: 'Tiro annullato' })
       }} />}
-      {watching && <DiceOverlay roll={watching} ownRoll={false} onClose={() => setWatching(null)} />}
+      {watching && <DiceOverlay roll={watching} ownRoll={ownRoll} onClose={() => { setWatching(null); setOwnRoll(false) }} />}
+      {isGm && <DiceSheet open={gmDice} onClose={() => setGmDice(false)} character={null} preset={null} onRoll={async req => {
+        setGmDice(false)
+        try { const r = await be.rollDice(id, null, req); live.addRoll(r); setOwnRoll(true); setWatching(r) }
+        catch (e) { toast({ text: e instanceof Error ? e.message : String(e), tone: 'error' }) }
+      }} />}
       {isGm && <CampaignSettings open={settings} onClose={() => setSettings(false)} campaignId={id}
         name={campaign.name} description={campaign.description} members={members.filter(m => m.role === 'player').map(m => m.display_name)} />}
     </>

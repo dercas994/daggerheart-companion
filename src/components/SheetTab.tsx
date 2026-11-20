@@ -2,15 +2,16 @@ import { useState } from 'react'
 import type { Character, TraitKey } from '../lib/types'
 import { TRAITS } from '../lib/types'
 import { className, fname, ftext, getAncestry, getClass, getCommunity, getSubclass, IT, type Feature } from '../data'
-import { ancestryFeatures, fmt, getArmor, getWeapon, spellcastTrait, traitValue, weaponDamage } from '../lib/rules'
+import { ancestryFeatures, fmt, getArmor, getWeapon, spellcastTrait, traitValue, weaponDamage, weaponDamageSpec } from '../lib/rules'
+import type { DicePreset } from './DiceSheet'
 import { HomebrewSection } from './Homebrew'
 import { FeatureList } from './CardView'
 import { Stepper } from './ui'
 
 const CONDITIONS = ['Vulnerabile', 'Trattenuto', 'Nascosto', 'Distratto', 'Avvelenato', 'In fiamme']
 
-export function SheetTab({ c, canEdit, patch, onRoll }: {
-  c: Character; canEdit: boolean; patch: (p: Partial<Character>) => void; onRoll: (t: TraitKey | null) => void
+export function SheetTab({ c, canEdit, patch, onRoll, onDamage }: {
+  c: Character; canEdit: boolean; patch: (p: Partial<Character>) => void; onRoll: (t: TraitKey | null) => void; onDamage?: (p: DicePreset) => void
 }) {
   const d = c.data
   const cls = getClass(d.class_id)
@@ -53,7 +54,14 @@ export function SheetTab({ c, canEdit, patch, onRoll }: {
             <div key={w.id} className="gear-item">
               <div className="gear-top">
                 <b>{w.name}</b>
-                {canEdit && <button className="btn btn-ghost small" onClick={() => onRoll(w.trait === 'spellcast' ? spell : (w.trait as TraitKey))}>Attacca</button>}
+                {canEdit && (
+                  <span className="gear-btns">
+                    <button className="btn btn-ghost small" onClick={() => onRoll(w.trait === 'spellcast' ? spell : (w.trait as TraitKey))}>Attacca</button>
+                    {onDamage && weaponDamageSpec(w.damage, d.proficiency) && (
+                      <button className="btn btn-ghost small btn-dmg" onClick={() => onDamage({ label: w.name, ...weaponDamageSpec(w.damage, d.proficiency)! })}>Danno</button>
+                    )}
+                  </span>
+                )}
               </div>
               <span className="gear-stats">{IT.traits[w.trait]}, {IT.range[w.range] ?? w.range}, <b>{weaponDamage(w.damage, d.proficiency)}</b>, {IT.burden[w.burden]}</span>
               {(w.feature_it || w.feature) && <span className="gear-feat">{w.feature_it || w.feature}</span>}

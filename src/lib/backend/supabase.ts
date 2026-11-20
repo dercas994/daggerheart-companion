@@ -131,6 +131,14 @@ export function createSupabaseBackend(url: string, key: string): Backend {
       fail(error)
       return data as Roll
     },
+    async rollDice(campaignId, characterId, req) {
+      const { data, error } = await sb.rpc('roll_dice', {
+        p_campaign: campaignId, p_character: characterId, p_label: req.label, p_groups: req.groups, p_bonus: req.bonus,
+        p_kind: req.kind, p_type: req.kind === 'damage' ? (req.type ?? 'phy') : null, p_crit: !!req.crit, p_manual: req.manualSum ?? null,
+      })
+      fail(error)
+      return data as Roll
+    },
     async undoRoll(rollId, revert) {
       const { error } = await sb.rpc('undo_roll', { p_roll: rollId, p_revert: revert })
       fail(error)

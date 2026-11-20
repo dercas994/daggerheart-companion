@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { Roll } from '../lib/types'
+import { DAMAGE_TYPE_IT } from '../lib/rules'
+import { DieShape } from './DiceSheet'
 
 const reduced = () => typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches
 
@@ -26,7 +28,75 @@ function D12({ value, tone }: { value: number; tone: 'hope' | 'fear' }) {
 
 const OUTCOME_TITLE = { hope: 'con Speranza', fear: 'con Paura', crit: 'Successo critico' }
 
-export function DiceOverlay({ roll, onClose, ownRoll = true }: { roll: Roll; onClose: () => void; ownRoll?: boolean }) {
+type OverlayProps = { roll: Roll; onClose: () => void; ownRoll?: boolean }
+export function DiceOverlay(p: OverlayProps) {
+  return p.roll.kind && p.roll.kind !== 'duality' ? <DamageOverlay {...p} /> : <DualityOverlay {...p} />
+}
+
+function useCloseKeys(onClose: () => void) {
+  useEffect(() => {
+    const k = (e: KeyboardEvent) => { if (e.key === 'Escape' || e.key === 'Enter') onClose() }
+    addEventListener('keydown', k)
+    return () => removeEventListener('keydown', k)
+  }, [onClose])
+}
+
+/** Danni e dadi liberi: i dadi rotolano, poi compare il totale. */
+function DamageOverlay({ roll, onClose, ownRoll = true }: OverlayProps) {
+  const fast = reduced()
+  const skip = fast || !!roll.manual
+  const groups = roll.dice?.groups ?? []
+  const flat = useMemo(() => groups.flatMap(g => (g.rolls.length ? g.rolls : Array.from({ length: g.n }, () => 0)).map(v => ({ sides: g.sides, v }))), [roll.id])
+  const [phase, setPhase] = useState<'tumble' | 'reveal'>(skip ? 'reveal' : 'tumble')
+  const [faces, setFaces] = useState(() => flat.map(d => d.v))
+  useCloseKeys(onClose)
+  useEffect(() => {
+    if (skip) return
+    const flick = setInterval(() => setFaces(flat.map(d => 1 + Math.floor(Math.random() * d.sides))), 70)
+    const stop = setTimeout(() => { clearInterval(flick); setFaces(flat.map(d => d.v)) }, 900)
+    const rev = setTimeout(() => setPhase('reveal'), 1050)
+    navigator.vibrate?.(30)
+    return () => { clearInterval(flick); clearTimeout(stop); clearTimeout(rev) }
+  }, [roll.id])
+  useEffect(() => { if (phase === 'reveal' && !fast) navigator.vibrate?.(roll.crit ? [30, 30, 90] : 50) }, [phase])
+
+  const tone = roll.kind === 'damage' ? `dmg-${roll.damage_type ?? 'phy'}` : 'dmg-free'
+  const parts: string[] = []
+  for (const g of groups) parts.push(g.rolls.length ? `${g.n}d${g.sides} (${g.rolls.join(', ')})` : `${g.n}d${g.sides}`)
+  if (roll.manual) parts.push(`somma ${roll.total - (roll.dice?.bonus ?? 0) - (roll.dice?.crit_bonus ?? 0)}`)
+  if (roll.dice?.crit_bonus) parts.push(`critico ${roll.dice.crit_bonus}`)
+  if (roll.dice?.bonus) parts.push(String(roll.dice.bonus))
+  const big = flat.length > 8
+
+  return (
+    <div className={`dice-overlay dmg-overlay phase-${phase} ${tone} ${roll.crit ? 'is-crit' : ''}`} onClick={onClose} role="dialog" aria-label="Risultato del tiro">
+      <div className="fx fx-flash" />
+      <div className="dice-stage">
+        {!ownRoll && <p className="dice-who">{roll.roller_name}</p>}
+        {!roll.manual && (
+          <div className={`dmg-dice ${big ? 'many' : ''}`}>
+            {flat.map((d, i) => (
+              <span key={i} className="dmg-die" style={{ animationDelay: `${(i % 8) * 40}ms` }}>
+                <DieShape sides={d.sides} /><b>{faces[i]}</b><small>d{d.sides}</small>
+              </span>
+            ))}
+          </div>
+        )}
+        <div className="dice-result" aria-live="assertive">
+          {roll.label && <p className="dice-label-line">{roll.label}</p>}
+          {roll.manual && <p className="dice-manual">dadi fisici</p>}
+          <p className="dice-total">{roll.total}</p>
+          <p className="dice-outcome">{roll.kind === 'damage' ? `danni ${DAMAGE_TYPE_IT[roll.damage_type ?? 'phy']}` : 'totale'}</p>
+          {roll.crit && <p className="dice-effect">Critico: massimo dei dadi aggiunto</p>}
+          <p className="dice-math">{parts.join(' + ')}</p>
+          <p className="dice-hint">Tocca per chiudere</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function DualityOverlay({ roll, onClose, ownRoll = true }: OverlayProps) {
   const fast = reduced()
   // con i dadi fisici il risultato è già noto: niente rotolamento, solo la rivelazione
   const skip = fast || !!roll.manual
@@ -46,11 +116,7 @@ export function DiceOverlay({ roll, onClose, ownRoll = true }: { roll: Roll; onC
     if (phase === 'reveal' && !fast) navigator.vibrate?.(roll.outcome === 'fear' ? [60, 40, 60] : roll.outcome === 'crit' ? [30, 30, 30, 30, 90] : 50)
   }, [phase])
 
-  useEffect(() => {
-    const k = (e: KeyboardEvent) => { if (e.key === 'Escape' || e.key === 'Enter') onClose() }
-    addEventListener('keydown', k)
-    return () => removeEventListener('keydown', k)
-  }, [onClose])
+  useCloseKeys(onClose)
 
   const sparks = useMemo(() => Array.from({ length: 26 }, (_, i) => ({
     left: 8 + Math.random() * 84, delay: Math.random() * 0.9, dur: 1.4 + Math.random() * 1.6, size: 3 + Math.random() * 5, drift: (Math.random() - 0.5) * 80, k: i,
@@ -94,7 +160,7 @@ export function DiceOverlay({ roll, onClose, ownRoll = true }: { roll: Roll; onC
           {roll.label && <p className="dice-label-line">{roll.label}</p>}
           {roll.manual && <p className="dice-manual">dadi fisici</p>}
           <p className="dice-total">{roll.total}</p>
-          <p className="dice-outcome">{OUTCOME_TITLE[roll.outcome]}</p>
+          <p className="dice-outcome">{roll.outcome && OUTCOME_TITLE[roll.outcome]}</p>
           <p className="dice-math">{math}</p>
           {effect && <p className="dice-effect">{effect}</p>}
           <p className="dice-hint">Tocca per chiudere</p>
@@ -105,5 +171,9 @@ export function DiceOverlay({ roll, onClose, ownRoll = true }: { roll: Roll; onC
 }
 
 export function outcomeText(r: Roll) {
-  return `${r.roller_name}: ${r.total} ${OUTCOME_TITLE[r.outcome]}${r.label ? ` (${r.label})` : ''}`
+  const what = r.kind === 'damage' ? `danni ${DAMAGE_TYPE_IT[r.damage_type ?? 'phy']}${r.crit ? ' (critico)' : ''}`
+    : r.kind === 'dice' ? `con ${(r.dice?.groups ?? []).map(g => `${g.n}d${g.sides}`).join(' + ')}`
+    : r.outcome ? OUTCOME_TITLE[r.outcome] : ''
+  return `${r.roller_name}: ${r.total} ${what}${r.label ? ` (${r.label})` : ''}`
 }
+export const rollTone = (r: Roll) => r.outcome ?? 'info'

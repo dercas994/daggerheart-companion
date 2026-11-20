@@ -23,9 +23,9 @@ function DieGrid({ sides, value, onPick, tone, label }: { sides: number; value: 
   )
 }
 
-export function RollSheet({ open, onClose, character, presetTrait, onRoll }: {
+export function RollSheet({ open, onClose, character, presetTrait, onRoll, onOtherDice }: {
   open: boolean; onClose: () => void; character: Character | null
-  presetTrait?: TraitKey | null; onRoll: (c: RollChoice) => void
+  presetTrait?: TraitKey | null; onRoll: (c: RollChoice) => void; onOtherDice?: () => void
 }) {
   const [trait, setTrait] = useState<TraitKey | null>(null)
   const [exps, setExps] = useState<number[]>([])
@@ -138,6 +138,7 @@ export function RollSheet({ open, onClose, character, presetTrait, onRoll }: {
           Registra il tiro
         </button>
       )}
+      {onOtherDice && <button type="button" className="link-btn other-dice" onClick={onOtherDice}>Tiro di danno o altri dadi</button>}
     </Sheet>
   )
 }

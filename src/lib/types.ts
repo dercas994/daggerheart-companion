@@ -114,13 +114,30 @@ export interface Roll {
   adv_die: number
   modifier: number
   total: number
-  outcome: Outcome
+  /** null per i tiri di danno e i dadi liberi */
+  outcome: Outcome | null
+  kind?: RollKind
+  dice?: { groups: { sides: number; n: number; rolls: number[] }[]; bonus: number; crit_bonus: number } | null
+  damage_type?: 'phy' | 'mag' | null
+  crit?: boolean
   /** true se il giocatore ha inserito il risultato di dadi fisici */
   manual?: boolean
   hope_gain?: number | null
   stress_cleared?: number | null
   fear_gain?: number | null
   created_at: string
+}
+
+export type RollKind = 'duality' | 'damage' | 'dice'
+export interface DiceRequest {
+  label: string
+  groups: { n: number; sides: number }[]
+  bonus: number
+  kind: 'damage' | 'dice'
+  type?: 'phy' | 'mag'
+  crit?: boolean
+  /** dadi fisici: somma dei dadi letta sul tavolo */
+  manualSum?: number
 }
 
 export interface RollRequest {
@@ -194,6 +211,7 @@ export interface Backend {
   uploadPortrait(campaignId: string, characterId: string, image: Blob): Promise<string>
   deletePortrait(url: string): Promise<void>
   roll(campaignId: string, characterId: string | null, req: RollRequest): Promise<Roll>
+  rollDice(campaignId: string, characterId: string | null, req: DiceRequest): Promise<Roll>
   listRolls(campaignId: string, limit?: number): Promise<Roll[]>
   /** solo master: elimina il tiro e, se revert, toglie Speranza/Paura che aveva dato */
   undoRoll(rollId: string, revert: boolean): Promise<void>

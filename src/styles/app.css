@@ -693,3 +693,55 @@ button.dcard:hover { transform: translateY(-2px); }
 .app-download.ios summary::-webkit-details-marker { display: none; }
 .app-download.ios svg { color: var(--parchment); }
 .app-download.ios ol { margin: 0.6rem 0 0.2rem; padding-left: 1.3rem; color: var(--muted); font-size: 0.9rem; }
+
+/* ---------- Tiri di danno e dadi liberi ---------- */
+.gear-btns { display: flex; gap: 0.4rem; }
+.btn-dmg { border-color: rgba(214, 106, 64, 0.55); color: #F2A57E; }
+.other-dice { display: block; margin: 0.9rem auto 0; }
+.pool { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.4rem; margin-bottom: 0.4rem; }
+.pool-die { position: relative; display: grid; gap: 0.25rem; }
+.pool-add { position: relative; display: grid; justify-items: center; gap: 0.1rem; padding: 0.45rem 0 0.35rem; border-radius: var(--r-s);
+  border: 1px solid var(--line); background: var(--night); color: var(--muted); cursor: pointer; font: inherit; font-size: 0.8rem; }
+.pool-add .die-shape { width: 30px; height: 30px; }
+.die-shape polygon { fill: none; stroke: currentColor; stroke-width: 6; stroke-linejoin: round; }
+.pool-die.on .pool-add { color: var(--parchment); border-color: var(--hope); background: rgba(233, 185, 73, 0.08); }
+.pool-n { position: absolute; top: -0.45rem; right: -0.3rem; min-width: 1.35rem; height: 1.35rem; border-radius: 999px; background: var(--hope); color: var(--night);
+  font-size: 0.8rem; display: grid; place-items: center; padding: 0 0.3rem; animation: pop 0.2s ease-out; }
+.pool-minus { border: 1px solid var(--line); background: none; color: var(--muted); border-radius: 999px; line-height: 1; padding: 0.2rem 0; cursor: pointer; }
+.pool-clear { float: right; font-size: 0.85rem; }
+.crit-toggle { color: var(--hope-glow); }
+.dmg-roll { background: linear-gradient(100deg, #8E3B22, #C8643A); }
+.dmg-roll.t-mag { background: linear-gradient(100deg, #4A2687, #8A55D6); }
+.dmg-roll.t-dice { background: linear-gradient(100deg, #5B4A2A, #8F7444); }
+.dmg-roll:disabled { opacity: 0.5; }
+@keyframes pop { from { transform: scale(0.4); } to { transform: scale(1); } }
+
+.roll-log li.out-damage { border-left-color: #C8643A; }
+.roll-log li.out-damage.t-mag { border-left-color: #8A55D6; }
+.roll-log li.out-dice { border-left-color: var(--muted); }
+.out-damage .rl-out { color: #F2A57E; }
+.out-damage.t-mag .rl-out { color: var(--fear-glow); }
+.out-dice .rl-out { color: var(--muted); }
+
+.dmg-dice { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; max-width: min(520px, 92vw); }
+.dmg-die { position: relative; width: 74px; height: 74px; display: grid; place-items: center; animation: dmg-tumble 0.9s ease-out both; }
+.dmg-dice.many .dmg-die { width: 52px; height: 52px; }
+.dmg-die .die-shape { position: absolute; inset: 0; width: 100%; height: 100%; }
+.dmg-die .die-shape polygon { stroke-width: 4; }
+.dmg-die b { position: relative; font-family: var(--f-display); font-size: 1.7rem; }
+.dmg-dice.many .dmg-die b { font-size: 1.2rem; }
+.dmg-die small { position: absolute; bottom: -1.1rem; font-size: 0.7rem; color: var(--muted); }
+.dmg-phy .dmg-die { color: #F2A57E; } .dmg-phy .dmg-die .die-shape polygon { fill: rgba(200, 100, 58, 0.22); }
+.dmg-mag .dmg-die { color: #C9A6FF; } .dmg-mag .dmg-die .die-shape polygon { fill: rgba(138, 85, 214, 0.25); }
+.dmg-free .dmg-die { color: var(--parchment); }
+.dmg-free .dmg-die .die-shape polygon { fill: rgba(233, 220, 195, 0.08); }
+.dmg-phy .dice-total { color: #F7B48F; text-shadow: 0 0 40px rgba(214, 106, 64, 0.65); }
+.dmg-mag .dice-total { color: var(--fear-glow); text-shadow: 0 0 40px rgba(154, 107, 224, 0.7); }
+.dmg-overlay .dice-outcome { color: var(--muted); }
+.dmg-phy .dice-outcome { color: #F2A57E; }
+.dmg-mag .dice-outcome { color: var(--fear-glow); }
+.dmg-overlay.is-crit .dice-total { color: #fff; text-shadow: 0 0 30px rgba(255, 230, 160, 0.9), 0 0 70px rgba(214, 106, 64, 0.6); }
+.dmg-overlay .dice-effect { color: var(--hope-glow); }
+.phase-tumble .dmg-die b { opacity: 0.75; }
+@keyframes dmg-tumble { 0% { transform: translateY(-40px) rotate(-200deg) scale(0.6); opacity: 0; } 60% { transform: translateY(6px) rotate(15deg) scale(1.05); opacity: 1; } 100% { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .dmg-die, .pool-n { animation: none; } }

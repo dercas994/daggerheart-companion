@@ -116,6 +116,22 @@ export function weaponDamage(dmg: string, proficiency: number) {
   return `${proficiency}d${m[1]}${m[2] ? '+' + m[2] : ''} ${type}`
 }
 
+/** Dadi di danno dell'arma con la Competenza: "d10+3 phy", competenza 2 → 2d10, +3, fisico. */
+export function weaponDamageSpec(dmg: string, proficiency: number): { groups: { n: number; sides: number }[]; bonus: number; type: 'phy' | 'mag' } | null {
+  const m = dmg.match(/^d(\d+)(?:\s*\+\s*(\d+))?\s*(.*)$/)
+  if (!m) return null
+  return { groups: [{ n: Math.max(1, proficiency), sides: parseInt(m[1], 10) }], bonus: m[2] ? parseInt(m[2], 10) : 0, type: /^mag/.test(m[3].trim()) ? 'mag' : 'phy' }
+}
+
+/** "2d10 + 1d6 + 3" */
+export function diceFormula(groups: { n: number; sides: number }[], bonus: number) {
+  const parts = groups.filter(g => g.n > 0).map(g => `${g.n}d${g.sides}`)
+  if (bonus) parts.push(String(Math.abs(bonus)))
+  return parts.join(' + ').replace(/ \+ (\d+)$/, bonus < 0 ? ' − $1' : ' + $1')
+}
+
+export const DAMAGE_TYPE_IT = { phy: 'fisici', mag: 'magici' } as const
+
 export function emptySheet(): SheetData {
   return {
     pronouns: '', class_id: '', subclass_id: '', subclass_tier: 'foundation', ancestry_id: '', community_id: '',
