@@ -15,7 +15,7 @@ import type { DiceRequest } from '../lib/types'
 import { GroupMoves } from '../components/GroupMoves'
 import { TagTeamFlow } from '../components/TagTeam'
 import { Countdowns } from '../components/Countdowns'
-import { FearAura } from '../components/FearAura'
+import { FearAura, HopeAura } from '../components/FearAura'
 import { FearTrack, ownerName, PartyCard, RollLog } from '../components/Party'
 import { SheetTab } from '../components/SheetTab'
 import { CardsTab } from '../components/CardsTab'
@@ -219,6 +219,7 @@ export function CharacterPage({ id }: { id: string }) {
 
       <RollSheet open={rollOpen} onClose={() => setRollOpen(false)} character={c} presetTrait={preset} presetExtra={rollPreset.extra} presetLabel={rollPreset.label} presetNote={rollPreset.note} presetAdv={rollPreset.adv ?? 0} onRoll={doRoll} onOtherDice={() => openDice(null)} />
       <FearAura fear={live.campaign.fear} enabled />
+      <HopeAura hope={c.hope} enabled={c.owner_id === user.id} wait={!!overlay} />
       <TagTeamFlow tag={live.tag} characters={live.characters} rolls={live.rolls} isGm={live.campaign.gm_id === user.id} onRollAdded={live.addRoll} />
       <DiceSheet open={diceOpen} onClose={() => setDiceOpen(false)} character={c} preset={dicePreset} onRoll={doDice} />
       {overlay && <DiceOverlay roll={overlay.roll} ownRoll={overlay.own} onClose={() => setOverlay(null)} />}

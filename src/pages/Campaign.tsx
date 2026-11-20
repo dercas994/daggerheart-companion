@@ -14,7 +14,7 @@ import { Chronicle } from '../components/Chronicle'
 import { Gallery } from '../components/Gallery'
 import { MiniPlayer, Music, usePlayer } from '../components/Music'
 import { DiceSheet } from '../components/DiceSheet'
-import { FearAura } from '../components/FearAura'
+import { FearAura, HopeAura } from '../components/FearAura'
 import { TagTeamFlow } from '../components/TagTeam'
 import { Countdowns } from '../components/Countdowns'
 import { EncounterTab } from '../components/Encounter'
@@ -120,6 +120,7 @@ export function CampaignPage({ id, tab }: { id: string; tab: CampaignTab }) {
       </main>
 
       <FearAura fear={campaign.fear} enabled />
+      <HopeAura hope={mine.length === 1 ? mine[0].hope : undefined} enabled={!isGm && mine.length === 1} name={mine[0]?.name} />
       <TagTeamFlow tag={live.tag} characters={characters} rolls={rolls} isGm={isGm} onRollAdded={live.addRoll} />
       {tab !== 'musica' && <MiniPlayer p={player} onOpen={() => go(`/c/${id}/musica`)} />}
       {isGm && <UndoRollSheet key={undoing?.id} roll={undoing} onClose={() => setUndoing(null)} onConfirm={async revert => {
