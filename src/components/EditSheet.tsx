@@ -57,23 +57,23 @@ export function EditSheet({ open, onClose, c, patch, onDelete }: {
         ))}
       </div>
 
-      <p className="field-title">Equipaggiamento (fino al grado {tier})</p>
+      <p className="field-title">Equipaggiamento (fino al rango {tier})</p>
       <label className="field"><span>Arma primaria</span>
         <select value={d.primary_weapon_id} onChange={e => set({ primary_weapon_id: e.target.value })}>
           <option value="">Nessuna</option>
-          {weapons('primary').map(w => <option key={w.id} value={w.id}>G{w.tier} {w.name}, {w.damage}</option>)}
+          {weapons('primary').map(w => <option key={w.id} value={w.id}>R{w.tier} {w.name}, {w.damage}</option>)}
         </select>
       </label>
       <label className="field"><span>Arma secondaria</span>
         <select value={d.secondary_weapon_id} onChange={e => set({ secondary_weapon_id: e.target.value })}>
           <option value="">Nessuna</option>
-          {weapons('secondary').map(w => <option key={w.id} value={w.id}>G{w.tier} {w.name}, {w.damage}</option>)}
+          {weapons('secondary').map(w => <option key={w.id} value={w.id}>R{w.tier} {w.name}, {w.damage}</option>)}
         </select>
       </label>
       <label className="field"><span>Armatura</span>
         <select value={d.armor_id} onChange={e => set({ armor_id: e.target.value })}>
           <option value="">Nessuna</option>
-          {ARMOR.filter(a => a.tier <= tier).map(a => <option key={a.id} value={a.id}>G{a.tier} {a.name}, {a.thresholds.join('/')}, {a.score}</option>)}
+          {ARMOR.filter(a => a.tier <= tier).map(a => <option key={a.id} value={a.id}>R{a.tier} {a.name}, {a.thresholds.join('/')}, {a.score}</option>)}
         </select>
       </label>
 

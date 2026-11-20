@@ -54,9 +54,9 @@ In Android Studio: *Build → Build App Bundle(s) / APK(s) → Build APK(s)*. L'
 
 ## 5. Contenuti di gioco e traduzione
 
-`src/data/srd.json` contiene classi, sottoclassi, retaggi, comunità, armi, armature e le 210 carte dominio (10 domini, incluso Terrore) estratti dal **Daggerheart SRD 2.0**, contenuto pubblico secondo la [Darrington Press Community Gaming License](https://www.darringtonpress.com/license). I testi sono in inglese come nell'SRD; l'interfaccia, i nomi di classi, domini e tratti sono in italiano.
+`src/data/srd.json` contiene classi, sottoclassi, retaggi, comunità, armi, armature e le 210 carte dominio (10 domini, incluso Terrore) del **Daggerheart SRD 2.0**, contenuto pubblico secondo la [Darrington Press Community Gaming License](https://www.darringtonpress.com/license).
 
-Per tradurre una carta o un privilegio aggiungi `name_it` e `text_it` all'oggetto in `srd.json`: l'app li mostra al posto dell'inglese.
+I testi sono una traduzione italiana dell'SRD, scritta per questo progetto con la terminologia dell'edizione italiana: nomi di carte, privilegi, sottoclassi, retaggi e comunità; Speranza, Paura, Rifugio, dotazione, distanze Prossima e Remota, rango. Non sono i testi stampati dei manuali italiani. L'originale inglese resta nei campi `*_en`. Gli script che generano il file sono in `tools/i18n/`.
 
 > Daggerheart è un marchio di Critical Role LLC. Questo è un progetto personale non commerciale, non affiliato a Darrington Press.
 

@@ -1,0 +1,905 @@
+{
+ "cards": {
+  "arcana-rune-ward": "Sigillo Runico",
+  "arcana-unleash-chaos": "Scatenare il Caos",
+  "arcana-wall-walk": "Camminare sui Muri",
+  "arcana-cinder-grasp": "Tocco delle Braci",
+  "arcana-floating-eye": "Occhio Fluttuante",
+  "arcana-counterspell": "Contromagia",
+  "arcana-flight": "Volare",
+  "arcana-blink-out": "Intermittenza",
+  "arcana-preservation-blast": "Deflagrazione Protettrice",
+  "arcana-chain-lightning": "Fulmine a Catena",
+  "arcana-premonition": "Premonizione",
+  "arcana-rift-walker": "Passabreccia",
+  "arcana-telekinesis": "Telecinesi",
+  "arcana-arcana-touched": "Padronanza dell’Arcano",
+  "arcana-cloaking-blast": "Esplosione Ammantante",
+  "arcana-arcane-reflection": "Riflessione Arcana",
+  "arcana-confusing-aura": "Aura di Confusione",
+  "arcana-earthquake": "Terremoto",
+  "arcana-sensory-projection": "Proiezione Sensoriale",
+  "arcana-adjust-reality": "Piegare la Realtà",
+  "arcana-falling-sky": "Frattura Celeste",
+  "blade-get-back-up": "Rinforzo",
+  "blade-not-good-enough": "Non È Abbastanza",
+  "blade-whirlwind": "Turbine",
+  "blade-a-soldier-s-bond": "Cameratismo",
+  "blade-reckless": "Spericolato",
+  "blade-scramble": "Mischiare le Carte",
+  "blade-versatile-fighter": "Combattente Versatile",
+  "blade-deadly-focus": "Focus Letale",
+  "blade-fortified-armor": "Armatura Rinforzata",
+  "blade-champion-s-edge": "Vantaggio del Campione",
+  "blade-vitality": "Vitalità",
+  "blade-battle-hardened": "Temprato dalla Battaglia",
+  "blade-rage-up": "Infuriarsi",
+  "blade-blade-touched": "Padronanza della Lama",
+  "blade-glancing-blow": "Colpo di Striscio",
+  "blade-battle-cry": "Grido di Battaglia",
+  "blade-frenzy": "Frenesia",
+  "blade-gore-and-glory": "Sangue e Gloria",
+  "blade-reaper-s-strike": "Fendente del Mietitore",
+  "blade-battle-monster": "Mastino della Guerra",
+  "blade-onslaught": "Massacro",
+  "bone-deft-maneuvers": "Manovre Evasive",
+  "bone-i-see-it-coming": "In Arrivo",
+  "bone-untouchable": "Intoccabile",
+  "bone-ferocity": "Ferocia",
+  "bone-strategic-approach": "Approccio Strategico",
+  "bone-brace": "Risolutezza",
+  "bone-tactician": "Tattiche",
+  "bone-boost": "Lanciami!",
+  "bone-redirect": "Ritorcere",
+  "bone-know-thy-enemy": "Conosci il Tuo Nemico",
+  "bone-signature-move": "Mossa Distintiva",
+  "bone-rapid-riposte": "Botta e Risposta",
+  "bone-recovery": "Recupero",
+  "bone-bone-touched": "Padronanza delle Ossa",
+  "bone-cruel-precision": "Precisione Crudele",
+  "bone-breaking-blow": "Fendente Frantumatore",
+  "bone-wrangle": "Adunata",
+  "bone-on-the-brink": "Al Limite",
+  "bone-splintering-strike": "Colpo Frammentante",
+  "bone-deathrun": "Corsa di Morte",
+  "bone-swift-step": "Passo Lesto",
+  "codex-book-of-ava": "Tomo di Ava",
+  "codex-book-of-illiat": "Tomo di Illiat",
+  "codex-book-of-tyfar": "Tomo di Tyfar",
+  "codex-book-of-sitil": "Tomo di Sitil",
+  "codex-book-of-vagras": "Tomo di Vagras",
+  "codex-book-of-korvax": "Tomo di Korvax",
+  "codex-book-of-norai": "Tomo di Norai",
+  "codex-book-of-exota": "Tomo di Exota",
+  "codex-book-of-grynn": "Tomo di Grynn",
+  "codex-manifest-wall": "Evocare Muraglia",
+  "codex-teleport": "Teletrasporto",
+  "codex-banish": "Esilio",
+  "codex-sigil-of-retribution": "Sigillo del Castigo",
+  "codex-book-of-homet": "Tomo di Homet",
+  "codex-codex-touched": "Padronanza del Codice",
+  "codex-book-of-vyola": "Tomo di Vyola",
+  "codex-safe-haven": "Rifugio Sicuro",
+  "codex-book-of-ronin": "Tomo di Ronin",
+  "codex-disintegration-wave": "Onda Disgregatrice",
+  "codex-book-of-yarrow": "Tomo di Yarrow",
+  "codex-transcendent-union": "Unione Trascendente",
+  "grace-deft-deceiver": "Astuto Ingannatore",
+  "grace-enrapture": "Fascinazione",
+  "grace-inspirational-words": "Parole Ispiratrici",
+  "grace-tell-no-lies": "Nessuna Menzogna",
+  "grace-troublemaker": "Piantagrane",
+  "grace-hypnotic-shimmer": "Scintillio Ipnotico",
+  "grace-invisibility": "Invisibilità",
+  "grace-soothing-speech": "Parole di Conforto",
+  "grace-through-your-eyes": "Attraverso i Tuoi Occhi",
+  "grace-thought-delver": "Lettura della Mente",
+  "grace-words-of-discord": "Voce della Discordia",
+  "grace-never-upstaged": "Insuperabile",
+  "grace-share-the-burden": "Condividere l’Onere",
+  "grace-endless-charisma": "Carisma Infinito",
+  "grace-grace-touched": "Padronanza della Grazia",
+  "grace-astral-projection": "Proiezione Astrale",
+  "grace-mass-enrapture": "Affascinare le Masse",
+  "grace-copycat": "Imitazione",
+  "grace-master-of-the-craft": "Segreti del Mestiere",
+  "grace-encore": "Bis",
+  "grace-notorious": "Famigerato",
+  "midnight-pick-and-pull": "Rapidità di Mano",
+  "midnight-rain-of-blades": "Pioggia di Lame",
+  "midnight-uncanny-disguise": "Travestimento Perfetto",
+  "midnight-midnight-spirit": "Spirito di Mezzanotte",
+  "midnight-shadowbind": "Legacci dell’Ombra",
+  "midnight-chokehold": "Strangolare",
+  "midnight-veil-of-night": "Velo Notturno",
+  "midnight-stealth-expertise": "Perizia Furtiva",
+  "midnight-glyph-of-nightfall": "Punto Debole",
+  "midnight-hush": "Silenzio",
+  "midnight-phantom-retreat": "Ritirata Fantasma",
+  "midnight-dark-whispers": "Oscuri Bisbigli",
+  "midnight-mass-disguise": "Travestimento di Massa",
+  "midnight-midnight-touched": "Padronanza della Mezzanotte",
+  "midnight-vanishing-dodge": "Schivata Evanescente",
+  "midnight-shadowhunter": "Caccia Notturna",
+  "midnight-spellcharge": "Carica Magica",
+  "midnight-night-terror": "Terrore Notturno",
+  "midnight-twilight-toll": "Rintocco del Crepuscolo",
+  "midnight-eclipse": "Eclissi",
+  "midnight-specter-of-the-dark": "Spettro nel Buio",
+  "sage-gifted-tracker": "Segugio Infallibile",
+  "sage-nature-s-tongue": "Lingua della Natura",
+  "sage-vicious-entangle": "Rovi Maligni",
+  "sage-conjure-swarm": "Evoca Sciame",
+  "sage-natural-familiar": "Famiglio della Natura",
+  "sage-corrosive-projectile": "Dardo Corrosivo",
+  "sage-towering-stalk": "Stelo Torreggiante",
+  "sage-death-grip": "Stretta Letale",
+  "sage-healing-field": "Prato del Risanamento",
+  "sage-thorn-skin": "Pelle di Spine",
+  "sage-wild-fortress": "Fortezza della Selva",
+  "sage-conjured-steeds": "Evoca Destrieri",
+  "sage-forager": "Foraggiare",
+  "sage-sage-touched": "Padronanza della Saggezza",
+  "sage-wild-surge": "Impeto Selvaggio",
+  "sage-forest-sprites": "Spiriti della Foresta",
+  "sage-rejuvenation-barrier": "Barriera di Rinnovamento",
+  "sage-fane-of-the-wilds": "Santuario della Natura",
+  "sage-plant-dominion": "Dominio Vegetale",
+  "sage-force-of-nature": "Forza della Natura",
+  "sage-tempest": "Tempesta",
+  "splendor-bolt-beacon": "Dardo Tracciante",
+  "splendor-mending-touch": "Tocco Risanatore",
+  "splendor-reassurance": "Rassicurare",
+  "splendor-final-words": "Ultime Parole",
+  "splendor-healing-hands": "Mani Guaritrici",
+  "splendor-second-wind": "Rinvigorire",
+  "splendor-voice-of-reason": "Voce della Ragione",
+  "splendor-divination": "Divinazione",
+  "splendor-life-ward": "Salvaguardia",
+  "splendor-shape-material": "Plasmare",
+  "splendor-smite": "Castigo",
+  "splendor-restoration": "Ristorare",
+  "splendor-zone-of-protection": "Aura di Protezione",
+  "splendor-healing-strike": "Colpo Risanante",
+  "splendor-splendor-touched": "Padronanza dello Splendore",
+  "splendor-shield-aura": "Scudo Magico",
+  "splendor-stunning-sunlight": "Bagliore Solare",
+  "splendor-overwhelming-aura": "Aura Soverchiante",
+  "splendor-salvation-beam": "Bagliore di Salvezza",
+  "splendor-invigoration": "Ravvivare",
+  "splendor-resurrection": "Resurrezione",
+  "valor-bare-bones": "A Petto Nudo",
+  "valor-forceful-push": "Spinta Energica",
+  "valor-i-am-your-shield": "Sono il Tuo Scudo",
+  "valor-body-basher": "A Peso Morto",
+  "valor-bold-presence": "Audacia",
+  "valor-critical-inspiration": "Ispirazione Tempestiva",
+  "valor-lean-on-me": "Conta Su di Me",
+  "valor-goad-them-on": "Provocazione",
+  "valor-support-tank": "Bastione",
+  "valor-armorer": "Armaiolo",
+  "valor-rousing-strike": "Colpo Trascinante",
+  "valor-inevitable": "Ineluttabile",
+  "valor-rise-up": "In Piedi!",
+  "valor-shrug-it-off": "Solo un Graffio",
+  "valor-valor-touched": "Padronanza del Valore",
+  "valor-full-surge": "A Tutta Forza",
+  "valor-ground-pound": "Schianto Tellurico",
+  "valor-hold-the-line": "Serrare i Ranghi",
+  "valor-lead-by-example": "Guidarli con l’Esempio",
+  "valor-unbreakable": "Indistruttibile",
+  "valor-unyielding-armor": "Corazza Inviolabile",
+  "dread-blighting-strike": "Folgore Avvizzente",
+  "dread-umbral-veil": "Velo Liminale",
+  "dread-voice-of-dread": "Voce del Terrore",
+  "dread-hideous-retribution": "Castigo Orribile",
+  "dread-siphon-essence": "Risucchio d’Essenza",
+  "dread-shared-trauma": "Trauma Condiviso",
+  "dread-terrify": "Terrorizzare",
+  "dread-chains-of-affliction": "Catene della Sofferenza",
+  "dread-horror": "Evocare Orrore",
+  "dread-dire-strike": "Colpo Crudele",
+  "dread-spectral-mist": "Foschia Spettrale",
+  "dread-darkfire": "Fuoco Oscuro",
+  "dread-jump-scare": "Sobbalzo di Paura",
+  "dread-dread-touched": "Padronanza del Terrore",
+  "dread-wall-of-hunger": "Muro della Fame",
+  "dread-dark-army": "Armata delle Tenebre",
+  "dread-eldritch-flesh": "Carni Innaturali",
+  "dread-damnation": "Dannazione",
+  "dread-savor-the-anguish": "Assaporare l’Angoscia",
+  "dread-avatar-of-terror": "Avatar del Terrore",
+  "dread-invoke-torment": "Invocare il Tormento"
+ },
+ "subclasses": {
+  "bard/troubadour": {
+   "name": "Trovatore",
+   "feats": [
+    [
+     "Musico Eccezionale",
+     "Canzone Popolare",
+     "Canto Epico",
+     "Ballata"
+    ],
+    [
+     "Maestro"
+    ],
+    [
+     "Virtuoso"
+    ]
+   ]
+  },
+  "bard/wordsmith": {
+   "name": "Oratore",
+   "feats": [
+    [
+     "Discorso Ispiratore",
+     "Cuore di Poeta"
+    ],
+    [
+     "Eloquente"
+    ],
+    [
+     "Poesia Epica"
+    ]
+   ]
+  },
+  "druid/warden-of-the-elements": {
+   "name": "Custode degli Elementi",
+   "feats": [
+    [
+     "Incarnazione Elementale",
+     "Fuoco",
+     "Terra",
+     "Acqua",
+     "Aria"
+    ],
+    [
+     "Aura Elementale",
+     "Fuoco",
+     "Terra",
+     "Acqua",
+     "Aria"
+    ],
+    [
+     "Dominio Elementale",
+     "Fuoco",
+     "Terra",
+     "Acqua",
+     "Aria"
+    ]
+   ]
+  },
+  "druid/warden-of-renewal": {
+   "name": "Custode del Rinnovamento",
+   "feats": [
+    [
+     "Illuminazione della Natura",
+     "Rigenerazione"
+    ],
+    [
+     "Onda Rigenerante",
+     "Protezione del Guardiano"
+    ],
+    [
+     "Difensore"
+    ]
+   ]
+  },
+  "guardian/stalwart": {
+   "name": "Valoroso",
+   "feats": [
+    [
+     "Saldo",
+     "Volontà di Ferro"
+    ],
+    [
+     "Implacabile",
+     "Compagni d’Arme"
+    ],
+    [
+     "Imperturbabile",
+     "Protettore Fedele"
+    ]
+   ]
+  },
+  "guardian/vengeance": {
+   "name": "Vendicatore",
+   "feats": [
+    [
+     "A Suo Agio",
+     "Vendetta"
+    ],
+    [
+     "Rappresaglia"
+    ],
+    [
+     "Nemesi"
+    ]
+   ]
+  },
+  "ranger/beastbound": {
+   "name": "Ferale",
+   "feats": [
+    [
+     "Compagno"
+    ],
+    [
+     "Addestramento Intensivo",
+     "Uniti nella Battaglia"
+    ],
+    [
+     "Addestramento Avanzato",
+     "Amico Fedele"
+    ]
+   ]
+  },
+  "ranger/wayfinder": {
+   "name": "Apripista",
+   "feats": [
+    [
+     "Predatore Spietato",
+     "La Via Prosegue"
+    ],
+    [
+     "Predatore Furtivo"
+    ],
+    [
+     "Predatore Dominante"
+    ]
+   ]
+  },
+  "rogue/nightwalker": {
+   "name": "Ombra Notturna",
+   "feats": [
+    [
+     "Passo d’Ombra"
+    ],
+    [
+     "Nube di Tenebra",
+     "Adrenalina"
+    ],
+    [
+     "Ombra Sfuggente",
+     "Svanire"
+    ]
+   ]
+  },
+  "rogue/syndicate": {
+   "name": "Ladro",
+   "feats": [
+    [
+     "Legami"
+    ],
+    [
+     "Amici Ovunque"
+    ],
+    [
+     "Supporto Fidato"
+    ]
+   ]
+  },
+  "seraph/divine-wielder": {
+   "name": "Emissario Divino",
+   "feats": [
+    [
+     "Arma Animata",
+     "Tocco Ristoratore"
+    ],
+    [
+     "Devoto"
+    ],
+    [
+     "Risonanza Celestiale"
+    ]
+   ]
+  },
+  "seraph/winged-sentinel": {
+   "name": "Sentinella Alata",
+   "feats": [
+    [
+     "Ali di Luce"
+    ],
+    [
+     "Volto Celeste"
+    ],
+    [
+     "Ascendente",
+     "Potere degli Dèi"
+    ]
+   ]
+  },
+  "sorcerer/elemental-origin": {
+   "name": "Potere Elementale",
+   "feats": [
+    [
+     "Elementalista"
+    ],
+    [
+     "Scudo della Natura"
+    ],
+    [
+     "Trascendenza"
+    ]
+   ]
+  },
+  "sorcerer/primal-origin": {
+   "name": "Potere Primordiale",
+   "feats": [
+    [
+     "Manipolare la Magia"
+    ],
+    [
+     "Aiuto Incantato"
+    ],
+    [
+     "Infusione Arcana"
+    ]
+   ]
+  },
+  "warrior/call-of-the-brave": {
+   "name": "Chiamata del Coraggio",
+   "feats": [
+    [
+     "Coraggio",
+     "Riti di Battaglia"
+    ],
+    [
+     "Raccogliere la Sfi da"
+    ],
+    [
+     "Commilitoni"
+    ]
+   ]
+  },
+  "warrior/call-of-the-slayer": {
+   "name": "Chiamata dello Sterminatore",
+   "feats": [
+    [
+     "Sterminatore"
+    ],
+    [
+     "Specialista delle Armi"
+    ],
+    [
+     "Addestramento Marziale"
+    ]
+   ]
+  },
+  "wizard/school-of-knowledge": {
+   "name": "Scuola della Conoscenza",
+   "feats": [
+    [
+     "Preparato",
+     "Iniziato"
+    ],
+    [
+     "Esperto",
+     "Memoria Perfetta"
+    ],
+    [
+     "Brillante",
+     "Padronanza Affi nata"
+    ]
+   ]
+  },
+  "wizard/school-of-war": {
+   "name": "Scuola della Guerra",
+   "feats": [
+    [
+     "Magia da Battaglia",
+     "Affronta la Tua Paura"
+    ],
+    [
+     "Evoca Scudo",
+     "Alimentato dalla Paura"
+    ],
+    [
+     "Prosperare nel Caos",
+     "Non Conoscerai la Paura"
+    ]
+   ]
+  },
+  "assassin/executioners-guild": {
+   "name": "Gilda dei Carnefici",
+   "feats": [
+    [
+     "Primo Colpo",
+     "Imboscata"
+    ],
+    [
+     "Colpo Mortale",
+     "Posa dello Scorpione"
+    ],
+    [
+     "Colpo Preciso",
+     "Colpo alle Spalle"
+    ]
+   ]
+  },
+  "assassin/poisoners-guild": {
+   "name": "Gilda degli Avvelenatori",
+   "feats": [
+    [
+     "Composti Tossici",
+     "Petalo Spettrale",
+     "Spora del Sepolcro",
+     "Erba della Sanguisuga"
+    ],
+    [
+     "Compendio dei Veleni",
+     "Viticcio della Mezzanotte",
+     "Radice della Gorgone",
+     "Zanne Gemelle"
+    ],
+    [
+     "Venomante",
+     "Seme della Rovina",
+     "Foglia della Paura",
+     "Spina Cadaverica",
+     "Benedizione della Vipera"
+    ]
+   ]
+  },
+  "brawler/juggernaut": {
+   "name": "Juggernaut",
+   "feats": [
+    [
+     "Rude",
+     "Sopraffare"
+    ],
+    [
+     "Circondato",
+     "Occhio per Occhio"
+    ],
+    [
+     "Ebrezza della Lotta",
+     "Non è Ancora Finita"
+    ]
+   ]
+  },
+  "brawler/martial-artist": {
+   "name": "Artista Marziale",
+   "feats": [
+    [
+     "Postura del Combattente"
+    ],
+    [
+     "Guardia Alta",
+     "Cannone Spirituale"
+    ],
+    [
+     "Oltre il Limite",
+     "Seguire la Corrente"
+    ]
+   ]
+  },
+  "warlock/pact-of-the-endless": {
+   "name": "Patto dell’Infinito",
+   "feats": [
+    [
+     "Mantello del Patrono",
+     "Abbraccio del Senzamorte"
+    ],
+    [
+     "Invocazione Straziante",
+     "Assorbimento del Danno"
+    ],
+    [
+     "Egida Oscura",
+     "Prosciugare"
+    ]
+   ]
+  },
+  "warlock/pact-of-the-wrathful": {
+   "name": "Patto dell’Ira",
+   "feats": [
+    [
+     "Furia del Patrono",
+     "Vendetta Letale"
+    ],
+    [
+     "Portata Minacciosa",
+     "Umilia i Miei Nemici"
+    ],
+    [
+     "Attacco Terrificante",
+     "Ira dell’Oltremondo"
+    ]
+   ]
+  },
+  "witch/hedge": {
+   "name": "Strega Liminale",
+   "feats": [
+    [
+     "Erbe Officinali",
+     "Talismano Incantato"
+    ],
+    [
+     "Camminare Tra i Mondi",
+     "Malia Vessante"
+    ],
+    [
+     "Cerchio di Potere"
+    ]
+   ]
+  },
+  "witch/moon": {
+   "name": "Strega Lunare",
+   "feats": [
+    [
+     "Incanto Notturno"
+    ],
+    [
+     "Chiaro di Luna",
+     "Ira della Pallida Luce"
+    ],
+    [
+     "Fasi Lunari"
+    ]
+   ]
+  }
+ },
+ "ancestries": {
+  "simiah": {
+   "name": "Simiah",
+   "feats": [
+    "Scalatore Naturale",
+    "Scioltezza"
+   ]
+  },
+  "clank": {
+   "name": "Clank",
+   "feats": [
+    "Scopo Preciso",
+    "Effi ciente"
+   ]
+  },
+  "drakona": {
+   "name": "Drakona",
+   "feats": [
+    "Scaglie",
+    "Soffi o Elementale"
+   ]
+  },
+  "dwarf": {
+   "name": "Nani",
+   "feats": [
+    "Pelle Dura",
+    "Resistenza Aumentata"
+   ]
+  },
+  "elf": {
+   "name": "Elfi",
+   "feats": [
+    "Reazione Istintiva",
+    "Dormiveglia"
+   ]
+  },
+  "faerie": {
+   "name": "Fatati",
+   "feats": [
+    "Portafortuna",
+    "Ali"
+   ]
+  },
+  "firbolg": {
+   "name": "Firbolg",
+   "feats": [
+    "Carica",
+    "Irremovibile"
+   ]
+  },
+  "fungril": {
+   "name": "Fungril",
+   "feats": [
+    "Cerchio dei Fungril",
+    "Connessione con i Morti"
+   ]
+  },
+  "faun": {
+   "name": "Fauni",
+   "feats": [
+    "Balzo Caprino",
+    "Calcio"
+   ]
+  },
+  "galapa": {
+   "name": "Galapa",
+   "feats": [
+    "Guscio",
+    "Rinchiudersi"
+   ]
+  },
+  "giant": {
+   "name": "Giganti",
+   "feats": [
+    "Resistenza",
+    "Raggiungere"
+   ]
+  },
+  "goblin": {
+   "name": "Goblin",
+   "feats": [
+    "Piè Fermo",
+    "Senso del Pericolo"
+   ]
+  },
+  "halfling": {
+   "name": "Halfling",
+   "feats": [
+    "Quadrifoglio",
+    "Bussola Interna"
+   ]
+  },
+  "human": {
+   "name": "Umani",
+   "feats": [
+    "Vigore",
+    "Versatilità"
+   ]
+  },
+  "infernis": {
+   "name": "Infernis",
+   "feats": [
+    "Senzapaura",
+    "Volto Spaventoso"
+   ]
+  },
+  "katari": {
+   "name": "Katàri",
+   "feats": [
+    "Istinti Felini",
+    "Artigli Retrattili"
+   ]
+  },
+  "orc": {
+   "name": "Orchi",
+   "feats": [
+    "Robusto",
+    "Zanne"
+   ]
+  },
+  "ribbet": {
+   "name": "Ribbet",
+   "feats": [
+    "Anfi bio",
+    "Lingualunga"
+   ]
+  },
+  "aetheris": {
+   "name": "Aetheris",
+   "feats": [
+    "Aura Benedetta",
+    "Ali Celestiali"
+   ]
+  },
+  "earthkin": {
+   "name": "Stirpe della Terra",
+   "feats": [
+    "Pelle di Pietra",
+    "Inamovibile"
+   ]
+  },
+  "emberkin": {
+   "name": "Stirpe della Brace",
+   "feats": [
+    "Ignifugo",
+    "Avvampare"
+   ]
+  },
+  "gnome": {
+   "name": "Gnomo",
+   "feats": [
+    "Dita Agili",
+    "Passo Sfuggente"
+   ]
+  },
+  "skykin": {
+   "name": "Stirpe del Cielo",
+   "feats": [
+    "Forza della Burrasca",
+    "Occhio del Ciclone"
+   ]
+  },
+  "tidekin": {
+   "name": "Stirpe della Marea",
+   "feats": [
+    "Anfibio",
+    "Sorgente Vitale"
+   ]
+  }
+ },
+ "communities": {
+  "highborne": {
+   "name": "Privilegiata",
+   "feats": [
+    "Privilegio"
+   ]
+  },
+  "loreborne": {
+   "name": "Erudita",
+   "feats": [
+    "Acculturato"
+   ]
+  },
+  "orderborne": {
+   "name": "Austera",
+   "feats": [
+    "Dedizione"
+   ]
+  },
+  "ridgeborne": {
+   "name": "Montanara",
+   "feats": [
+    "Costanza"
+   ]
+  },
+  "seaborne": {
+   "name": "Marittima",
+   "feats": [
+    "Sentire la Marea"
+   ]
+  },
+  "slyborne": {
+   "name": "Bassifondi",
+   "feats": [
+    "Furfante"
+   ]
+  },
+  "underborne": {
+   "name": "Sotterranea",
+   "feats": [
+    "Vivere nel Crepuscolo"
+   ]
+  },
+  "wanderborne": {
+   "name": "Nomade",
+   "feats": [
+    "Sacca da Viaggio"
+   ]
+  },
+  "wildborne": {
+   "name": "Forestale",
+   "feats": [
+    "Piè Leggero"
+   ]
+  },
+  "duneborne": {
+   "name": "Desertica",
+   "feats": [
+    "Oasi"
+   ]
+  },
+  "freeborne": {
+   "name": "Affrancata",
+   "feats": [
+    "Senza Vincoli"
+   ]
+  },
+  "frostborne": {
+   "name": "Artica",
+   "feats": [
+    "Temprata"
+   ]
+  },
+  "hearthborne": {
+   "name": "Rustica",
+   "feats": [
+    "Coesa"
+   ]
+  },
+  "reborne": {
+   "name": "Esule",
+   "feats": [
+    "Nuova Famiglia"
+   ]
+  },
+  "warborne": {
+   "name": "Marziale",
+   "feats": [
+    "Espressione Coraggiosa"
+   ]
+  }
+ }
+}

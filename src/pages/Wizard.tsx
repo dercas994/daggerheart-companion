@@ -113,7 +113,7 @@ function ClassDetail({ id }: { id: string }) {
   const c = getClass(id)!
   return (
     <div className="panel detail">
-      <h3>{className(c.id)} <small>({c.name})</small></h3>
+      <h3>{className(c.id)}</h3>
       <p className="lore">{c.description}</p>
       <p className="field-title">Privilegio della Speranza</p>
       <FeatureList items={[c.hope_feature]} />
@@ -238,8 +238,8 @@ function StepTraits({ d, set }: StepProps) {
 
 function StepGear({ d, set }: StepProps) {
   const spell = getSubclass(d.class_id, d.subclass_id)?.spellcast
-  const prim = WEAPONS.filter(w => w.tier === 1 && w.category === 'primary' && !w.name.includes('Wheelchair') && (spell || !w.damage.endsWith('mag')))
-  const wheel = WEAPONS.filter(w => w.tier === 1 && w.name.includes('Wheelchair'))
+  const prim = WEAPONS.filter(w => w.tier === 1 && w.category === 'primary' && !w.id.includes('wheelchair') && (spell || !w.damage.endsWith('mag')))
+  const wheel = WEAPONS.filter(w => w.tier === 1 && w.id.includes('wheelchair'))
   const p = getWeapon(d.primary_weapon_id)
   const sec = WEAPONS.filter(w => w.tier === 1 && w.category === 'secondary')
   const arm = ARMOR.filter(a => a.tier === 1)
@@ -259,7 +259,7 @@ function StepGear({ d, set }: StepProps) {
         {arm.map(a => (
           <button key={a.id} type="button" className={`list-item ${d.armor_id === a.id ? 'sel' : ''}`} onClick={() => set({ armor_id: a.id })}>
             <span className="pick-title">{a.name}</span>
-            <span className="list-feats">Soglie {a.thresholds[0] + 1}/{a.thresholds[1] + 1}, Armatura {a.score}{a.feature ? `. ${a.feature}` : ''}</span>
+            <span className="list-feats">Soglie {a.thresholds[0] + 1}/{a.thresholds[1] + 1}, Armatura {a.score}{a.feature ? `. ${a.feature_it || a.feature}` : ''}</span>
           </button>
         ))}
       </div>
@@ -278,7 +278,7 @@ function WeaponTable({ list, value, onPick, allowNone, prof }: { list: typeof WE
         <button key={w.id} type="button" className={`list-item ${value === w.id ? 'sel' : ''}`} onClick={() => onPick(w.id)}>
           <span className="pick-title">{w.name}</span>
           <span className="w-stats">{IT.traits[w.trait]}, {IT.range[w.range] ?? w.range}, {weaponDamage(w.damage, prof)}, {IT.burden[w.burden]}</span>
-          {w.feature && <span className="list-feats">{w.feature}</span>}
+          {w.feature && <span className="list-feats">{w.feature_it || w.feature}</span>}
         </button>
       ))}
     </div>

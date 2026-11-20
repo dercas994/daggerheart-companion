@@ -58,9 +58,9 @@ export function RestSheet({ open, onClose, c, patch }: { open: boolean; onClose:
   }
 
   const moves = [
-    { id: 'wounds', label: 'Curare le ferite', desc: kind === 'short' ? 'Libera 1d4 + grado PF' : 'Libera tutti i PF' },
-    { id: 'stress', label: 'Liberarsi dello stress', desc: kind === 'short' ? 'Libera 1d4 + grado Stress' : 'Libera tutto lo Stress' },
-    { id: 'armor', label: 'Riparare l’armatura', desc: kind === 'short' ? 'Libera 1d4 + grado slot Armatura' : 'Libera tutti gli slot Armatura' },
+    { id: 'wounds', label: 'Curare le ferite', desc: kind === 'short' ? 'Libera 1d4 + rango PF' : 'Libera tutti i PF' },
+    { id: 'stress', label: 'Liberarsi dello stress', desc: kind === 'short' ? 'Libera 1d4 + rango Stress' : 'Libera tutto lo Stress' },
+    { id: 'armor', label: 'Riparare l’armatura', desc: kind === 'short' ? 'Libera 1d4 + rango slot Armatura' : 'Libera tutti gli slot Armatura' },
     { id: 'prepare', label: 'Prepararsi', desc: 'Guadagni 1 Speranza' },
   ]
 

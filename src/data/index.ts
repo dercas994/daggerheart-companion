@@ -1,7 +1,8 @@
 // Contenuti di gioco dal Daggerheart SRD 2.0 — Public Game Content secondo la
 // Darrington Press Community Gaming License (www.darringtonpress.com/license).
-// I testi delle carte sono in inglese come nell'SRD: per tradurli aggiungi i campi
-// `name_it` / `text_it` agli oggetti in srd.json, l'app li userà automaticamente.
+// Testi tradotti in italiano dall'SRD, con la terminologia dell'edizione italiana
+// (nomi di carte, privilegi, retaggi). L'originale inglese resta nei campi *_en.
+// Il campo `feature` di armi e armature resta in inglese: lo legge rules.ts per i bonus.
 import raw from './srd.json'
 import { CUSTOM_ANCESTRIES } from './custom'
 import type { TraitKey } from '../lib/types'
@@ -21,9 +22,9 @@ export interface ClassDef {
 export interface Heritage { id: string; name: string; description: string; features: Feature[]; custom?: boolean; image?: string; card?: string }
 export interface Weapon {
   id: string; name: string; trait: TraitKey | 'spellcast'; range: string; damage: string
-  burden: 'One-Handed' | 'Two-Handed'; feature: string; tier: number; category: 'primary' | 'secondary'
+  burden: 'One-Handed' | 'Two-Handed'; feature: string; feature_it?: string; name_en?: string; tier: number; category: 'primary' | 'secondary'
 }
-export interface Armor { id: string; name: string; thresholds: [number, number]; score: number; feature: string; tier: number }
+export interface Armor { id: string; name: string; name_en?: string; thresholds: [number, number]; score: number; feature: string; feature_it?: string; tier: number }
 export interface DomainCard {
   id: string; name: string; level: number; domain: string; type: 'spell' | 'ability' | 'grimoire'
   recall: number; text: string; name_it?: string; text_it?: string
@@ -85,7 +86,7 @@ export const IT = {
     warrior: 'Guerriero', witch: 'Strega', wizard: 'Mago',
   } as Record<string, string>,
   cardType: { spell: 'Incantesimo', ability: 'Capacità', grimoire: 'Grimorio' } as Record<string, string>,
-  range: { Melee: 'Mischia', 'Very Close': 'Molto vicino', Close: 'Ravvicinata', Far: 'Lontana', 'Very Far': 'Molto lontana' } as Record<string, string>,
+  range: { Melee: 'Mischia', 'Very Close': 'Prossima', Close: 'Ravvicinata', Far: 'Lontana', 'Very Far': 'Remota' } as Record<string, string>,
   burden: { 'One-Handed': 'Una mano', 'Two-Handed': 'Due mani' } as Record<string, string>,
 }
 

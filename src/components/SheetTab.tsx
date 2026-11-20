@@ -55,14 +55,14 @@ export function SheetTab({ c, canEdit, patch, onRoll }: {
                 {canEdit && <button className="btn btn-ghost small" onClick={() => onRoll(w.trait === 'spellcast' ? spell : (w.trait as TraitKey))}>Attacca</button>}
               </div>
               <span className="gear-stats">{IT.traits[w.trait]}, {IT.range[w.range] ?? w.range}, <b>{weaponDamage(w.damage, d.proficiency)}</b>, {IT.burden[w.burden]}</span>
-              {w.feature && <span className="gear-feat">{w.feature}</span>}
+              {w.feature && <span className="gear-feat">{w.feature_it || w.feature}</span>}
             </div>
           ))}
           {armor && (
             <div className="gear-item">
               <div className="gear-top"><b>{armor.name}</b></div>
               <span className="gear-stats">Soglie base {armor.thresholds[0]}/{armor.thresholds[1]}, punteggio {armor.score}</span>
-              {armor.feature && <span className="gear-feat">{armor.feature}</span>}
+              {armor.feature && <span className="gear-feat">{armor.feature_it || armor.feature}</span>}
             </div>
           )}
         </div>

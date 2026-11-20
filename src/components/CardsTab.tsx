@@ -30,24 +30,24 @@ export function CardsTab({ c, canEdit, patch }: { c: Character; canEdit: boolean
   return (
     <div className="cards-tab">
       <div className="section-head">
-        <h2>Loadout <small>({loadout.length}/{MAX_LOADOUT})</small></h2>
+        <h2>Dotazione <small>({loadout.length}/{MAX_LOADOUT})</small></h2>
         {canEdit && <button className="btn btn-ghost small" onClick={() => setAdding(true)}>Aggiungi carta</button>}
       </div>
       {loadout.length === 0 && <p className="empty">Nessuna carta attiva.</p>}
       <div className="card-grid">
         {loadout.map(card => (
           <DomainCardView key={card.id} card={card}
-            action={canEdit && <button className="btn btn-ghost small" onClick={() => toVault(card.id)}>Metti nel vault</button>} />
+            action={canEdit && <button className="btn btn-ghost small" onClick={() => toVault(card.id)}>Metti nel Rifugio</button>} />
         ))}
       </div>
 
       <div className="section-head">
-        <h2>Vault <small>({vault.length})</small></h2>
+        <h2>Rifugio <small>({vault.length})</small></h2>
         {canEdit && vault.length > 0 && (
           <label className="toggle"><input type="checkbox" checked={resting} onChange={e => setResting(e.target.checked)} /> Siamo a riposo (scambio gratuito)</label>
         )}
       </div>
-      {vault.length === 0 && <p className="empty">Le carte oltre le cinque del loadout finiscono qui.</p>}
+      {vault.length === 0 && <p className="empty">Le carte oltre le cinque della dotazione finiscono qui.</p>}
       <div className="card-grid">
         {vault.map(card => (
           <DomainCardView key={card.id} card={card} dim
@@ -58,7 +58,7 @@ export function CardsTab({ c, canEdit, patch }: { c: Character; canEdit: boolean
       <AddCardSheet open={adding} onClose={() => setAdding(false)} c={c} onAdd={card => {
         const full = d.loadout.length >= MAX_LOADOUT
         patch({ data: { ...d, loadout: full ? d.loadout : [...d.loadout, card.id], vault: full ? [...d.vault, card.id] : d.vault } })
-        toast({ text: `${card.name} aggiunta ${full ? 'al vault' : 'al loadout'}` })
+        toast({ text: `${card.name} aggiunta ${full ? 'al Rifugio' : 'alla dotazione'}` })
         setAdding(false)
       }} />
     </div>

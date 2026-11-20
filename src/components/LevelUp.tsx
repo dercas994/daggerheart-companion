@@ -85,7 +85,7 @@ export function LevelUpSheet({ open, onClose, c, patch }: { open: boolean; onClo
     <Sheet open={open} onClose={onClose} title={`Livello ${L}`} wide>
       {achievement && (
         <div className="panel detail">
-          <h3>Traguardo di grado {T}</h3>
+          <h3>Traguardo di rango {T}</h3>
           <p>+1 Competenza e una nuova Esperienza a +2{L !== 2 ? '. I tratti marcati tornano disponibili.' : '.'}</p>
           <label className="field"><span>Nuova Esperienza</span><input value={newExp} onChange={e => setNewExp(e.target.value)} /></label>
         </div>
