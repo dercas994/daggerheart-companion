@@ -1,0 +1,7 @@
+{
+  "appId": "it.itdot.daggerheart",
+  "appName": "Daggerheart Companion",
+  "webDir": "dist",
+  "android": { "backgroundColor": "#16111F" },
+  "server": { "androidScheme": "https" }
+}

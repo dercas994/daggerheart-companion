@@ -1,0 +1,106 @@
+import { useEffect, useMemo, useState } from 'react'
+import type { Roll } from '../lib/types'
+
+const reduced = () => typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches
+
+/** Vista frontale di un d12: faccia pentagonale al centro dentro un decagono. */
+function D12({ value, tone }: { value: number; tone: 'hope' | 'fear' }) {
+  const { outer, inner, spokes } = useMemo(() => {
+    const R = 46, r = 25
+    const pt = (rad: number, a: number) => [50 + rad * Math.cos(a), 50 + rad * Math.sin(a)]
+    const outer = Array.from({ length: 10 }, (_, i) => pt(R, -Math.PI / 2 + (i * Math.PI) / 5))
+    const inner = Array.from({ length: 5 }, (_, i) => pt(r, -Math.PI / 2 + (i * 2 * Math.PI) / 5))
+    const spokes = inner.map((p, i) => [p, outer[i * 2]])
+    return { outer, inner, spokes }
+  }, [])
+  const poly = (ps: number[][]) => ps.map(p => p.join(',')).join(' ')
+  return (
+    <svg viewBox="0 0 100 100" className={`d12 d12-${tone}`} aria-hidden="true">
+      <polygon points={poly(outer)} className="d12-body" />
+      {spokes.map(([a, b], i) => <line key={i} x1={a[0]} y1={a[1]} x2={b[0]} y2={b[1]} className="d12-edge" />)}
+      <polygon points={poly(inner)} className="d12-face" />
+      <text x="50" y="51" className="d12-num" dominantBaseline="middle" textAnchor="middle">{value}</text>
+    </svg>
+  )
+}
+
+const OUTCOME_TITLE = { hope: 'con Speranza', fear: 'con Paura', crit: 'Successo critico' }
+
+export function DiceOverlay({ roll, onClose, ownRoll = true }: { roll: Roll; onClose: () => void; ownRoll?: boolean }) {
+  const fast = reduced()
+  const [phase, setPhase] = useState<'tumble' | 'reveal'>(fast ? 'reveal' : 'tumble')
+  const [faces, setFaces] = useState<[number, number]>([roll.hope_die, roll.fear_die])
+
+  useEffect(() => {
+    if (fast) return
+    const flick = setInterval(() => setFaces([1 + Math.floor(Math.random() * 12), 1 + Math.floor(Math.random() * 12)]), 70)
+    const stop = setTimeout(() => { clearInterval(flick); setFaces([roll.hope_die, roll.fear_die]) }, 1050)
+    const rev = setTimeout(() => setPhase('reveal'), 1250)
+    navigator.vibrate?.(30)
+    return () => { clearInterval(flick); clearTimeout(stop); clearTimeout(rev) }
+  }, [roll.id])
+
+  useEffect(() => {
+    if (phase === 'reveal' && !fast) navigator.vibrate?.(roll.outcome === 'fear' ? [60, 40, 60] : roll.outcome === 'crit' ? [30, 30, 30, 30, 90] : 50)
+  }, [phase])
+
+  useEffect(() => {
+    const k = (e: KeyboardEvent) => { if (e.key === 'Escape' || e.key === 'Enter') onClose() }
+    addEventListener('keydown', k)
+    return () => removeEventListener('keydown', k)
+  }, [onClose])
+
+  const sparks = useMemo(() => Array.from({ length: 26 }, (_, i) => ({
+    left: 8 + Math.random() * 84, delay: Math.random() * 0.9, dur: 1.4 + Math.random() * 1.6, size: 3 + Math.random() * 5, drift: (Math.random() - 0.5) * 80, k: i,
+  })), [roll.id])
+
+  let math = `${roll.hope_die} + ${roll.fear_die}`
+  if (roll.adv_die) math += roll.adv_die > 0 ? ` + ${roll.adv_die} (vantaggio)` : ` − ${-roll.adv_die} (svantaggio)`
+  if (roll.modifier) math += roll.modifier > 0 ? ` + ${roll.modifier}` : ` − ${-roll.modifier}`
+
+  const effect = roll.outcome === 'fear'
+    ? 'Il master guadagna 1 Paura'
+    : roll.character_id
+      ? roll.outcome === 'crit' ? '+1 Speranza e −1 Stress' : '+1 Speranza'
+      : ''
+
+  return (
+    <div className={`dice-overlay phase-${phase} out-${roll.outcome}`} onClick={onClose} role="dialog" aria-label="Risultato del tiro">
+      <div className="fx fx-rays" />
+      <div className="fx fx-smoke"><i /><i /><i /><i /></div>
+      <div className="fx fx-flash" />
+      <div className="fx fx-sparks">
+        {sparks.map(s => (
+          <span key={s.k} style={{ left: `${s.left}%`, animationDelay: `${s.delay}s`, animationDuration: `${s.dur}s`, width: s.size, height: s.size, ['--drift' as any]: `${s.drift}px` }} />
+        ))}
+      </div>
+
+      <div className="dice-stage">
+        {!ownRoll && <p className="dice-who">{roll.roller_name}</p>}
+        <div className="dice-pair">
+          <div className={`die-wrap die-hope ${roll.outcome !== 'fear' ? 'winner' : 'loser'}`}>
+            <D12 value={faces[0]} tone="hope" />
+            <span className="die-label">Speranza</span>
+          </div>
+          <div className={`die-wrap die-fear ${roll.outcome !== 'hope' ? 'winner' : 'loser'}`}>
+            <D12 value={faces[1]} tone="fear" />
+            <span className="die-label">Paura</span>
+          </div>
+        </div>
+
+        <div className="dice-result" aria-live="assertive">
+          {roll.label && <p className="dice-label-line">{roll.label}</p>}
+          <p className="dice-total">{roll.total}</p>
+          <p className="dice-outcome">{OUTCOME_TITLE[roll.outcome]}</p>
+          <p className="dice-math">{math}</p>
+          {effect && <p className="dice-effect">{effect}</p>}
+          <p className="dice-hint">Tocca per chiudere</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export function outcomeText(r: Roll) {
+  return `${r.roller_name}: ${r.total} ${OUTCOME_TITLE[r.outcome]}${r.label ? ` (${r.label})` : ''}`
+}
