@@ -1,5 +1,5 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
-import type { Backend, Campaign, CampaignWithRole, Character, Member, Roll, User } from '../types'
+import type { Backend, Campaign, CampaignWithRole, Character, Media, Member, Recap, Roll, User } from '../types'
 
 function fail(error: { message: string } | null) {
   if (error) throw new Error(translate(error.message))
@@ -137,6 +137,57 @@ export function createSupabaseBackend(url: string, key: string): Backend {
       return (data ?? []) as Roll[]
     },
 
+    async listRecaps(campaignId) {
+      const { data, error } = await sb.from('session_recaps').select('*').eq('campaign_id', campaignId)
+        .order('number', { ascending: true, nullsFirst: false }).order('created_at')
+      fail(error)
+      return (data ?? []) as Recap[]
+    },
+    async saveRecap(campaignId, r) {
+      const row = { number: r.number ?? null, title: r.title ?? '', played_on: r.played_on || null, body: r.body ?? '' }
+      const q = r.id
+        ? sb.from('session_recaps').update({ ...row, updated_at: new Date().toISOString() }).eq('id', r.id)
+        : sb.from('session_recaps').insert({ ...row, campaign_id: campaignId })
+      const { data, error } = await q.select().single()
+      fail(error)
+      return data as Recap
+    },
+    async deleteRecap(id) {
+      const { error } = await sb.from('session_recaps').delete().eq('id', id)
+      fail(error)
+    },
+
+    async listMedia(campaignId) {
+      const { data, error } = await sb.from('campaign_media').select('*').eq('campaign_id', campaignId).order('sort').order('created_at')
+      fail(error)
+      return (data ?? []) as Media[]
+    },
+    async addMedia(campaignId, items) {
+      const { data, error } = await sb.from('campaign_media').insert(items.map(i => ({ ...i, campaign_id: campaignId }))).select()
+      fail(error)
+      return (data ?? []) as Media[]
+    },
+    async updateMedia(id, patch) {
+      const { error } = await sb.from('campaign_media').update(patch).eq('id', id)
+      fail(error)
+    },
+    async deleteMedia(m) {
+      const { error } = await sb.from('campaign_media').delete().eq('id', m.id)
+      fail(error)
+      const marker = '/campaign-media/'
+      const i = m.url?.indexOf(marker) ?? -1
+      if (m.url && i >= 0) await sb.storage.from('campaign-media').remove([decodeURIComponent(m.url.slice(i + marker.length))])
+    },
+    async uploadMedia(campaignId, file, name) {
+      const safe = name.normalize('NFD').replace(/[^\w.-]+/g, '_').slice(-80) || 'file'
+      const path = `${campaignId}/${Date.now()}-${safe}`
+      const { error } = await sb.storage.from('campaign-media').upload(path, file, { contentType: file.type, upsert: false, cacheControl: '31536000' })
+      if (error && /exceeded|too large|maximum/i.test(error.message)) throw new Error('File troppo grande (massimo 50 MB).')
+      if (error && /mime|type/i.test(error.message)) throw new Error('Formato non supportato.')
+      fail(error)
+      return sb.storage.from('campaign-media').getPublicUrl(path).data.publicUrl
+    },
+
     subscribe(campaignId, h) {
       const ch = sb.channel(`campaign:${campaignId}:${Math.random().toString(36).slice(2)}`)
         .on('postgres_changes', { event: '*', schema: 'public', table: 'characters', filter: `campaign_id=eq.${campaignId}` }, (p: any) => {
@@ -146,6 +197,8 @@ export function createSupabaseBackend(url: string, key: string): Backend {
         .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'campaigns', filter: `id=eq.${campaignId}` }, (p: any) => h.onCampaign?.(p.new as Campaign))
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'rolls', filter: `campaign_id=eq.${campaignId}` }, (p: any) => h.onRoll?.(p.new as Roll))
         .on('postgres_changes', { event: '*', schema: 'public', table: 'campaign_members', filter: `campaign_id=eq.${campaignId}` }, () => h.onMembers?.())
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'session_recaps', filter: `campaign_id=eq.${campaignId}` }, () => h.onRecaps?.())
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'campaign_media', filter: `campaign_id=eq.${campaignId}` }, () => h.onMedia?.())
         .subscribe()
       return () => { sb.removeChannel(ch) }
     },

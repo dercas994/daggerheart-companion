@@ -8,7 +8,7 @@ import { HomePage } from './pages/Home'
 import { CampaignPage } from './pages/Campaign'
 import { WizardPage } from './pages/Wizard'
 import { CharacterPage } from './pages/Character'
-import { UpdateBanner } from './components/UpdateBanner'
+import { SiteFreshness, UpdateBanner } from './components/UpdateBanner'
 
 interface Ctx { be: Backend; user: User; setUser: (u: User | null) => void }
 const AppCtx = createContext<Ctx | null>(null)
@@ -16,7 +16,7 @@ export const useApp = () => useContext(AppCtx)!
 
 export default function App() {
   if (!backend) return <NotConfigured />
-  return <ToastHost><UpdateBanner /><Authed be={backend} /></ToastHost>
+  return <ToastHost><UpdateBanner /><SiteFreshness /><Authed be={backend} /></ToastHost>
 }
 
 function Authed({ be }: { be: Backend }) {
@@ -34,7 +34,7 @@ function Authed({ be }: { be: Backend }) {
   return (
     <AppCtx.Provider value={{ be, user, setUser }}>
       {route.name === 'home' && <HomePage />}
-      {route.name === 'campaign' && <CampaignPage id={route.id} key={route.id} />}
+      {route.name === 'campaign' && <CampaignPage id={route.id} tab={route.tab} key={route.id} />}
       {route.name === 'wizard' && <WizardPage campaignId={route.campaignId} />}
       {route.name === 'character' && <CharacterPage id={route.id} key={route.id} />}
     </AppCtx.Provider>

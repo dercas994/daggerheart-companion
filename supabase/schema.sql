@@ -358,3 +358,100 @@ create policy "portraits update" on storage.objects for update to authenticated
 create policy "portraits delete" on storage.objects for delete to authenticated
   using (bucket_id = 'portraits'
          and public.can_edit_character((storage.foldername(name))[1], (storage.foldername(name))[2]));
+
+-- ---------------------------------------------------------------------
+--  Migrazione 4: Storia (recap delle sessioni), Galleria e Musica
+-- ---------------------------------------------------------------------
+create table if not exists public.session_recaps (
+  id          uuid primary key default gen_random_uuid(),
+  campaign_id uuid not null references public.campaigns(id) on delete cascade,
+  number      int,
+  title       text not null default '' check (char_length(title) <= 140),
+  played_on   date,
+  body        text not null default '' check (char_length(body) <= 40000),
+  author_id   uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  created_at  timestamptz not null default now(),
+  updated_at  timestamptz not null default now()
+);
+create index if not exists session_recaps_campaign on public.session_recaps(campaign_id, number);
+
+create table if not exists public.campaign_media (
+  id          uuid primary key default gen_random_uuid(),
+  campaign_id uuid not null references public.campaigns(id) on delete cascade,
+  kind        text not null check (kind in ('image','audio')),
+  title       text not null default '' check (char_length(title) <= 200),
+  album       text not null default '' check (char_length(album) <= 80),
+  url         text,
+  drive_id    text check (drive_id ~ '^[A-Za-z0-9_-]{10,80}$'),
+  sort        int not null default 0,
+  created_by  uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  created_at  timestamptz not null default now(),
+  check (url is not null or drive_id is not null)
+);
+create index if not exists campaign_media_campaign on public.campaign_media(campaign_id, kind, album, sort);
+
+alter table public.session_recaps enable row level security;
+alter table public.campaign_media enable row level security;
+grant select, insert, update, delete on public.session_recaps to authenticated;
+grant select, insert, update, delete on public.campaign_media to authenticated;
+
+drop policy if exists "recaps read"   on public.session_recaps;
+drop policy if exists "recaps insert" on public.session_recaps;
+drop policy if exists "recaps update" on public.session_recaps;
+drop policy if exists "recaps delete" on public.session_recaps;
+create policy "recaps read"   on public.session_recaps for select to authenticated using (is_member(campaign_id));
+create policy "recaps insert" on public.session_recaps for insert to authenticated
+  with check (author_id = auth.uid() and is_member(campaign_id));
+create policy "recaps update" on public.session_recaps for update to authenticated
+  using (author_id = auth.uid() or is_gm(campaign_id)) with check (is_member(campaign_id));
+create policy "recaps delete" on public.session_recaps for delete to authenticated
+  using (author_id = auth.uid() or is_gm(campaign_id));
+
+drop policy if exists "media read"   on public.campaign_media;
+drop policy if exists "media insert" on public.campaign_media;
+drop policy if exists "media update" on public.campaign_media;
+drop policy if exists "media delete" on public.campaign_media;
+create policy "media read"   on public.campaign_media for select to authenticated using (is_member(campaign_id));
+create policy "media insert" on public.campaign_media for insert to authenticated
+  with check (created_by = auth.uid() and is_member(campaign_id));
+create policy "media update" on public.campaign_media for update to authenticated
+  using (created_by = auth.uid() or is_gm(campaign_id)) with check (is_member(campaign_id));
+create policy "media delete" on public.campaign_media for delete to authenticated
+  using (created_by = auth.uid() or is_gm(campaign_id));
+
+alter table public.session_recaps replica identity full;
+alter table public.campaign_media replica identity full;
+do $$
+declare t text;
+begin
+  foreach t in array array['session_recaps','campaign_media'] loop
+    if not exists (select 1 from pg_publication_tables
+                   where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = t) then
+      execute format('alter publication supabase_realtime add table public.%I', t);
+    end if;
+  end loop;
+end $$;
+
+-- File caricati: <campaign_id>/<timestamp>-<nome>  (immagini fino a 10 MB, audio fino a 50 MB per il limite del piano free)
+create or replace function public.is_member_text(p_campaign text)
+returns boolean language sql stable security definer set search_path = public as $$
+  select exists (select 1 from campaign_members
+                 where campaign_id::text = p_campaign and user_id = auth.uid());
+$$;
+grant execute on function public.is_member_text(text) to authenticated;
+
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('campaign-media', 'campaign-media', true, 52428800,
+        array['image/webp','image/jpeg','image/png','image/gif','audio/mpeg','audio/mp3','audio/ogg','audio/wav','audio/x-wav','audio/mp4','audio/aac','audio/x-m4a','audio/webm','audio/flac'])
+on conflict (id) do update
+  set public = true, file_size_limit = excluded.file_size_limit, allowed_mime_types = excluded.allowed_mime_types;
+
+drop policy if exists "media files read"   on storage.objects;
+drop policy if exists "media files insert" on storage.objects;
+drop policy if exists "media files delete" on storage.objects;
+create policy "media files read" on storage.objects for select using (bucket_id = 'campaign-media');
+create policy "media files insert" on storage.objects for insert to authenticated
+  with check (bucket_id = 'campaign-media' and public.is_member_text((storage.foldername(name))[1]));
+create policy "media files delete" on storage.objects for delete to authenticated
+  using (bucket_id = 'campaign-media' and (owner = auth.uid()
+         or exists (select 1 from public.campaigns c where c.id::text = (storage.foldername(name))[1] and c.gm_id = auth.uid())));

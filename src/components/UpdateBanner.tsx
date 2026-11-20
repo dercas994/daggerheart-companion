@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { APK_URL } from './AppDownload'
+import { cleanUrl, newerVersionAvailable, reloadFresh } from '../lib/freshness'
 
 // L'APK carica il sito online, quindi le novità dell'app arrivano da sole.
 // Va riscaricato solo quando cambia la parte Android (icona, plugin): in quel caso
@@ -58,6 +59,44 @@ export function UpdateBanner() {
       <div className="update-actions">
         <button className="btn btn-ghost small" onClick={later}>Più tardi</button>
         <button className="btn btn-primary small" onClick={update}>Aggiorna</button>
+      </div>
+    </div>
+  )
+}
+
+/**
+ * Nuova versione del sito pubblicata: all'avvio ricarico subito (una volta sola),
+ * a sessione in corso mostro un avviso per non interrompere un tiro o una modifica.
+ */
+export function SiteFreshness() {
+  const [stale, setStale] = useState(false)
+  useEffect(() => {
+    cleanUrl()
+    let alive = true
+    const started = Date.now()
+    const check = async () => {
+      const newer = await newerVersionAvailable()
+      if (!newer || !alive) return
+      let tried = false
+      try { tried = sessionStorage.getItem('dh.freshReload') === newer } catch { /* niente */ }
+      if (Date.now() - started < 8000 && !tried) {
+        try { sessionStorage.setItem('dh.freshReload', newer) } catch { /* niente */ }
+        reloadFresh()
+      } else setStale(true)
+    }
+    check()
+    const onVis = () => { if (document.visibilityState === 'visible') check() }
+    document.addEventListener('visibilitychange', onVis)
+    const t = setInterval(check, 10 * 60 * 1000)
+    return () => { alive = false; document.removeEventListener('visibilitychange', onVis); clearInterval(t) }
+  }, [])
+  if (!stale) return null
+  return (
+    <div className="update-banner" role="status">
+      <p><b>È uscita una nuova versione del sito.</b> Ricarica per vedere le novità.</p>
+      <div className="update-actions">
+        <button className="btn btn-ghost small" onClick={() => setStale(false)}>Più tardi</button>
+        <button className="btn btn-primary small" onClick={() => { try { sessionStorage.removeItem('dh.freshReload') } catch { /* niente */ } reloadFresh() }}>Ricarica</button>
       </div>
     </div>
   )

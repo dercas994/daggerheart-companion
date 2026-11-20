@@ -8,8 +8,15 @@ import { FearTrack, ownerName, PartyCard, RollLog } from '../components/Party'
 import { DiceOverlay, outcomeText } from '../components/Dice'
 import { Avatar } from '../components/Portrait'
 import type { Roll } from '../lib/types'
+import type { CampaignTab } from '../lib/router'
+import { useLiveList } from '../lib/liveList'
+import { Chronicle } from '../components/Chronicle'
+import { Gallery } from '../components/Gallery'
+import { MiniPlayer, Music, usePlayer } from '../components/Music'
 
-export function CampaignPage({ id }: { id: string }) {
+const TAB_LABEL: Record<CampaignTab, string> = { tavolo: 'Tavolo', storia: 'Storia', galleria: 'Galleria', musica: 'Musica' }
+
+export function CampaignPage({ id, tab }: { id: string; tab: CampaignTab }) {
   const { be, user } = useApp()
   const toast = useToast()
   const [watching, setWatching] = useState<Roll | null>(null)
@@ -20,6 +27,8 @@ export function CampaignPage({ id }: { id: string }) {
   const { campaign, characters, members, rolls } = live
   const isGm = campaign?.gm_id === user.id
   const [settings, setSettings] = useState(false)
+  const media = useLiveList(be, id, cid => be.listMedia(cid), 'onMedia')
+  const player = usePlayer(media.items)
 
   if (live.loading) return <div className="center-screen"><Spinner /></div>
   if (!campaign) return <div className="center-screen"><ErrorLine error={live.error ?? 'Campagna non trovata.'} /><a href="#/">Torna alla home</a></div>
@@ -30,8 +39,17 @@ export function CampaignPage({ id }: { id: string }) {
   return (
     <>
       <TopBar title={campaign.name} back="#/" right={isGm && <button className="btn btn-ghost small" onClick={() => setSettings(true)}>Gestisci</button>} />
-      <main className={`page ${isGm ? 'gm-page' : ''}`}>
-        {isGm ? (
+      <nav className="tabs campaign-tabs" role="tablist">
+        {(Object.keys(TAB_LABEL) as CampaignTab[]).map(t => (
+          <button key={t} role="tab" aria-selected={tab === t} className={tab === t ? 'sel' : ''}
+            onClick={() => go(t === 'tavolo' ? `/c/${id}` : `/c/${id}/${t}`)}>{TAB_LABEL[t]}</button>
+        ))}
+      </nav>
+      <main className={`page tab-page ${isGm && tab === 'tavolo' ? 'gm-page' : ''} ${player.current ? 'with-player' : ''}`}>
+        {tab === 'storia' && <Chronicle campaignId={id} isGm={isGm} members={members} />}
+        {tab === 'galleria' && <Gallery campaignId={id} media={media.items} reload={media.reload} isGm={isGm} />}
+        {tab === 'musica' && <Music campaignId={id} media={media.items} reload={media.reload} isGm={isGm} p={player} />}
+        {tab !== 'tavolo' ? null : isGm ? (
           <div className="gm-grid">
             <section className="panel fear-panel">
               <FearTrack big value={campaign.fear} onChange={n => live.patchCampaign({ fear: n }).catch(e => toast({ text: e.message, tone: 'error' }))} />
@@ -87,6 +105,7 @@ export function CampaignPage({ id }: { id: string }) {
         )}
       </main>
 
+      {tab !== 'musica' && <MiniPlayer p={player} onOpen={() => go(`/c/${id}/musica`)} />}
       {watching && <DiceOverlay roll={watching} ownRoll={false} onClose={() => setWatching(null)} />}
       {isGm && <CampaignSettings open={settings} onClose={() => setSettings(false)} campaignId={id}
         name={campaign.name} description={campaign.description} members={members.filter(m => m.role === 'player').map(m => m.display_name)} />}

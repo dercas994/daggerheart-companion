@@ -126,12 +126,43 @@ export interface RollRequest {
   manual?: { hope: number; fear: number; adv?: number }
 }
 
+export interface Recap {
+  id: string
+  campaign_id: string
+  number: number | null
+  title: string
+  played_on: string | null
+  body: string
+  author_id: string
+  created_at: string
+  updated_at: string
+}
+
+export type MediaKind = 'image' | 'audio'
+export interface Media {
+  id: string
+  campaign_id: string
+  kind: MediaKind
+  title: string
+  album: string
+  /** file caricato su Supabase Storage */
+  url: string | null
+  /** file su Google Drive (condiviso con "chiunque abbia il link") */
+  drive_id: string | null
+  sort: number
+  created_by: string
+  created_at: string
+}
+export type NewMedia = Pick<Media, 'kind' | 'title' | 'album'> & Partial<Pick<Media, 'url' | 'drive_id' | 'sort'>>
+
 export interface RealtimeHandlers {
   onCharacter?: (c: Character) => void
   onCharacterDelete?: (id: string) => void
   onCampaign?: (c: Campaign) => void
   onRoll?: (r: Roll) => void
   onMembers?: () => void
+  onRecaps?: () => void
+  onMedia?: () => void
 }
 
 export interface Backend {
@@ -160,5 +191,15 @@ export interface Backend {
   deletePortrait(url: string): Promise<void>
   roll(campaignId: string, characterId: string | null, req: RollRequest): Promise<Roll>
   listRolls(campaignId: string, limit?: number): Promise<Roll[]>
+  listRecaps(campaignId: string): Promise<Recap[]>
+  saveRecap(campaignId: string, r: Partial<Pick<Recap, 'id' | 'number' | 'title' | 'played_on' | 'body'>>): Promise<Recap>
+  deleteRecap(id: string): Promise<void>
+
+  listMedia(campaignId: string): Promise<Media[]>
+  addMedia(campaignId: string, items: NewMedia[]): Promise<Media[]>
+  updateMedia(id: string, patch: Partial<Pick<Media, 'title' | 'album' | 'sort'>>): Promise<void>
+  deleteMedia(m: Media): Promise<void>
+  uploadMedia(campaignId: string, file: Blob, name: string): Promise<string>
+
   subscribe(campaignId: string, h: RealtimeHandlers): () => void
 }
