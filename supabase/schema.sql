@@ -69,6 +69,10 @@ create table if not exists public.rolls (
   created_at   timestamptz not null default now()
 );
 alter table public.rolls add column if not exists manual boolean not null default false;
+-- effetti realmente applicati dal tiro (servono per annullarlo)
+alter table public.rolls add column if not exists hope_gain int;
+alter table public.rolls add column if not exists stress_cleared int;
+alter table public.rolls add column if not exists fear_gain int;
 create index if not exists rolls_campaign_idx on public.rolls(campaign_id, created_at desc);
 
 -- ---------------------------------------------------------------------
@@ -184,6 +188,9 @@ declare
   a int := 0;
   res text;
   who text;
+  fb int;
+  nh int;
+  ns int;
 begin
   if not is_member(p_campaign) then raise exception 'Non fai parte di questa campagna'; end if;
 
@@ -227,15 +234,20 @@ begin
   returning * into r;
 
   if res = 'fear' then
-    update campaigns set fear = least(fear + 1, 12) where id = p_campaign;
+    select fear into fb from campaigns where id = p_campaign for update;
+    update campaigns set fear = least(fb + 1, 12) where id = p_campaign;
+    update rolls set fear_gain = least(fb + 1, 12) - fb where id = r.id;
   elsif p_character is not null then
     update characters
        set hope = least(hope + 1, coalesce((data->>'hope_max')::int, 6)),
            stress_marked = case when res = 'crit' then greatest(stress_marked - 1, 0)
                                 else stress_marked end
-     where id = p_character;
+     where id = p_character
+     returning hope, stress_marked into nh, ns;
+    update rolls set hope_gain = nh - ch.hope, stress_cleared = ch.stress_marked - ns where id = r.id;
   end if;
 
+  select * into r from rolls where id = r.id;
   return r;
 end $$;
 
@@ -455,3 +467,38 @@ create policy "media files insert" on storage.objects for insert to authenticate
 create policy "media files delete" on storage.objects for delete to authenticated
   using (bucket_id = 'campaign-media' and (owner = auth.uid()
          or exists (select 1 from public.campaigns c where c.id::text = (storage.foldername(name))[1] and c.gm_id = auth.uid())));
+
+-- ---------------------------------------------------------------------
+--  Migrazione 5: il master può annullare un tiro della sessione,
+--  togliendo la Speranza/Paura (e ridando lo Stress) assegnate dal tiro.
+-- ---------------------------------------------------------------------
+create or replace function public.undo_roll(p_roll uuid, p_revert boolean default true)
+returns void language plpgsql security definer set search_path = public as $$
+declare
+  r rolls;
+begin
+  select * into r from rolls where id = p_roll;
+  if not found then return; end if;
+  if not is_gm(r.campaign_id) then raise exception 'Solo il master può annullare i tiri'; end if;
+  if p_revert then
+    if r.outcome = 'fear' then
+      update campaigns set fear = greatest(fear - coalesce(r.fear_gain, 1), 0) where id = r.campaign_id;
+    elsif r.character_id is not null then
+      -- tiri vecchi (prima di questa versione): +1 Speranza nota, Stress tolto sconosciuto
+      update characters
+         set hope = greatest(hope - coalesce(r.hope_gain, 1), 0),
+             stress_marked = least(stress_marked + coalesce(r.stress_cleared, 0), stress_max)
+       where id = r.character_id;
+    end if;
+  end if;
+  delete from rolls where id = p_roll;
+end $$;
+grant execute on function public.undo_roll(uuid, boolean) to authenticated;
+
+-- Migrazione 6: la Edge Function drive-audio chiede se un file di Drive è un brano registrato
+create or replace function public.is_drive_audio(p_id text)
+returns boolean language sql stable security definer set search_path = public as $$
+  select exists (select 1 from campaign_media where kind = 'audio' and drive_id = p_id);
+$$;
+revoke all on function public.is_drive_audio(text) from public;
+grant execute on function public.is_drive_audio(text) to anon, authenticated;

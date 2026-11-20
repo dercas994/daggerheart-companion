@@ -102,7 +102,7 @@ export function Music({ campaignId, media, reload, isGm, p }: { campaignId: stri
           {p.current.album && <p className="np-album">{p.current.album}</p>}
           {p.failed ? (
             <div className="np-fallback">
-              <p className="hint">Questo file di Drive non si può riprodurre direttamente (succede con i file grandi o non condivisi pubblicamente). Usa il lettore di Drive qui sotto.</p>
+              <p className="hint">Non riesco a riprodurre questo file di Drive: controlla che sia condiviso con «Chiunque abbia il link». Intanto puoi usare il lettore di Drive qui sotto.</p>
               {p.current.drive_id && <iframe title={p.current.title} src={drivePreview(p.current)} allow="autoplay" />}
               <a href={drivePage(p.current)} target="_blank" rel="noreferrer">Apri su Google Drive</a>
             </div>

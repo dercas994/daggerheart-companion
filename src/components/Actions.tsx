@@ -5,13 +5,17 @@ import { Sheet, useToast } from './ui'
 
 export function DamageSheet({ open, onClose, c, patch }: { open: boolean; onClose: () => void; c: Character; patch: (p: Partial<Character>) => void }) {
   const [dmg, setDmg] = useState('')
-  const [useArmor, setUseArmor] = useState(false)
-  useEffect(() => { if (open) { setDmg(''); setUseArmor(false) } }, [open])
+  const [armorUse, setArmorUse] = useState(0)
+  useEffect(() => { if (open) { setDmg(''); setArmorUse(0) } }, [open])
   const [maj, sev] = thresholds(c.data, c.level)
   const n = parseInt(dmg, 10) || 0
   const base = n <= 0 ? 0 : n >= sev ? 3 : n >= maj ? 2 : 1
   const armorLeft = c.armor_max - c.armor_marked
-  const marks = Math.max(0, base - (useArmor && armorLeft > 0 ? 1 : 0))
+  // Valoroso (Guardiano), "Volontà di Ferro": contro i danni fisici si può marcare uno slot Armatura in più
+  const ironWill = c.data.subclass_id === 'stalwart' || c.data.multiclass?.subclass_id === 'stalwart'
+  const maxSlots = Math.min(armorLeft, ironWill ? 2 : 1)
+  const used = Math.min(armorUse, maxSlots)
+  const marks = Math.max(0, base - used)
   const names = ['nessun danno', 'Minore', 'Maggiore', 'Grave']
 
   return (
@@ -20,14 +24,27 @@ export function DamageSheet({ open, onClose, c, patch }: { open: boolean; onClos
         <input type="number" inputMode="numeric" min={0} value={dmg} onChange={e => setDmg(e.target.value)} autoFocus className="big-input" />
       </label>
       <p className="hint">Soglie: Maggiore da {maj}, Grave da {sev}.</p>
-      {armorLeft > 0 && (
-        <label className="toggle"><input type="checkbox" checked={useArmor} onChange={e => setUseArmor(e.target.checked)} /> Marca uno slot Armatura per ridurre di una soglia ({armorLeft} disponibili)</label>
+      {maxSlots === 1 && (
+        <label className="toggle"><input type="checkbox" checked={used === 1} onChange={e => setArmorUse(e.target.checked ? 1 : 0)} /> Marca uno slot Armatura per ridurre di una soglia ({armorLeft} disponibili)</label>
+      )}
+      {maxSlots === 2 && (
+        <div className="field">
+          <span className="hint">Slot Armatura da marcare ({armorLeft} disponibili)</span>
+          <div className="seg tight" role="radiogroup" aria-label="Slot Armatura da marcare">
+            {[0, 1, 2].map(k => (
+              <button key={k} role="radio" aria-checked={used === k} className={used === k ? 'sel' : ''} onClick={() => setArmorUse(k)}>
+                {k === 0 ? 'Nessuno' : k === 1 ? '1 slot, una soglia' : '2 slot, due soglie'}
+              </button>
+            ))}
+          </div>
+          <p className="hint">Il secondo slot è Volontà di Ferro del Valoroso: vale solo contro i danni fisici.</p>
+        </div>
       )}
       <p className="damage-preview">
-        {n > 0 ? <>Danno {names[base]}: segni <b>{marks}</b> PF{useArmor && armorLeft > 0 ? ' e 1 Armatura' : ''}</> : 'Inserisci il danno'}
+        {n > 0 ? <>Danno {names[base]}: segni <b>{marks}</b> PF{used > 0 ? ` e ${used} Armatura` : ''}</> : 'Inserisci il danno'}
       </p>
       <button className="btn btn-primary" disabled={n <= 0} onClick={() => {
-        patch({ hp_marked: Math.min(c.hp_max, c.hp_marked + marks), armor_marked: c.armor_marked + (useArmor && armorLeft > 0 ? 1 : 0) })
+        patch({ hp_marked: Math.min(c.hp_max, c.hp_marked + marks), armor_marked: c.armor_marked + used })
         onClose()
       }}>Applica</button>
     </Sheet>

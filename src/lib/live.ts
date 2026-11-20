@@ -39,6 +39,7 @@ export function useCampaignLive(be: Backend, campaignId: string | undefined, use
         setRolls(xs => (xs.some(x => x.id === r.id) ? xs : [r, ...xs].slice(0, 50)))
         if (r.user_id !== uid.current) foreign.current?.(r)
       },
+      onRollDelete: id => setRolls(xs => xs.filter(x => x.id !== id)),
       onMembers: reloadMembers,
     })
     // al ritorno in primo piano (telefono in tasca) ricarico tutto
@@ -71,7 +72,8 @@ export function useCampaignLive(be: Backend, campaignId: string | undefined, use
     try { await be.updateCampaign(campaignId, patch) } catch (e) { setCampaign(before); throw e }
   }, [be, campaignId])
 
+  const removeRoll = (id: string) => setRolls(xs => xs.filter(x => x.id !== id))
   const addRoll = (r: Roll) => setRolls(xs => (xs.some(x => x.id === r.id) ? xs : [r, ...xs].slice(0, 50)))
 
-  return { campaign, characters, members, rolls, error, loading, patchCharacter, patchCampaign, addRoll, setCharacters, setCampaign }
+  return { campaign, characters, members, rolls, error, loading, patchCharacter, patchCampaign, addRoll, removeRoll, setCharacters, setCampaign }
 }

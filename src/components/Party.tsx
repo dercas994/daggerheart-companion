@@ -1,7 +1,8 @@
 import type { Character, Member, Roll } from '../lib/types'
 import { className, getSubclass } from '../data'
 import { evasion, hopeMax, MAX_FEAR, thresholds } from '../lib/rules'
-import { Pips } from './ui'
+import { useState } from 'react'
+import { ErrorLine, Pips, Sheet, useAsync } from './ui'
 import { Avatar } from './Portrait'
 
 export function PartyCard({ c, owner, editable, onPatch, isMe, compact }: {
@@ -61,7 +62,7 @@ export function FearTrack({ value, onChange, big }: { value: number; onChange?: 
 }
 
 const OUT = { hope: 'Speranza', fear: 'Paura', crit: 'Critico' }
-export function RollLog({ rolls, limit = 12 }: { rolls: Roll[]; limit?: number }) {
+export function RollLog({ rolls, limit = 12, onUndo }: { rolls: Roll[]; limit?: number; onUndo?: (r: Roll) => void }) {
   if (!rolls.length) return <p className="empty">Nessun tiro ancora. I tiri di tutti compaiono qui in tempo reale.</p>
   return (
     <ol className="roll-log">
@@ -74,6 +75,7 @@ export function RollLog({ rolls, limit = 12 }: { rolls: Roll[]; limit?: number }
           </span>
           <span className="rl-out">{OUT[r.outcome]}</span>
           <time>{new Date(r.created_at).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}</time>
+          {onUndo && <button className="rl-undo" onClick={() => onUndo(r)} aria-label={`Annulla il tiro di ${r.roller_name}`}>Annulla</button>}
         </li>
       ))}
     </ol>
@@ -81,3 +83,31 @@ export function RollLog({ rolls, limit = 12 }: { rolls: Roll[]; limit?: number }
 }
 
 export const ownerName = (members: Member[], id: string) => members.find(m => m.user_id === id)?.display_name
+
+/** Master: annulla un tiro, togliendo Speranza o Paura che il tiro aveva dato. */
+export function UndoRollSheet({ roll, onClose, onConfirm }: { roll: Roll | null; onClose: () => void; onConfirm: (revert: boolean) => Promise<void> }) {
+  const [revert, setRevert] = useState(true)
+  const job = useAsync()
+  if (!roll) return null
+  const r = roll
+  let effect: string
+  if (r.outcome === 'fear') effect = `toglie ${r.fear_gain ?? 1} Paura alla tua riserva`
+  else if (!r.character_id) effect = 'non aveva dato Speranza a nessun personaggio'
+  else {
+    const hope = r.hope_gain ?? 1
+    effect = `toglie ${hope} Speranza a ${r.roller_name}`
+    if (r.outcome === 'crit') effect += r.stress_cleared == null ? ' (lo Stress tolto dal critico va rimesso a mano)' : r.stress_cleared > 0 ? ` e gli rimette ${r.stress_cleared} Stress` : ''
+  }
+  return (
+    <Sheet open onClose={onClose} title="Annulla tiro">
+      <p><b>{r.roller_name}</b>{r.label ? ` ${r.label}` : ''}: {r.total} {OUT[r.outcome]}.</p>
+      <label className="toggle"><input type="checkbox" checked={revert} onChange={e => setRevert(e.target.checked)} /> Annulla anche l'effetto: {effect}</label>
+      <p className="hint">Il tiro sparisce dalla cronologia di tutti.</p>
+      <ErrorLine error={job.error} />
+      <div className="row-gap end">
+        <button className="btn btn-ghost" onClick={onClose}>Indietro</button>
+        <button className="btn btn-danger" disabled={job.busy} onClick={async () => { if (await job.run(() => onConfirm(revert).then(() => true))) onClose() }}>Annulla tiro</button>
+      </div>
+    </Sheet>
+  )
+}

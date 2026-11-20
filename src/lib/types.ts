@@ -117,6 +117,9 @@ export interface Roll {
   outcome: Outcome
   /** true se il giocatore ha inserito il risultato di dadi fisici */
   manual?: boolean
+  hope_gain?: number | null
+  stress_cleared?: number | null
+  fear_gain?: number | null
   created_at: string
 }
 
@@ -160,6 +163,7 @@ export interface RealtimeHandlers {
   onCharacterDelete?: (id: string) => void
   onCampaign?: (c: Campaign) => void
   onRoll?: (r: Roll) => void
+  onRollDelete?: (id: string) => void
   onMembers?: () => void
   onRecaps?: () => void
   onMedia?: () => void
@@ -191,6 +195,8 @@ export interface Backend {
   deletePortrait(url: string): Promise<void>
   roll(campaignId: string, characterId: string | null, req: RollRequest): Promise<Roll>
   listRolls(campaignId: string, limit?: number): Promise<Roll[]>
+  /** solo master: elimina il tiro e, se revert, toglie Speranza/Paura che aveva dato */
+  undoRoll(rollId: string, revert: boolean): Promise<void>
   listRecaps(campaignId: string): Promise<Recap[]>
   saveRecap(campaignId: string, r: Partial<Pick<Recap, 'id' | 'number' | 'title' | 'played_on' | 'body'>>): Promise<Recap>
   deleteRecap(id: string): Promise<void>

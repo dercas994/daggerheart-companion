@@ -4,7 +4,7 @@ import { useCampaignLive } from '../lib/live'
 import { go } from '../lib/router'
 import { ErrorLine, Sheet, Spinner, useAsync, useToast } from '../components/ui'
 import { TopBar } from '../components/TopBar'
-import { FearTrack, ownerName, PartyCard, RollLog } from '../components/Party'
+import { FearTrack, ownerName, PartyCard, RollLog, UndoRollSheet } from '../components/Party'
 import { DiceOverlay, outcomeText } from '../components/Dice'
 import { Avatar } from '../components/Portrait'
 import type { Roll } from '../lib/types'
@@ -27,6 +27,7 @@ export function CampaignPage({ id, tab }: { id: string; tab: CampaignTab }) {
   const { campaign, characters, members, rolls } = live
   const isGm = campaign?.gm_id === user.id
   const [settings, setSettings] = useState(false)
+  const [undoing, setUndoing] = useState<Roll | null>(null)
   const media = useLiveList(be, id, cid => be.listMedia(cid), 'onMedia')
   const player = usePlayer(media.items)
 
@@ -71,7 +72,7 @@ export function CampaignPage({ id, tab }: { id: string; tab: CampaignTab }) {
             </section>
             <section className="gm-log">
               <h2>Tiri della sessione</h2>
-              <RollLog rolls={rolls} limit={20} />
+              <RollLog rolls={rolls} limit={20} onUndo={setUndoing} />
             </section>
           </div>
         ) : (
@@ -106,6 +107,11 @@ export function CampaignPage({ id, tab }: { id: string; tab: CampaignTab }) {
       </main>
 
       {tab !== 'musica' && <MiniPlayer p={player} onOpen={() => go(`/c/${id}/musica`)} />}
+      {isGm && <UndoRollSheet key={undoing?.id} roll={undoing} onClose={() => setUndoing(null)} onConfirm={async revert => {
+        await be.undoRoll(undoing!.id, revert)
+        live.removeRoll(undoing!.id)
+        toast({ text: 'Tiro annullato' })
+      }} />}
       {watching && <DiceOverlay roll={watching} ownRoll={false} onClose={() => setWatching(null)} />}
       {isGm && <CampaignSettings open={settings} onClose={() => setSettings(false)} campaignId={id}
         name={campaign.name} description={campaign.description} members={members.filter(m => m.role === 'player').map(m => m.display_name)} />}

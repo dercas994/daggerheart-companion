@@ -677,3 +677,19 @@ button.dcard:hover { transform: translateY(-2px); }
 .mp-bar { display: block; height: 3px; background: var(--line); border-radius: 2px; margin-top: 0.3rem; overflow: hidden; }
 .mp-bar span { display: block; height: 100%; background: var(--fear-glow); }
 @media (prefers-reduced-motion: reduce) { .eq i, .tile img, .lb-img, .mini-player { animation: none; transition: none; } }
+
+.roll-log li:has(.rl-undo) { grid-template-columns: 2.6rem 1fr auto auto; }
+.rl-undo { grid-row: 1 / span 2; grid-column: 4; background: none; border: 1px solid var(--line); color: var(--muted); border-radius: 999px; padding: 0.25rem 0.6rem; font-size: 0.78rem; cursor: pointer; }
+.rl-undo:hover { color: var(--danger); border-color: var(--danger); }
+
+.equip-preview { margin: -0.3rem 0 0.9rem; padding: 0.6rem 0.75rem; border-radius: var(--r-s); background: var(--night); border: 1px solid var(--line); }
+.ep-stats { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; margin: 0; }
+.ep-stats span { display: flex; flex-direction: column; font-weight: 700; }
+.ep-stats small { font-weight: 400; color: var(--muted); font-size: 0.75rem; }
+.ep-feat { margin: 0.45rem 0 0; font-family: var(--f-serif); color: #E8DCC3; }
+.ep-result { margin: 0.45rem 0 0; color: var(--hope-glow); font-size: 0.9rem; }
+.app-download.ios { display: block; }
+.app-download.ios summary { display: flex; align-items: center; gap: 0.7rem; cursor: pointer; list-style: none; }
+.app-download.ios summary::-webkit-details-marker { display: none; }
+.app-download.ios svg { color: var(--parchment); }
+.app-download.ios ol { margin: 0.6rem 0 0.2rem; padding-left: 1.3rem; color: var(--muted); font-size: 0.9rem; }

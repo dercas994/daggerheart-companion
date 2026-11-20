@@ -2,7 +2,7 @@ import { useState, type ReactNode } from 'react'
 import type { Character, SheetData } from '../lib/types'
 import { TRAITS } from '../lib/types'
 import { ARMOR, IT, WEAPONS } from '../data'
-import { armorScore, HB, tierOf } from '../lib/rules'
+import { armorScore, evasion, getArmor, getWeapon, HB, thresholds, tierOf, weaponDamage } from '../lib/rules'
 import { ErrorLine, Sheet, Stepper, useAsync } from './ui'
 import { PortraitPicker } from './Portrait'
 import { useApp } from '../App'
@@ -89,6 +89,7 @@ export function EditSheet({ open, onClose, c, patch, onDelete }: {
           {weapons('primary').map(w => <option key={w.id} value={w.id}>R{w.tier} {w.name}, {w.damage}</option>)}
         </select>
       </label>
+      <WeaponPreview id={d.primary_weapon_id} d={d} />
       <label className="field"><span>Arma secondaria</span>
         <select value={d.secondary_weapon_id} onChange={e => set({ secondary_weapon_id: e.target.value })}>
           <option value="">Nessuna</option>
@@ -96,6 +97,7 @@ export function EditSheet({ open, onClose, c, patch, onDelete }: {
           {weapons('secondary').map(w => <option key={w.id} value={w.id}>R{w.tier} {w.name}, {w.damage}</option>)}
         </select>
       </label>
+      <WeaponPreview id={d.secondary_weapon_id} d={d} />
       <label className="field"><span>Armatura</span>
         <select value={d.armor_id} onChange={e => set({ armor_id: e.target.value })}>
           <option value="">Nessuna</option>
@@ -103,6 +105,8 @@ export function EditSheet({ open, onClose, c, patch, onDelete }: {
           {ARMOR.filter(a => a.tier <= tier).map(a => <option key={a.id} value={a.id}>R{a.tier} {a.name}, {a.thresholds.join('/')}, {a.score}</option>)}
         </select>
       </label>
+      <ArmorPreview d={d} level={level} />
+      <p className="hint">Le schede qui sopra mostrano cosa fa l’oggetto scelto: puoi provarne diversi, la scheda cambia solo quando premi Salva.</p>
 
       <p className="field-title">Esperienze</p>
       {d.experiences.map((e, i) => (
@@ -125,4 +129,36 @@ export function EditSheet({ open, onClose, c, patch, onDelete }: {
 
 function Row({ label, children }: { label: string; children: ReactNode }) {
   return <div className="edit-row"><span>{label}</span>{children}</div>
+}
+
+/** Cosa fa l'arma scelta, per confrontare prima di salvare. */
+function WeaponPreview({ id, d }: { id: string; d: SheetData }) {
+  const w = getWeapon(id, d)
+  if (!w) return null
+  return (
+    <div className="equip-preview">
+      <p className="ep-stats">
+        <span><small>Tratto</small>{IT.traits[w.trait] ?? w.trait}</span>
+        <span><small>Portata</small>{IT.range[w.range] ?? w.range}</span>
+        <span><small>Danno</small>{weaponDamage(w.damage, d.proficiency)}</span>
+        <span><small>Impugnatura</small>{IT.burden[w.burden] ?? w.burden}</span>
+      </p>
+      {(w.feature_it || w.feature) && <p className="ep-feat">{w.feature_it || w.feature}</p>}
+    </div>
+  )
+}
+
+function ArmorPreview({ d, level }: { d: SheetData; level: number }) {
+  const a = getArmor(d.armor_id, d)
+  const [maj, sev] = thresholds(d, level)
+  return (
+    <div className="equip-preview">
+      {a && <p className="ep-stats">
+        <span><small>Soglie base</small>{a.thresholds[0]}/{a.thresholds[1]}</span>
+        <span><small>Punteggio</small>{a.score}</span>
+      </p>}
+      {a && (a.feature_it || a.feature) && <p className="ep-feat">{a.feature_it || a.feature}</p>}
+      <p className="ep-result">Con questo equipaggiamento: Evasione {evasion(d)}, Armatura {armorScore(d)}, soglie {maj} e {sev}.</p>
+    </div>
+  )
 }

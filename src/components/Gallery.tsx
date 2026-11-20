@@ -197,7 +197,7 @@ export function AddMedia({ kind, campaignId, albums, defaultAlbum, onClose, onAd
       <datalist id={listId}>{albums.filter(Boolean).map(a => <option key={a} value={a} />)}</datalist>
       {mode === 'file' ? (
         <>
-          <p className="hint">{kind === 'image' ? 'Puoi sceglierne più di una: vengono ridotte e compresse prima del caricamento.' : 'MP3, OGG, M4A o WAV, fino a 50 MB ciascuno. Il titolo viene preso dal nome del file.'}</p>
+          <p className="hint">{kind === 'image' ? 'Puoi sceglierne più di una: vengono ridotte e compresse prima del caricamento.' : 'MP3, OGG, M4A o WAV, fino a 50 MB ciascuno. Per file più pesanti usa Google Drive: lì non c’è limite.'}</p>
           <label className={`btn btn-primary file-btn ${save.busy ? 'disabled' : ''}`}>
             {progress ?? (kind === 'image' ? 'Scegli le immagini' : 'Scegli i file audio')}
             <input type="file" multiple accept={kind === 'image' ? 'image/*' : 'audio/*'} disabled={save.busy} onChange={e => upload(e.target.files)} hidden />

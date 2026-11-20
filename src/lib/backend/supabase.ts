@@ -131,6 +131,10 @@ export function createSupabaseBackend(url: string, key: string): Backend {
       fail(error)
       return data as Roll
     },
+    async undoRoll(rollId, revert) {
+      const { error } = await sb.rpc('undo_roll', { p_roll: rollId, p_revert: revert })
+      fail(error)
+    },
     async listRolls(campaignId, limit = 30) {
       const { data, error } = await sb.from('rolls').select('*').eq('campaign_id', campaignId).order('created_at', { ascending: false }).limit(limit)
       fail(error)
@@ -196,6 +200,8 @@ export function createSupabaseBackend(url: string, key: string): Backend {
         })
         .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'campaigns', filter: `id=eq.${campaignId}` }, (p: any) => h.onCampaign?.(p.new as Campaign))
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'rolls', filter: `campaign_id=eq.${campaignId}` }, (p: any) => h.onRoll?.(p.new as Roll))
+        // le DELETE non si possono filtrare: arriva solo l'id, lo cerco nella lista locale
+        .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'rolls' }, (p: any) => p.old?.id && h.onRollDelete?.(p.old.id))
         .on('postgres_changes', { event: '*', schema: 'public', table: 'campaign_members', filter: `campaign_id=eq.${campaignId}` }, () => h.onMembers?.())
         .on('postgres_changes', { event: '*', schema: 'public', table: 'session_recaps', filter: `campaign_id=eq.${campaignId}` }, () => h.onRecaps?.())
         .on('postgres_changes', { event: '*', schema: 'public', table: 'campaign_media', filter: `campaign_id=eq.${campaignId}` }, () => h.onMedia?.())

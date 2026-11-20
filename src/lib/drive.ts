@@ -22,9 +22,12 @@ export function imageFallback(m: Media, width = 1600) {
   return m.drive_id ? `https://drive.google.com/thumbnail?id=${m.drive_id}&sz=w${width}` : null
 }
 
+// Drive non permette più di riprodurre i suoi file dentro altri siti: passo dalla
+// Edge Function "drive-audio" (supabase/functions/drive-audio), che li legge lato server.
+const SUPABASE_URL = (import.meta.env.VITE_SUPABASE_URL as string | undefined) ?? ''
 export function audioSrc(m: Media) {
   if (m.url) return m.url
-  return `https://drive.usercontent.google.com/download?id=${m.drive_id}&export=download`
+  return `${SUPABASE_URL}/functions/v1/drive-audio?id=${m.drive_id}`
 }
 export function drivePage(m: Media) {
   return m.drive_id ? `https://drive.google.com/file/d/${m.drive_id}/view` : m.url ?? '#'
