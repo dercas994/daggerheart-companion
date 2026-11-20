@@ -11,9 +11,11 @@ export function PartyCard({ c, owner, editable, onPatch, isMe, compact }: {
 }) {
   const sub = getSubclass(c.data.class_id, c.data.subclass_id)
   const down = c.hp_marked >= c.hp_max
+  // sotto il 25% dei Punti Ferita il bordo pulsa di rosso
+  const critical = !down && c.hp_max > 0 && (c.hp_max - c.hp_marked) / c.hp_max <= 0.25
   const [maj, sev] = thresholds(c.data, c.level)
   return (
-    <article className={`party-card ${down ? 'down' : ''} ${isMe ? 'me' : ''}`} style={{ ['--accent' as any]: c.data.accent || 'var(--hope)' }}>
+    <article className={`party-card ${down ? 'down' : ''} ${critical ? 'critical' : ''} ${isMe ? 'me' : ''}`} title={critical ? `${c.name} è gravemente ferito` : undefined} style={{ ['--accent' as any]: c.data.accent || 'var(--hope)' }}>
       <header>
         <Avatar url={c.data.portrait_url} name={c.name} accent={c.data.accent} size={46} />
         <div>

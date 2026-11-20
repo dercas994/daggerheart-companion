@@ -35,7 +35,24 @@ export function EditSheet({ open, onClose, c, patch, onDelete }: {
   }
   const set = (p: Partial<SheetData>) => setD(x => ({ ...x, ...p }))
   const tier = tierOf(level)
-  const weapons = (cat: 'primary' | 'secondary') => WEAPONS.filter(w => w.category === cat && w.tier <= tier)
+  const TIER_FROM = { 1: 1, 2: 2, 3: 5, 4: 8 } as const
+  const tierLabel = (t: number) => t <= tier ? `Rango ${t}` : `Rango ${t}, dal livello ${TIER_FROM[t as 1 | 2 | 3 | 4]}`
+  const byName = <T extends { name: string }>(a: T, b: T) => a.name.localeCompare(b.name, 'it')
+  /** Armi raggruppate per rango; quelle dei ranghi futuri si vedono ma non si scelgono. */
+  const weaponGroups = (cat: 'primary' | 'secondary') => [1, 2, 3, 4].map(t => {
+    const list = WEAPONS.filter(w => w.category === cat && w.tier === t).sort(byName)
+    if (!list.length) return null
+    return (
+      <optgroup key={t} label={tierLabel(t)} disabled={t > tier}>
+        {list.map(w => <option key={w.id} value={w.id}>{w.name}, {weaponDamage(w.damage, d.proficiency)}, {IT.range[w.range] ?? w.range}</option>)}
+      </optgroup>
+    )
+  })
+  const armorGroups = () => [1, 2, 3, 4].map(t => (
+    <optgroup key={t} label={tierLabel(t)} disabled={t > tier}>
+      {ARMOR.filter(a => a.tier === t).sort(byName).map(a => <option key={a.id} value={a.id}>{a.name}, soglie {a.thresholds.join('/')}, punteggio {a.score}</option>)}
+    </optgroup>
+  ))
   const hb = (kind: 'weapon' | 'armor', cat?: 'primary' | 'secondary') => (d.homebrew ?? [])
     .filter(h => h.kind === kind && (!cat || (h.category ?? 'primary') === cat))
     .map(h => <option key={h.id} value={HB + h.id}>★ {h.name} (homebrew)</option>)
@@ -81,28 +98,28 @@ export function EditSheet({ open, onClose, c, patch, onDelete }: {
         ))}
       </div>
 
-      <p className="field-title">Equipaggiamento (fino al rango {tier})</p>
+      <p className="field-title">Equipaggiamento <small>(rango {tier}: puoi scegliere fino a questo)</small></p>
       <label className="field"><span>Arma primaria</span>
         <select value={d.primary_weapon_id} onChange={e => set({ primary_weapon_id: e.target.value })}>
           <option value="">Nessuna</option>
-          {hb('weapon', 'primary')}
-          {weapons('primary').map(w => <option key={w.id} value={w.id}>R{w.tier} {w.name}, {w.damage}</option>)}
+          {hb('weapon', 'primary').length > 0 && <optgroup label="Homebrew">{hb('weapon', 'primary')}</optgroup>}
+          {weaponGroups('primary')}
         </select>
       </label>
       <WeaponPreview id={d.primary_weapon_id} d={d} />
       <label className="field"><span>Arma secondaria</span>
         <select value={d.secondary_weapon_id} onChange={e => set({ secondary_weapon_id: e.target.value })}>
           <option value="">Nessuna</option>
-          {hb('weapon', 'secondary')}
-          {weapons('secondary').map(w => <option key={w.id} value={w.id}>R{w.tier} {w.name}, {w.damage}</option>)}
+          {hb('weapon', 'secondary').length > 0 && <optgroup label="Homebrew">{hb('weapon', 'secondary')}</optgroup>}
+          {weaponGroups('secondary')}
         </select>
       </label>
       <WeaponPreview id={d.secondary_weapon_id} d={d} />
       <label className="field"><span>Armatura</span>
         <select value={d.armor_id} onChange={e => set({ armor_id: e.target.value })}>
           <option value="">Nessuna</option>
-          {hb('armor')}
-          {ARMOR.filter(a => a.tier <= tier).map(a => <option key={a.id} value={a.id}>R{a.tier} {a.name}, {a.thresholds.join('/')}, {a.score}</option>)}
+          {hb('armor').length > 0 && <optgroup label="Homebrew">{hb('armor')}</optgroup>}
+          {armorGroups()}
         </select>
       </label>
       <ArmorPreview d={d} level={level} />

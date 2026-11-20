@@ -11,6 +11,7 @@ import { RollSheet, type RollChoice } from '../components/RollSheet'
 import { DiceSheet, type DicePreset } from '../components/DiceSheet'
 import type { DiceRequest } from '../lib/types'
 import { GroupMoves, TagTeamChoice } from '../components/GroupMoves'
+import { FearAura } from '../components/FearAura'
 import { traitValue } from '../lib/rules'
 import { IT } from '../data'
 import { FearTrack, ownerName, PartyCard, RollLog } from '../components/Party'
@@ -187,6 +188,7 @@ export function CharacterPage({ id }: { id: string }) {
         setOverlay({ roll: r, own: true })
         be.listCharacters(r.campaign_id).then(live.setCharacters).catch(() => {})
       }} />}
+      <FearAura fear={live.campaign.fear} enabled={live.campaign.gm_id !== user.id} />
       <DiceSheet open={diceOpen} onClose={() => setDiceOpen(false)} character={c} preset={dicePreset} onRoll={doDice} />
       {overlay && <DiceOverlay roll={overlay.roll} ownRoll={overlay.own} onClose={() => setOverlay(null)} />}
       <DamageSheet open={sheet === 'damage'} onClose={() => setSheet(null)} c={c} patch={patch} />

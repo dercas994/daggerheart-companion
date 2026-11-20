@@ -803,3 +803,43 @@ button.dcard:hover { transform: translateY(-2px); }
 .out-fear .to-total, .out-fear .to-out { color: var(--fear-glow); }
 .to-dice { font-size: 0.8rem; color: var(--muted); }
 .to-use { margin-top: 0.4rem; font-size: 0.85rem; padding: 0.25rem 0.8rem; border-radius: 999px; border: 1px solid currentColor; color: var(--muted); }
+
+/* ---------- Dettagli d'atmosfera ---------- */
+/* PG quasi a terra: il bordo pulsa come un battito */
+.party-card.critical { border-color: rgba(200, 71, 62, 0.7); border-top-color: var(--blood); animation: heartbeat 1.6s ease-in-out infinite; }
+.party-card.critical .pips-hp .pip:not(.on) .ic { animation: heart-throb 1.6s ease-in-out infinite; transform-origin: center; }
+@keyframes heartbeat {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(200, 71, 62, 0); }
+  12% { box-shadow: 0 0 0 2px rgba(224, 103, 92, 0.85), 0 0 22px rgba(200, 71, 62, 0.55); }
+  24% { box-shadow: 0 0 0 1px rgba(200, 71, 62, 0.25), 0 0 8px rgba(200, 71, 62, 0.2); }
+  36% { box-shadow: 0 0 0 2px rgba(224, 103, 92, 0.7), 0 0 18px rgba(200, 71, 62, 0.45); }
+  60% { box-shadow: 0 0 0 0 rgba(200, 71, 62, 0); }
+}
+@keyframes heart-throb { 0%, 60%, 100% { transform: scale(1); } 12%, 36% { transform: scale(1.18); } }
+.party-card.down { filter: saturate(0.6); }
+
+/* La Paura del master: fumo viola dai bordi */
+.fear-aura { position: fixed; inset: 0; z-index: 85; pointer-events: none; overflow: hidden; }
+.fa-vignette { position: absolute; inset: 0; animation: fa-vignette 4s ease-out forwards;
+  box-shadow: inset 0 0 90px 30px rgba(110, 50, 190, 0.75), inset 0 0 220px 60px rgba(60, 20, 110, 0.55); }
+.fa-puff { position: absolute; border-radius: 50%; filter: blur(22px); opacity: 0;
+  background: radial-gradient(circle, rgba(170, 110, 255, 0.75), rgba(110, 50, 190, 0.45) 45%, transparent 70%);
+  animation: fa-puff 3s ease-out forwards; }
+.fa-puff.side-0 { top: 0; left: var(--along); --dx: 0px; --dy: 60px; translate: -50% -55%; }
+.fa-puff.side-1 { bottom: 0; left: var(--along); --dx: 0px; --dy: -60px; translate: -50% 55%; }
+.fa-puff.side-2 { left: 0; top: var(--along); --dx: 60px; --dy: 0px; translate: -55% -50%; }
+.fa-puff.side-3 { right: 0; top: var(--along); --dx: -60px; --dy: 0px; translate: 55% -50%; }
+@keyframes fa-puff {
+  0% { opacity: 0; transform: translate(0, 0) scale(0.5); }
+  25% { opacity: 0.95; }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1.35); }
+}
+@keyframes fa-vignette { 0% { opacity: 0; } 15% { opacity: 1; } 70% { opacity: 0.8; } 100% { opacity: 0; } }
+.fa-text { position: absolute; left: 50%; top: 18%; translate: -50% 0; margin: 0; padding: 0.4rem 1rem; border-radius: 999px;
+  font-family: var(--f-display); font-size: 1.15rem; color: #E9DBFF; background: rgba(40, 16, 72, 0.7); border: 1px solid rgba(170, 110, 255, 0.5);
+  text-shadow: 0 0 12px rgba(170, 110, 255, 0.9); animation: fa-text 4s ease-out forwards; white-space: nowrap; }
+@keyframes fa-text { 0% { opacity: 0; transform: translateY(-8px); } 15%, 75% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .party-card.critical, .party-card.critical .pips-hp .pip .ic { animation: none; box-shadow: 0 0 0 2px rgba(224, 103, 92, 0.8); }
+  .fa-puff { display: none; }
+}
