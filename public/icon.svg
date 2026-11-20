@@ -1,1 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="96" fill="#16111F"/><g transform="translate(256 256)"><path d="M0-190 L46-46 L0 190 L-46-46Z" fill="#E9B949"/><path d="M0-190 L46-46 L0 190Z" fill="#9A6BE0"/><circle r="22" fill="#16111F" stroke="#F1E6D0" stroke-width="8"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><clipPath id="rr"><rect width="1024" height="1024" rx="220"/></clipPath><g clip-path="url(#rr)"><defs><radialGradient id="bg" cx=".5" cy=".42" r=".75"><stop offset="0" stop-color="#3A2B5C"/><stop offset=".55" stop-color="#211A31"/><stop offset="1" stop-color="#110C1A"/></radialGradient></defs>
+<rect width="1024" height="1024" fill="url(#bg)"/>
+<defs><filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="70"/></filter></defs><g filter="url(#soft)"><ellipse cx="400" cy="500" rx="230" ry="300" fill="#E9B949" opacity=".28"/><ellipse cx="624" cy="520" rx="230" ry="300" fill="#9A6BE0" opacity=".38"/></g><g transform="translate(512 512) scale(0.86) translate(-512 -512)">
+<defs>
+  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE7A0"/><stop offset=".55" stop-color="#E9B949"/><stop offset="1" stop-color="#9C6A16"/></linearGradient>
+  <linearGradient id="vio" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D2B4FF"/><stop offset=".5" stop-color="#8E5BD6"/><stop offset="1" stop-color="#3E1C78"/></linearGradient>
+  <linearGradient id="goldF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF1C4"/><stop offset="1" stop-color="#F0C25A"/></linearGradient>
+  <linearGradient id="vioF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B793F2"/><stop offset="1" stop-color="#6A3BB8"/></linearGradient>
+  <clipPath id="left"><polygon points="0,0 540,0 484,1024 0,1024"/></clipPath>
+  <clipPath id="right"><polygon points="540,0 1024,0 1024,1024 484,1024"/></clipPath>
+  <linearGradient id="blade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FFF6E2"/><stop offset=".5" stop-color="#F1E6D0"/><stop offset=".5" stop-color="#CFC3AE"/><stop offset="1" stop-color="#B5A88F"/></linearGradient>
+  <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="28"/></filter>
+</defs>
+<g clip-path="url(#left)">
+  <polygon points="512.0,182.0 706.0,245.0 825.8,410.0 825.8,614.0 706.0,779.0 512.0,842.0 318.0,779.0 198.2,614.0 198.2,410.0 318.0,245.0" fill="url(#gold)"/>
+  <polygon points="512.0,334.0 681.3,457.0 616.6,656.0 407.4,656.0 342.7,457.0" fill="url(#goldF)"/>
+  <g stroke="#FFF3CF" stroke-opacity=".55" stroke-width="7"><line x1="512.0" y1="334.0" x2="512.0" y2="182.0"/><line x1="681.3" y1="457.0" x2="825.8" y2="410.0"/><line x1="616.6" y1="656.0" x2="706.0" y2="779.0"/><line x1="407.4" y1="656.0" x2="318.0" y2="779.0"/><line x1="342.7" y1="457.0" x2="198.2" y2="410.0"/></g>
+</g>
+<g clip-path="url(#right)">
+  <polygon points="512.0,182.0 706.0,245.0 825.8,410.0 825.8,614.0 706.0,779.0 512.0,842.0 318.0,779.0 198.2,614.0 198.2,410.0 318.0,245.0" fill="url(#vio)"/>
+  <polygon points="512.0,334.0 681.3,457.0 616.6,656.0 407.4,656.0 342.7,457.0" fill="url(#vioF)"/>
+  <g stroke="#E6D6FF" stroke-opacity=".45" stroke-width="7"><line x1="512.0" y1="334.0" x2="512.0" y2="182.0"/><line x1="681.3" y1="457.0" x2="825.8" y2="410.0"/><line x1="616.6" y1="656.0" x2="706.0" y2="779.0"/><line x1="407.4" y1="656.0" x2="318.0" y2="779.0"/><line x1="342.7" y1="457.0" x2="198.2" y2="410.0"/></g>
+</g>
+<polygon points="512.0,182.0 706.0,245.0 825.8,410.0 825.8,614.0 706.0,779.0 512.0,842.0 318.0,779.0 198.2,614.0 198.2,410.0 318.0,245.0" fill="none" stroke="#F1E6D0" stroke-opacity=".9" stroke-width="10" stroke-linejoin="round"/>
+<polygon points="512.0,334.0 681.3,457.0 616.6,656.0 407.4,656.0 342.7,457.0" fill="none" stroke="#F1E6D0" stroke-opacity=".8" stroke-width="8" stroke-linejoin="round"/>
+<!-- pugnale che attraversa il dado -->
+<g transform="rotate(-8 512 512)">
+  <path d="M512 214 L560 530 L512 640 L464 530 Z" fill="url(#blade)" stroke="#16111F" stroke-width="8" stroke-linejoin="round"/>
+  <rect x="402" y="632" width="220" height="40" rx="20" fill="#F1E6D0" stroke="#16111F" stroke-width="8"/>
+  <rect x="490" y="668" width="44" height="100" rx="12" fill="#5B2E9E" stroke="#16111F" stroke-width="8"/>
+  <circle cx="512" cy="796" r="34" fill="#E9B949" stroke="#16111F" stroke-width="8"/>
+</g>
+</g></g></svg>

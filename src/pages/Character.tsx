@@ -56,7 +56,7 @@ export function CharacterPage({ id }: { id: string }) {
     setRollOpen(false); setRolling(true)
     try {
       if (choice.hopeSpent > 0) await live.patchCharacter(c.id, { hope: Math.max(0, c.hope - choice.hopeSpent) })
-      const r = await be.roll(campaignId, c.id, { modifier: choice.modifier, label: choice.label, advantage: choice.advantage })
+      const r = await be.roll(campaignId, c.id, { modifier: choice.modifier, label: choice.label, advantage: choice.advantage, manual: choice.manual })
       live.addRoll(r)
       setOverlay({ roll: r, own: true })
       // l'aggiornamento arriva anche via realtime; rileggo per sicurezza

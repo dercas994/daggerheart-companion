@@ -38,6 +38,10 @@ Il sito è installabile come app dal browser (PWA): su Android, Chrome, menu, *A
 
 ## 4. App Android (APK)
 
+Pubblicazione automatica: ogni push su `main` ripubblica il sito su GitHub Pages. L'APK carica il sito online (`server.url` in `capacitor.config.json`), quindi le novità arrivano nell'app senza reinstallare. L'APK viene ricostruito solo quando cambiano icona, plugin o configurazione Android, e l'app mostra l'avviso "Aggiorna" quando c'è una build più nuova di quella installata.
+
+Build manuale, se servisse:
+
 Serve Android Studio.
 
 ```bash

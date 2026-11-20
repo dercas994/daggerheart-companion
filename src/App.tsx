@@ -8,6 +8,7 @@ import { HomePage } from './pages/Home'
 import { CampaignPage } from './pages/Campaign'
 import { WizardPage } from './pages/Wizard'
 import { CharacterPage } from './pages/Character'
+import { UpdateBanner } from './components/UpdateBanner'
 
 interface Ctx { be: Backend; user: User; setUser: (u: User | null) => void }
 const AppCtx = createContext<Ctx | null>(null)
@@ -15,7 +16,7 @@ export const useApp = () => useContext(AppCtx)!
 
 export default function App() {
   if (!backend) return <NotConfigured />
-  return <ToastHost><Authed be={backend} /></ToastHost>
+  return <ToastHost><UpdateBanner /><Authed be={backend} /></ToastHost>
 }
 
 function Authed({ be }: { be: Backend }) {

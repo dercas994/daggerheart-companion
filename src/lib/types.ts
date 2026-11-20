@@ -87,10 +87,16 @@ export interface Roll {
   modifier: number
   total: number
   outcome: Outcome
+  /** true se il giocatore ha inserito il risultato di dadi fisici */
+  manual?: boolean
   created_at: string
 }
 
-export interface RollRequest { modifier: number; label: string; advantage: -1 | 0 | 1 }
+export interface RollRequest {
+  modifier: number; label: string; advantage: -1 | 0 | 1
+  /** dadi fisici: valori letti dal tavolo */
+  manual?: { hope: number; fear: number; adv?: number }
+}
 
 export interface RealtimeHandlers {
   onCharacter?: (c: Character) => void

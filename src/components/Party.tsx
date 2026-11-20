@@ -66,7 +66,7 @@ export function RollLog({ rolls, limit = 12 }: { rolls: Roll[]; limit?: number }
           <span className="rl-total">{r.total}</span>
           <span className="rl-main">
             <b>{r.roller_name}</b>{r.label ? ` ${r.label}` : ''}
-            <small>{r.hope_die} Speranza, {r.fear_die} Paura{r.adv_die ? `, ${r.adv_die > 0 ? '+' : ''}${r.adv_die} d6` : ''}{r.modifier ? `, mod ${r.modifier > 0 ? '+' : ''}${r.modifier}` : ''}</small>
+            <small>{r.hope_die} Speranza, {r.fear_die} Paura{r.adv_die ? `, ${r.adv_die > 0 ? '+' : ''}${r.adv_die} d6` : ''}{r.modifier ? `, mod ${r.modifier > 0 ? '+' : ''}${r.modifier}` : ''}{r.manual ? ', dadi fisici' : ''}</small>
           </span>
           <span className="rl-out">{OUT[r.outcome]}</span>
           <time>{new Date(r.created_at).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}</time>

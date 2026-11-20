@@ -68,6 +68,7 @@ create table if not exists public.rolls (
   outcome      text not null check (outcome in ('hope','fear','crit')),
   created_at   timestamptz not null default now()
 );
+alter table public.rolls add column if not exists manual boolean not null default false;
 create index if not exists rolls_campaign_idx on public.rolls(campaign_id, created_at desc);
 
 -- ---------------------------------------------------------------------
@@ -160,20 +161,26 @@ begin
   return c;
 end $$;
 
--- Tiro di Dualità: i dadi si tirano sul server (niente trucchi),
--- poi si aggiornano Speranza del PG o Paura del master.
+-- Tiro di Dualità. Di norma i dadi si tirano sul server (niente trucchi);
+-- con p_hope/p_fear il giocatore registra il risultato di dadi fisici.
+-- Poi si aggiornano Speranza del PG o Paura del master.
+drop function if exists public.roll_duality(uuid, uuid, int, text, int);
 create or replace function public.roll_duality(
   p_campaign  uuid,
   p_character uuid,
   p_modifier  int  default 0,
   p_label     text default '',
-  p_advantage int  default 0      -- 1 vantaggio, -1 svantaggio, 0 nessuno
+  p_advantage int  default 0,      -- 1 vantaggio, -1 svantaggio, 0 nessuno
+  p_hope      int  default null,   -- dadi fisici: valori inseriti a mano
+  p_fear      int  default null,
+  p_adv       int  default null    -- valore del d6 (sempre positivo)
 ) returns public.rolls language plpgsql security definer set search_path = public as $$
 declare
   ch characters;
   r rolls;
-  h int := 1 + floor(random() * 12)::int;
-  f int := 1 + floor(random() * 12)::int;
+  manual boolean := p_hope is not null or p_fear is not null;
+  h int;
+  f int;
   a int := 0;
   res text;
   who text;
@@ -191,8 +198,21 @@ begin
     select display_name into who from profiles where id = auth.uid();
   end if;
 
-  if p_advantage > 0 then a := 1 + floor(random() * 6)::int;
-  elsif p_advantage < 0 then a := -(1 + floor(random() * 6)::int);
+  if manual then
+    if p_hope is null or p_fear is null or p_hope not between 1 and 12 or p_fear not between 1 and 12 then
+      raise exception 'I dadi di Speranza e Paura vanno da 1 a 12';
+    end if;
+    if p_advantage <> 0 and (p_adv is null or p_adv not between 1 and 6) then
+      raise exception 'Il dado di vantaggio va da 1 a 6';
+    end if;
+    h := p_hope; f := p_fear;
+    if p_advantage <> 0 then a := sign(p_advantage) * p_adv; end if;
+  else
+    h := 1 + floor(random() * 12)::int;
+    f := 1 + floor(random() * 12)::int;
+    if p_advantage > 0 then a := 1 + floor(random() * 6)::int;
+    elsif p_advantage < 0 then a := -(1 + floor(random() * 6)::int);
+    end if;
   end if;
 
   if h = f then res := 'crit';
@@ -201,9 +221,9 @@ begin
   end if;
 
   insert into rolls (campaign_id, character_id, user_id, roller_name, label,
-                     hope_die, fear_die, adv_die, modifier, total, outcome)
+                     hope_die, fear_die, adv_die, modifier, total, outcome, manual)
   values (p_campaign, p_character, auth.uid(), coalesce(who,''), coalesce(p_label,''),
-          h, f, a, coalesce(p_modifier,0), h + f + a + coalesce(p_modifier,0), res)
+          h, f, a, coalesce(p_modifier,0), h + f + a + coalesce(p_modifier,0), res, manual)
   returning * into r;
 
   if res = 'fear' then
@@ -232,7 +252,7 @@ grant execute on function public.is_gm(uuid) to authenticated;
 
 grant execute on function public.create_campaign(text, text) to authenticated;
 grant execute on function public.join_campaign(text) to authenticated;
-grant execute on function public.roll_duality(uuid, uuid, int, text, int) to authenticated;
+grant execute on function public.roll_duality(uuid, uuid, int, text, int, int, int, int) to authenticated;
 
 -- ---------------------------------------------------------------------
 --  Row Level Security

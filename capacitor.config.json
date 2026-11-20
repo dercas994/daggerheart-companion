@@ -2,6 +2,12 @@
   "appId": "it.itdot.daggerheart",
   "appName": "Daggerheart Companion",
   "webDir": "dist",
-  "android": { "backgroundColor": "#16111F" },
-  "server": { "androidScheme": "https" }
+  "server": {
+    "url": "https://dercas994.github.io/daggerheart-companion/",
+    "androidScheme": "https",
+    "cleartext": false
+  },
+  "android": {
+    "backgroundColor": "#16111F"
+  }
 }

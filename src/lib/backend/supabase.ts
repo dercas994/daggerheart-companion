@@ -113,6 +113,7 @@ export function createSupabaseBackend(url: string, key: string): Backend {
     async roll(campaignId, characterId, req) {
       const { data, error } = await sb.rpc('roll_duality', {
         p_campaign: campaignId, p_character: characterId, p_modifier: req.modifier, p_label: req.label, p_advantage: req.advantage,
+        ...(req.manual ? { p_hope: req.manual.hope, p_fear: req.manual.fear, p_adv: req.manual.adv ?? null } : {}),
       })
       fail(error)
       return data as Roll

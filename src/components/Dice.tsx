@@ -28,11 +28,13 @@ const OUTCOME_TITLE = { hope: 'con Speranza', fear: 'con Paura', crit: 'Successo
 
 export function DiceOverlay({ roll, onClose, ownRoll = true }: { roll: Roll; onClose: () => void; ownRoll?: boolean }) {
   const fast = reduced()
-  const [phase, setPhase] = useState<'tumble' | 'reveal'>(fast ? 'reveal' : 'tumble')
+  // con i dadi fisici il risultato è già noto: niente rotolamento, solo la rivelazione
+  const skip = fast || !!roll.manual
+  const [phase, setPhase] = useState<'tumble' | 'reveal'>(skip ? 'reveal' : 'tumble')
   const [faces, setFaces] = useState<[number, number]>([roll.hope_die, roll.fear_die])
 
   useEffect(() => {
-    if (fast) return
+    if (skip) return
     const flick = setInterval(() => setFaces([1 + Math.floor(Math.random() * 12), 1 + Math.floor(Math.random() * 12)]), 70)
     const stop = setTimeout(() => { clearInterval(flick); setFaces([roll.hope_die, roll.fear_die]) }, 1050)
     const rev = setTimeout(() => setPhase('reveal'), 1250)
@@ -90,6 +92,7 @@ export function DiceOverlay({ roll, onClose, ownRoll = true }: { roll: Roll; onC
 
         <div className="dice-result" aria-live="assertive">
           {roll.label && <p className="dice-label-line">{roll.label}</p>}
+          {roll.manual && <p className="dice-manual">dadi fisici</p>}
           <p className="dice-total">{roll.total}</p>
           <p className="dice-outcome">{OUTCOME_TITLE[roll.outcome]}</p>
           <p className="dice-math">{math}</p>
