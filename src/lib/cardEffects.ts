@@ -14,6 +14,7 @@ import { CARDS_B } from './cards/b'
 import { CARDS_C } from './cards/c'
 import { CLASS_FEATURES } from './cards/classes'
 import { hbCardDef } from './hbAbilities'
+import { beastFeature } from './beast'
 
 /** Da dove si prende un numero: un tratto, il tratto da incantatore, la Competenza, il livello, la Paura del GM, o un numero fisso. */
 export type Source = TraitKey | 'spellcast' | 'prof' | 'level' | 'fear' | number
@@ -105,6 +106,12 @@ const RAW: Record<string, CardAction[] | CardDef> = { ...CARDS_A, ...CARDS_B, ..
 
 export function cardDef(id: string, d?: SheetData): CardDef | null {
   if (id.startsWith('hbab:')) return hbCardDef(d, id)
+  if (id.startsWith('bf:')) {
+    const f = beastFeature(id)
+    if (!f) return null
+    const passive = f.thresholds ? `Già applicato alle soglie (${f.thresholds > 0 ? '+' : ''}${f.thresholds}).` : f.fragile ? 'Con un danno Maggiore o peggiore esci dalla forma da solo.' : undefined
+    return f.actions || passive ? { actions: f.actions ?? [], passive } : null
+  }
   const r = RAW[id]
   if (!r) return null
   return Array.isArray(r) ? { actions: r, tokens: r.some(a => !a.tokensFrom && (a.fill !== undefined || a.tokens || a.scale?.by === 'tokens' || a.addTokens)) } : r

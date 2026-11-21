@@ -3,8 +3,18 @@ import { resetUses, unstoppable } from '../lib/cardEffects'
 import type { Character } from '../lib/types'
 import { hopeMax, thresholds, tierOf, damageMarks, massiveThreshold } from '../lib/rules'
 import { Sheet, Stepper, useToast } from './ui'
+import { beastView } from '../lib/beast'
+
+/** Si esce dalla Forma Bestiale segnando l'ultimo PF, o con un danno Maggiore se la forma è Fragile. */
+function beastDrop(c: Character, hpAfter: number, severity = 0): Partial<Character> {
+  const v = beastView(c.data.beastform)
+  if (!v || !(hpAfter >= c.hp_max || (v.fragile && severity >= 2))) return {}
+  const { beastform: _, ...rest } = c.data
+  return { data: rest as Character['data'] }
+}
 
 export function DamageSheet({ open, onClose, c, patch }: { open: boolean; onClose: () => void; c: Character; patch: (p: Partial<Character>) => void }) {
+  const toast = useToast()
   const [dmg, setDmg] = useState('')
   const [armorUse, setArmorUse] = useState(0)
   const [physical, setPhysical] = useState(true)
@@ -52,7 +62,10 @@ export function DamageSheet({ open, onClose, c, patch }: { open: boolean; onClos
         {n > 0 ? <>Danno {names[base]}: segni <b>{marks}</b> PF{used > 0 ? ` e ${used} Armatura` : ''}</> : 'Inserisci il danno'}
       </p>
       <button className="btn btn-primary" disabled={n <= 0} onClick={() => {
-        patch({ hp_marked: Math.min(c.hp_max, c.hp_marked + marks), armor_marked: c.armor_marked + used })
+        const hpAfter = Math.min(c.hp_max, c.hp_marked + marks)
+        const drop = beastDrop(c, hpAfter, marks)
+        patch({ hp_marked: hpAfter, armor_marked: c.armor_marked + used, ...drop })
+        if (drop.data) toast({ text: 'Esci dalla Forma Bestiale' })
         onClose()
       }}>Applica</button>
     </Sheet>
@@ -87,7 +100,7 @@ export function StressSheet({ open, onClose, c, patch }: { open: boolean; onClos
       </p>
       {hp > 0 && <p className="hint">Quando dovete marcare Stress ma è tutto segnato, marcate invece un Punto Ferita.</p>}
       <button className="btn btn-primary" disabled={stress + hp === 0} onClick={() => {
-        patch({ stress_marked: c.stress_marked + stress, ...(hp ? { hp_marked: c.hp_marked + hp } : {}) })
+        patch({ stress_marked: c.stress_marked + stress, ...(hp ? { hp_marked: c.hp_marked + hp, ...beastDrop(c, c.hp_marked + hp) } : {}) })
         toast({ text: `${stress ? `+${stress} Stress` : ''}${stress && hp ? ', ' : ''}${hp ? `+${hp} PF` : ''}`, tone: hp ? 'error' : undefined })
         onClose()
       }}>Applica</button>

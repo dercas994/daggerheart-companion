@@ -120,6 +120,8 @@ export interface SheetData {
   multiclass?: { class_id: string; domain: string; subclass_id: string }
   /** Stato delle carte dominio giocabili: segnalini e usi «una volta per riposo». */
   card_state?: Record<string, { tokens?: number; used?: string[] }>
+  /** Forma Bestiale attiva del Druido. */
+  beastform?: BeastState
 }
 
 export interface Character {
@@ -385,4 +387,14 @@ export interface Backend {
   uploadMedia(campaignId: string, file: Blob, name: string): Promise<string>
 
   subscribe(campaignId: string, h: RealtimeHandlers): () => void
+}
+
+/** Forma Bestiale in corso: forma scelta, forma di partenza (evoluta), forme/privilegi/vantaggi scelti (ibrido), tratto di Evoluzione. */
+export interface BeastState {
+  id: string
+  base?: string
+  forms?: string[]
+  feats?: string[]
+  advs?: string[]
+  evo?: TraitKey
 }

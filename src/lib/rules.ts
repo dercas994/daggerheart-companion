@@ -1,4 +1,5 @@
 import type { Character, Homebrew, SheetData, TraitKey } from './types'
+import { beastMods, beastWeapon } from './beast'
 import { getAncestry, getArmor as srdArmor, getClass, getWeapon as srdWeapon, getSubclass, type Armor, type Feature, type FeatureMods, type Weapon } from '../data'
 export type { WeaponMode } from '../data'
 
@@ -45,6 +46,10 @@ export function homebrewArmor(h: Homebrew): Armor {
 export function getWeapon(id?: string, d?: SheetData): Weapon | undefined {
   const h = hbFind(d, id)
   return h ? (h.kind === 'weapon' ? homebrewWeapon(h) : undefined) : srdWeapon(id)
+}
+/** Arma con cui si attacca: in Forma Bestiale l'attacco della bestia, altrimenti l'arma primaria. */
+export function attackWeapon(d: SheetData): Weapon | undefined {
+  return beastWeapon(d) ?? getWeapon(d.primary_weapon_id, d)
 }
 export function getArmor(id?: string, d?: SheetData): Armor | undefined {
   const h = hbFind(d, id)
@@ -94,6 +99,11 @@ export function cardMods(d: SheetData) {
   if (has('winged-sentinel', 'mastery')) m.severe += 4
   if (has('nightwalker', 'mastery')) m.evasion += 1
   if (d.class_id === 'brawler' && !d.primary_weapon_id && !d.secondary_weapon_id) m.evasion += 1
+  // Forma Bestiale del Druido
+  const bm = beastMods(d)
+  m.evasion += bm.evasion
+  m.thresholds += bm.thresholds
+  for (const [t, v] of Object.entries(bm.traits)) m.traits[t as TraitKey] = (m.traits[t as TraitKey] ?? 0) + (v ?? 0)
   return m
 }
 

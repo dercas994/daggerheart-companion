@@ -3,7 +3,7 @@ import type { Character, Roll } from '../lib/types'
 import {
   actionCost, cannotUse, cardDef, cardState, diceSpec, scaleMax, sourceValue, specText, type CardAction,
 } from '../lib/cardEffects'
-import { getWeapon, modeDamageSpec, weaponDamage, weaponModes, type WeaponModeKey } from '../lib/rules'
+import { attackWeapon, modeDamageSpec, weaponDamage, weaponModes, type WeaponModeKey } from '../lib/rules'
 import { IT } from '../data'
 import { Sheet, Stepper } from './ui'
 
@@ -79,7 +79,7 @@ export function flowDamage(flow: CardFlow, c: Character) {
   const dmg = flow.action.damage
   if (!dmg) return null
   if (dmg.dice === 'weapon') {
-    const w = getWeapon(c.data.primary_weapon_id, c.data)
+    const w = attackWeapon(c.data)
     if (!w) return null
     const base = Math.max(1, c.data.proficiency ?? 1)
     const prof = dmg.halfProf ? Math.max(1, Math.ceil(base / 2)) : base + (dmg.profDelta ?? 0)
@@ -150,7 +150,7 @@ export function ModeSheet({ ask, c, onPick, onClose }: {
   ask: { card: { id: string; name: string } } | null; c: Character
   onPick: (m: WeaponModeKey) => void; onClose: () => void
 }) {
-  const w = getWeapon(c.data.primary_weapon_id, c.data)
+  const w = attackWeapon(c.data)
   if (!ask || !w) return null
   return (
     <Sheet open onClose={onClose} title={ask.card.name}>

@@ -3,7 +3,7 @@ import { useApp } from '../App'
 import type { Character, Roll, TagTeam, TraitKey } from '../lib/types'
 import { TRAITS } from '../lib/types'
 import { IT } from '../data'
-import { fmt, getWeapon, traitValue, weaponDamageSpec, DAMAGE_TYPE_IT } from '../lib/rules'
+import { fmt, attackWeapon, traitValue, weaponDamageSpec, DAMAGE_TYPE_IT } from '../lib/rules'
 import { DiceOverlay } from './Dice'
 import { DiceSheet, type DicePreset } from './DiceSheet'
 import { ErrorLine, Stepper, useAsync, useToast } from './ui'
@@ -100,7 +100,7 @@ export function TagTeamFlow({ tag, characters, rolls, isGm, onRollAdded }: {
     const chosen = duality.find(r => r.id === tag.chosen_roll)
     const total = damage.reduce((s, r) => s + r.total, 0)
     const myDamage = myChar ? damage.find(r => r.character_id === myChar.id) : undefined
-    const w = myChar ? getWeapon(myChar.data.primary_weapon_id, myChar.data) : undefined
+    const w = myChar ? attackWeapon(myChar.data) : undefined
     const spec = w && myChar ? weaponDamageSpec(w.damage, myChar.data.proficiency) : null
     const preset: DicePreset | null = spec && w ? { label: `${w.name} (Tiro Combinato)`, ...spec } : null
     return (

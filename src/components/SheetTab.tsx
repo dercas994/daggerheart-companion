@@ -13,13 +13,14 @@ import { cardDef, featureKey, type CardAction } from '../lib/cardEffects'
 import { CardActionButtons } from './CardPlay'
 import { HbAbilities } from './Homebrew'
 import { useApp } from '../App'
+import { beastWeapon } from '../lib/beast'
 
 const CONDITIONS = ['Vulnerabile', 'Trattenuto', 'Nascosto', 'Distratto', 'Avvelenato', 'In fiamme']
 
-export function SheetTab({ c, canEdit, patch, onRoll, onDamage, allies = [], afterGear, onStress, onPlayCard, onCardTokens }: {
+export function SheetTab({ c, canEdit, patch, onRoll, onDamage, allies = [], afterGear, onStress, onPlayCard, onCardTokens, onBeastEvo }: {
   c: Character; canEdit: boolean; patch: (p: Partial<Character>) => void; onRoll: (t: TraitKey | null, o?: { label?: string; adv?: -1 | 0 | 1; cost?: { stress?: number; hope?: number } }) => void; onDamage?: (p: DicePreset) => void
   allies?: Character[]; afterGear?: ReactNode; onStress?: (u: StressUse, src: string) => void
-  onPlayCard?: (card: { id: string; name: string }, a: CardAction) => void; onCardTokens?: (cardId: string, n: number) => void
+  onPlayCard?: (card: { id: string; name: string }, a: CardAction) => void; onCardTokens?: (cardId: string, n: number) => void; onBeastEvo?: () => void
 }) {
   const toast = useToast()
   const [allyPick, setAllyPick] = useState(false)
@@ -37,7 +38,9 @@ export function SheetTab({ c, canEdit, patch, onRoll, onDamage, allies = [], aft
 
   const ancFeatures: Feature[] = ancestryFeatures(d)
 
-  const weapons = [getWeapon(d.primary_weapon_id, d), getWeapon(d.secondary_weapon_id, d)].filter(Boolean)
+  // in Forma Bestiale si attacca solo con la bestia
+  const beastW = beastWeapon(d)
+  const weapons = beastW ? [beastW] : [getWeapon(d.primary_weapon_id, d), getWeapon(d.secondary_weapon_id, d)].filter(Boolean)
   const armor = getArmor(d.armor_id, d)
   // privilegio giocabile: i suoi pulsanti; altrimenti i soli usi di Stress letti dal testo
   const sb = (f: { name: string; text: string }) => cardDef(featureKey(f.name))
@@ -94,7 +97,7 @@ export function SheetTab({ c, canEdit, patch, onRoll, onDamage, allies = [], aft
                     <span className="gear-stats">
                       {multi && <b className="mode-name">{m.key === 'main' ? (IT.range[m.range] ?? m.range) : m.name}: </b>}
                       {IT.traits[m.trait]}, {IT.range[m.range] ?? m.range}, <b>{weaponDamage(m.damage, d.proficiency)}{m.extra ? ` +${m.extra.replace(/^\+/, '')}` : ''}</b>
-                      {m.key === 'main' ? `, ${IT.burden[w.burden]}` : ''}{m.adv === -1 ? ', con svantaggio' : ''}{cost ? `, costa ${cost}` : ''}
+                      {m.key === 'main' && w.id !== 'beast' ? `, ${IT.burden[w.burden]}` : ''}{m.adv === -1 ? ', con svantaggio' : ''}{cost ? `, costa ${cost}` : ''}
                     </span>
                     {canEdit && multi && (
                       <span className="gear-btns">
@@ -140,7 +143,7 @@ export function SheetTab({ c, canEdit, patch, onRoll, onDamage, allies = [], aft
               <p>{ftext(cls.hope_feature)}</p>
             </div>
             {canEdit && (
-              <HopeFeatureButton c={c} classId={d.class_id} patch={patch} toast={toast} onAlly={() => setAllyPick(true)} />
+              <HopeFeatureButton c={c} classId={d.class_id} patch={patch} toast={toast} onAlly={() => setAllyPick(true)} onBeast={onBeastEvo} />
             )}
           </div>
           <FeatureList extra={sb} items={cls.features.map(f => ({ name: fname(f), text: ftext(f) }))} />
@@ -239,11 +242,12 @@ const HOPE_EFFECT: Record<string, { apply?: (c: Character) => Partial<Character>
   druid: { done: 'Ti trasformi senza segnare Stress; +1 a un tratto finché resti in Forma Bestiale' },
 }
 
-function HopeFeatureButton({ c, classId, patch, toast, onAlly }: {
-  c: Character; classId: string; patch: (p: Partial<Character>) => void; toast: ReturnType<typeof useToast>; onAlly: () => void
+function HopeFeatureButton({ c, classId, patch, toast, onAlly, onBeast }: {
+  c: Character; classId: string; patch: (p: Partial<Character>) => void; toast: ReturnType<typeof useToast>; onAlly: () => void; onBeast?: () => void
 }) {
   const eff = HOPE_EFFECT[classId]
   const blocked = eff?.can?.(c) ?? null
+  if (classId === 'druid' && onBeast) return <button className="btn btn-hope" disabled={c.hope < 3} onClick={onBeast}>Evoluzione, 3 Speranza</button>
   if (classId === 'seraph') return <button className="btn btn-hope" disabled={c.hope < 3} onClick={onAlly}>Usa, 3 Speranza</button>
   return (
     <button className="btn btn-hope" disabled={c.hope < 3 || !!blocked} title={blocked ?? undefined} onClick={() => {

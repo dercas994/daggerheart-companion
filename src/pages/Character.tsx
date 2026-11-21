@@ -4,7 +4,7 @@ import { useApp } from '../App'
 import type { Character, Roll, TraitKey } from '../lib/types'
 import { useCampaignLive } from '../lib/live'
 import { className, getAncestry, getCommunity, getSubclass } from '../data'
-import { evasion, hopeMax, thresholds, massiveThreshold, spellcastTrait, getWeapon, weaponModes, type WeaponModeKey } from '../lib/rules'
+import { evasion, hopeMax, thresholds, massiveThreshold, spellcastTrait, attackWeapon, weaponModes, type WeaponModeKey } from '../lib/rules'
 import { ErrorLine, Pips, Spinner, useToast } from '../components/ui'
 import { TopBar } from '../components/TopBar'
 import { DiceOverlay, outcomeText, rollTone } from '../components/Dice'
@@ -26,6 +26,8 @@ import { CardsTab } from '../components/CardsTab'
 import { DamageSheet, RestSheet, StressSheet } from '../components/Actions'
 import { LevelUpSheet } from '../components/LevelUp'
 import { EditSheet } from '../components/EditSheet'
+import { BeastPanel, BeastSheet } from '../components/Beastform'
+import type { BeastState } from '../lib/types'
 
 type Tab = 'scheda' | 'carte' | 'gruppo' | 'tiri'
 
@@ -38,7 +40,7 @@ export function CharacterPage({ id }: { id: string }) {
   const [rollOpen, setRollOpen] = useState(false)
   const [preset, setPreset] = useState<TraitKey | null>(null)
   const [overlay, setOverlay] = useState<{ roll: Roll; own: boolean } | null>(null)
-  const [sheet, setSheet] = useState<null | 'damage' | 'stress' | 'rest' | 'level' | 'edit'>(null)
+  const [sheet, setSheet] = useState<null | 'damage' | 'stress' | 'rest' | 'level' | 'edit' | 'beast' | 'beastEvo'>(null)
   const [rolling, setRolling] = useState(false)
   const [diceOpen, setDiceOpen] = useState(false)
   const [dicePreset, setDicePreset] = useState<DicePreset | null>(null)
@@ -98,6 +100,11 @@ export function CharacterPage({ id }: { id: string }) {
   /** Usa una carta dominio: costo variabile (se serve), tiro, costo, poi il pannello con danni e promemoria. */
   function playCard(card: { id: string; name: string }, a: CardAction) {
     if (!c) return
+    // Forma Bestiale: prima si sceglie la creatura
+    if (card.id === 'cls:Forma Bestiale' && a.id === 'use') {
+      if (c.data.beastform) { toast({ text: 'Sei già in Forma Bestiale: prima torna normale', tone: 'error' }); return }
+      setSheet('beast'); return
+    }
     const why = cannotUse(a, c, card.id)
     if (why) { toast({ text: why, tone: 'error' }); return }
     if (a.scale) { setScaleAsk({ card, action: a }); return }
@@ -106,7 +113,7 @@ export function CharacterPage({ id }: { id: string }) {
   function runCard(card: { id: string; name: string }, a: CardAction, n: number, mode?: WeaponModeKey) {
     if (!c) return
     setScaleAsk(null)
-    const w = getWeapon(c.data.primary_weapon_id, c.data)
+    const w = attackWeapon(c.data)
     // arma con due modi d'uso: prima si sceglie quale
     const usesWeapon = a.roll === 'weapon' || a.damage?.dice === 'weapon'
     if (usesWeapon && w?.alts?.length && !mode) { setModeAsk({ card, action: a, n }); return }
@@ -132,6 +139,18 @@ export function CharacterPage({ id }: { id: string }) {
     if (!c) return
     const b = a.bonusFn ? a.bonusFn(c, n) : a.bonus
     if (b) setPending({ src: card.name, ...b })
+  }
+  function transform(s: BeastState, cost: { stress: number; hope: number }) {
+    if (!c) return
+    patch({ stress_marked: Math.min(c.stress_max, c.stress_marked + cost.stress), hope: Math.max(0, c.hope - cost.hope), data: { ...c.data, beastform: s } })
+    setSheet(null)
+    toast({ text: 'Ti sei trasformato', tone: 'hope' })
+  }
+  function untransform() {
+    if (!c) return
+    const { beastform: _, ...rest } = c.data
+    patch({ data: rest as typeof c.data })
+    toast({ text: 'Sei tornato alla tua forma' })
   }
   function cardTokens(cardId: string, tokens: number) {
     if (!c) return
@@ -325,7 +344,8 @@ export function CharacterPage({ id }: { id: string }) {
       </nav>
 
       <main className="page tab-page">
-        {tab === 'scheda' && <SheetTab c={c} canEdit={canEdit} patch={patch} onRoll={openRoll} onDamage={openDice} allies={allies} onStress={markStress} onPlayCard={playCard} onCardTokens={cardTokens}
+        {tab === 'scheda' && c.data.beastform && <BeastPanel c={c} canEdit={canEdit} onExit={untransform} onPlay={playCard} onTokens={cardTokens} />}
+        {tab === 'scheda' && <SheetTab onBeastEvo={() => c.data.beastform ? toast({ text: 'Sei già in Forma Bestiale', tone: 'error' }) : setSheet('beastEvo')} c={c} canEdit={canEdit} patch={patch} onRoll={openRoll} onDamage={openDice} allies={allies} onStress={markStress} onPlayCard={playCard} onCardTokens={cardTokens}
           afterGear={canEdit && <GroupMoves c={c} allies={allies} onHelp={help} onTagTeam={proposeTagTeam}
             onGroupAction={(m, l) => { setPreset(null); setRollPreset({ extra: m, label: l }); setRollOpen(true) }} />} />}
         {tab === 'carte' && <CardsTab c={c} canEdit={canEdit} patch={patch} onStress={markStress} onPlayCard={playCard} onCardTokens={cardTokens} />}
@@ -356,6 +376,7 @@ export function CharacterPage({ id }: { id: string }) {
       <DiceSheet open={diceOpen} onClose={() => setDiceOpen(false)} character={c} preset={dicePreset} onRoll={doDice} />
       {overlay && <DiceOverlay roll={overlay.roll} ownRoll={overlay.own} onClose={() => setOverlay(null)} />}
       <DamageSheet open={sheet === 'damage'} onClose={() => setSheet(null)} c={c} patch={patch} />
+      <BeastSheet open={sheet === 'beast' || sheet === 'beastEvo'} evolution={sheet === 'beastEvo'} onClose={() => setSheet(null)} c={c} onTransform={transform} />
       <StressSheet open={sheet === 'stress'} onClose={() => setSheet(null)} c={c} patch={patch} />
       <RestSheet open={sheet === 'rest'} onClose={() => setSheet(null)} c={c} patch={patch} onLongRest={() => { setSheet(null); setRestRun(Date.now()) }} />
       <LongRestSky run={restRun} onDone={() => { setRestRun(0); setDawn(true); setTimeout(() => setDawn(false), 1600) }} />
