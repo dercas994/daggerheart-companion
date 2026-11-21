@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { resetUses, unstoppable } from '../lib/cardEffects'
 import type { Character } from '../lib/types'
 import { hopeMax, thresholds, tierOf, damageMarks, massiveThreshold } from '../lib/rules'
-import { Sheet, useToast } from './ui'
+import { Sheet, Stepper, useToast } from './ui'
 
 export function DamageSheet({ open, onClose, c, patch }: { open: boolean; onClose: () => void; c: Character; patch: (p: Partial<Character>) => void }) {
   const [dmg, setDmg] = useState('')
@@ -53,6 +53,42 @@ export function DamageSheet({ open, onClose, c, patch }: { open: boolean; onClos
       </p>
       <button className="btn btn-primary" disabled={n <= 0} onClick={() => {
         patch({ hp_marked: Math.min(c.hp_max, c.hp_marked + marks), armor_marked: c.armor_marked + used })
+        onClose()
+      }}>Applica</button>
+    </Sheet>
+  )
+}
+
+/** Stress subito: se gli slot sono pieni, ogni Stress in più diventa un Punto Ferita. */
+export function stressMarks(c: Character, n: number) {
+  const free = Math.max(0, c.stress_max - c.stress_marked)
+  const stress = Math.min(n, free)
+  const hp = Math.min(n - stress, c.hp_max - c.hp_marked)
+  return { stress, hp }
+}
+
+export function StressSheet({ open, onClose, c, patch }: { open: boolean; onClose: () => void; c: Character; patch: (p: Partial<Character>) => void }) {
+  const toast = useToast()
+  const [n, setN] = useState(1)
+  useEffect(() => { if (open) setN(1) }, [open])
+  const { stress, hp } = stressMarks(c, n)
+  const free = c.stress_max - c.stress_marked
+  return (
+    <Sheet open={open} onClose={onClose} title="Subisci Stress">
+      <div className="scale-pick">
+        <Stepper value={n} min={1} max={12} onChange={setN} />
+        <span className="hint">{free > 0 ? `${free} Stress liber${free === 1 ? "o" : "i"}` : 'Stress pieno'}</span>
+      </div>
+      <p className="damage-preview">
+        {stress > 0 && <>Segni <b>{stress}</b> Stress</>}
+        {stress > 0 && hp > 0 && ' e '}
+        {hp > 0 && <>{stress > 0 ? 'per il resto ' : 'Stress pieno: '}segni <b>{hp}</b> PF</>}
+        {stress === 0 && hp === 0 && 'Stress e Punti Ferita sono già tutti segnati'}
+      </p>
+      {hp > 0 && <p className="hint">Quando dovete marcare Stress ma è tutto segnato, marcate invece un Punto Ferita.</p>}
+      <button className="btn btn-primary" disabled={stress + hp === 0} onClick={() => {
+        patch({ stress_marked: c.stress_marked + stress, ...(hp ? { hp_marked: c.hp_marked + hp } : {}) })
+        toast({ text: `${stress ? `+${stress} Stress` : ''}${stress && hp ? ', ' : ''}${hp ? `+${hp} PF` : ''}`, tone: hp ? 'error' : undefined })
         onClose()
       }}>Applica</button>
     </Sheet>

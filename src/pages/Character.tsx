@@ -23,7 +23,7 @@ import { cannotUse, cardPatch, unstoppable, UNSTOPPABLE, type CardAction } from 
 import { FearTrack, ownerName, PartyCard, RollLog } from '../components/Party'
 import { SheetTab } from '../components/SheetTab'
 import { CardsTab } from '../components/CardsTab'
-import { DamageSheet, RestSheet } from '../components/Actions'
+import { DamageSheet, RestSheet, StressSheet } from '../components/Actions'
 import { LevelUpSheet } from '../components/LevelUp'
 import { EditSheet } from '../components/EditSheet'
 
@@ -38,7 +38,7 @@ export function CharacterPage({ id }: { id: string }) {
   const [rollOpen, setRollOpen] = useState(false)
   const [preset, setPreset] = useState<TraitKey | null>(null)
   const [overlay, setOverlay] = useState<{ roll: Roll; own: boolean } | null>(null)
-  const [sheet, setSheet] = useState<null | 'damage' | 'rest' | 'level' | 'edit'>(null)
+  const [sheet, setSheet] = useState<null | 'damage' | 'stress' | 'rest' | 'level' | 'edit'>(null)
   const [rolling, setRolling] = useState(false)
   const [diceOpen, setDiceOpen] = useState(false)
   const [dicePreset, setDicePreset] = useState<DicePreset | null>(null)
@@ -297,6 +297,7 @@ export function CharacterPage({ id }: { id: string }) {
         {canEdit && (
           <div className="quick-actions">
             <button className="btn btn-ghost small" onClick={() => setSheet('damage')}>Subisci danno</button>
+            <button className="btn btn-ghost small" onClick={() => setSheet('stress')}>Subisci Stress</button>
             <button className="btn btn-ghost small" onClick={() => setSheet('rest')}>Riposo</button>
             {c.level < 10 && <button className="btn btn-ghost small" onClick={() => setSheet('level')}>Sali di livello</button>}
           </div>
@@ -355,6 +356,7 @@ export function CharacterPage({ id }: { id: string }) {
       <DiceSheet open={diceOpen} onClose={() => setDiceOpen(false)} character={c} preset={dicePreset} onRoll={doDice} />
       {overlay && <DiceOverlay roll={overlay.roll} ownRoll={overlay.own} onClose={() => setOverlay(null)} />}
       <DamageSheet open={sheet === 'damage'} onClose={() => setSheet(null)} c={c} patch={patch} />
+      <StressSheet open={sheet === 'stress'} onClose={() => setSheet(null)} c={c} patch={patch} />
       <RestSheet open={sheet === 'rest'} onClose={() => setSheet(null)} c={c} patch={patch} onLongRest={() => { setSheet(null); setRestRun(Date.now()) }} />
       <LongRestSky run={restRun} onDone={() => { setRestRun(0); setDawn(true); setTimeout(() => setDawn(false), 1600) }} />
       {sheet === 'level' && <LevelUpSheet open onClose={() => setSheet(null)} c={c} patch={patch} />}
