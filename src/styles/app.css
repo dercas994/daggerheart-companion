@@ -1227,3 +1227,5 @@ button.dcard:hover { transform: translateY(-2px); }
 .cf-outcome { margin: 0.2rem 0 0.5rem; }
 .cf-outcome.tone-fear b { color: #C59BEA; } .cf-outcome.tone-hope b, .cf-outcome.tone-crit b { color: var(--hope-glow); }
 .cf-actions { display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center; }
+.card-tokens { display: inline-flex; align-items: center; gap: 0.45rem; font-size: 0.85rem; color: var(--muted); margin-right: 0.3rem; }
+.scale-pick { display: flex; align-items: center; gap: 0.8rem; margin: 0.6rem 0 1rem; }

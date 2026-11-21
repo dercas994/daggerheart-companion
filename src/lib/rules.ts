@@ -38,6 +38,27 @@ export function homebrewMods(d: SheetData) {
   return m
 }
 
+/**
+ * Carte dominio passive che cambiano i valori della scheda (solo quelle nella dotazione).
+ * Le «Padronanza» valgono con 4 o più carte dello stesso dominio in dotazione.
+ */
+export function cardMods(d: SheetData) {
+  const m = { evasion: 0, armor: 0, thresholds: 0, severe: 0, traits: {} as Partial<Record<TraitKey, number>>, bareBones: false }
+  const lo = new Set(d.loadout ?? [])
+  const count = (dom: string) => (d.loadout ?? []).filter(id => id.startsWith(dom + '-')).length
+  const worn = !!getArmor(d.armor_id, d)
+  if (lo.has('bone-untouchable')) m.evasion += Math.floor(((d.traits?.agility ?? 0) + (equipmentMods(d).agility ?? 0)) / 2)
+  if (lo.has('blade-fortified-armor') && worn) m.thresholds += 2
+  if (lo.has('valor-armorer') && worn) m.armor += 1
+  if (lo.has('valor-rise-up')) m.severe += Math.max(1, d.proficiency ?? 1)
+  if (lo.has('bone-bone-touched') && count('bone') >= 4) m.traits.agility = 1
+  if (lo.has('blade-blade-touched') && count('blade') >= 4) m.severe += 4
+  if (lo.has('splendor-splendor-touched') && count('splendor') >= 4) m.severe += 3
+  if (lo.has('valor-valor-touched') && count('valor') >= 4) m.armor += 1
+  if (lo.has('valor-bare-bones') && !worn) m.bareBones = true
+  return m
+}
+
 /** Le due capacità di retaggio del PG (gestisce anche il retaggio misto). */
 export function ancestryFeatures(d: SheetData): Feature[] {
   if (d.ancestry_id === 'mixed') {
@@ -89,24 +110,33 @@ export function equipmentMods(d: SheetData) {
 }
 
 export function traitValue(d: SheetData, t: TraitKey) {
-  return (d.traits?.[t] ?? 0) + (equipmentMods(d)[t] ?? 0) + (homebrewMods(d).traits[t] ?? 0)
+  return (d.traits?.[t] ?? 0) + (equipmentMods(d)[t] ?? 0) + (homebrewMods(d).traits[t] ?? 0) + (cardMods(d).traits[t] ?? 0)
 }
 
 export function evasion(d: SheetData) {
   const base = getClass(d.class_id)?.evasion ?? 10
-  return base + (d.evasion_bonus ?? 0) + (equipmentMods(d).evasion ?? 0) + ancestryMods(d).evasion + homebrewMods(d).evasion
+  return base + (d.evasion_bonus ?? 0) + (equipmentMods(d).evasion ?? 0) + ancestryMods(d).evasion + homebrewMods(d).evasion + cardMods(d).evasion
 }
 
 export function armorScore(d: SheetData) {
-  return Math.max(0, (getArmor(d.armor_id, d)?.score ?? 0) + (equipmentMods(d).armor ?? 0) + ancestryMods(d).armor + homebrewMods(d).armor)
+  const cm = cardMods(d)
+  // A Petto Nudo: senza armatura il punteggio base è 3 + Forza
+  const base = cm.bareBones ? 3 + traitValue(d, 'strength') : (getArmor(d.armor_id, d)?.score ?? 0)
+  return Math.max(0, base + (equipmentMods(d).armor ?? 0) + ancestryMods(d).armor + homebrewMods(d).armor + cm.armor)
 }
 
 export function thresholds(d: SheetData, level: number): [number, number] {
   const a = getArmor(d.armor_id, d)
-  const extra = (d.threshold_bonus ?? 0) + (equipmentMods(d).thresholds ?? 0) + ancestryMods(d).thresholds + homebrewMods(d).thresholds
+  const cm = cardMods(d)
+  const extra = (d.threshold_bonus ?? 0) + (equipmentMods(d).thresholds ?? 0) + ancestryMods(d).thresholds + homebrewMods(d).thresholds + cm.thresholds
+  // A Petto Nudo: soglie base per rango
+  if (cm.bareBones) {
+    const t = ([[9, 19], [11, 24], [13, 31], [15, 38]] as const)[Math.min(3, tierOf(level) - 1)]
+    return [t[0] + level + extra, t[1] + level + extra + cm.severe]
+  }
   // senza armatura: Maggiore = livello, Grave = 2 × livello
-  if (!a) return [level + extra, level * 2 + extra]
-  return [a.thresholds[0] + level + extra, a.thresholds[1] + level + extra]
+  if (!a) return [level + extra, level * 2 + extra + cm.severe]
+  return [a.thresholds[0] + level + extra, a.thresholds[1] + level + extra + cm.severe]
 }
 
 /**

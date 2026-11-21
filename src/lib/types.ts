@@ -81,6 +81,8 @@ export interface SheetData {
   /** Slot Speranza (6 di base, alcuni retaggi ne danno di più) */
   hope_max?: number
   multiclass?: { class_id: string; domain: string; subclass_id: string }
+  /** Stato delle carte dominio giocabili: segnalini e usi «una volta per riposo». */
+  card_state?: Record<string, { tokens?: number; used?: string[] }>
 }
 
 export interface Character {

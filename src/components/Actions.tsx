@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { resetUses } from '../lib/cardEffects'
 import type { Character } from '../lib/types'
 import { hopeMax, thresholds, tierOf, damageMarks, massiveThreshold } from '../lib/rules'
 import { Sheet, useToast } from './ui'
@@ -95,7 +96,11 @@ export function RestSheet({ open, onClose, c, patch, onLongRest }: { open: boole
           </button>
         ))}
       </div>
-      <button className="btn btn-primary" onClick={() => (kind === 'long' && used.length > 0 && onLongRest ? onLongRest() : onClose())}>Fine del riposo</button>
+      <button className="btn btn-primary" onClick={() => {
+        // le carte «una volta per riposo» tornano disponibili
+        if (used.length > 0 && c.data.card_state) patch({ data: { ...c.data, card_state: resetUses(c.data, kind) } })
+        if (kind === 'long' && used.length > 0 && onLongRest) onLongRest(); else onClose()
+      }}>Fine del riposo</button>
     </Sheet>
   )
 }

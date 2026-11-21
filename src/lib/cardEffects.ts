@@ -3,19 +3,32 @@
  *
  * Ogni carta può avere una o più azioni. Un'azione dice cosa costa, se richiede
  * un tiro (di solito il Tiro Incantesimo) e cosa succede dopo: danni da tirare,
- * cure, bonus al prossimo tiro. La schermata del personaggio esegue i passi in ordine.
+ * dadi da tirare, cure su di sé, bonus al prossimo tiro, segnalini sulla carta.
+ * La schermata del personaggio esegue i passi in ordine.
  */
-import type { Character, TraitKey } from './types'
+import type { Character, SheetData, TraitKey } from './types'
 import type { PendingBonus } from './costs'
+import { traitValue, spellcastTrait } from './rules'
+import { CARDS_A } from './cards/a'
+import { CARDS_B } from './cards/b'
+import { CARDS_C } from './cards/c'
+
+/** Da dove si prende un numero: un tratto, il tratto da incantatore, la Competenza, il livello, la Paura del GM, o un numero fisso. */
+export type Source = TraitKey | 'spellcast' | 'prof' | 'level' | 'fear' | number
 
 export interface CardDamage {
-  /** Dado base, es. "d8+2". Con `prof` il numero di dadi è la Competenza. */
+  /** Dado base, es. "d8+2", oppure 'weapon' per il danno dell'arma primaria. Il numero di dadi viene da `count`, altrimenti dalla formula. */
   dice: string
-  prof?: boolean
+  count?: Source | 'scale' | 'tokens'
+  /** Con il costo scelto: moltiplica tutta la formula per le unità spese. */
+  perUnit?: boolean
+  /** Solo arma: Competenza modificata (+1) o dimezzata. */
+  profDelta?: number
+  halfProf?: boolean
   type: 'mag' | 'phy'
-  /** Danno diverso se il tiro è con Paura (es. Folgore Avvizzente). */
+  /** Danno diverso se il tiro è con Paura. */
   onFear?: string
-  /** Etichetta del pulsante, es. "ai bersagli colpiti". */
+  /** A chi si applica, es. "a tutti i bersagli colpiti". */
   to?: string
 }
 
@@ -25,54 +38,126 @@ export interface CardAction {
   label: string
   hope?: number
   stress?: number
-  /** Tiro di dualità richiesto: 'spellcast' = tratto da incantatore. */
-  roll?: TraitKey | 'spellcast'
-  /** Danni da tirare dopo un tiro riuscito (o subito, se non c'è tiro). */
+  /** Slot Armatura da segnare come costo. */
+  armor?: number
+  /** Segnalini della carta da spendere. */
+  tokens?: number
+  /** Una volta per riposo / per riposo lungo. */
+  per?: 'rest' | 'longRest'
+  /**
+   * Costo scelto al momento ("spendete un numero qualsiasi di Speranze"):
+   * ogni unità paga la risorsa e moltiplica danni e dadi.
+   */
+  scale?: { by: 'hope' | 'stress' | 'tokens' | 'free'; max?: Source; what: string }
+  /** Tiro di dualità richiesto ('weapon' = tratto dell'arma primaria). */
+  roll?: TraitKey | 'spellcast' | 'weapon'
+  /** Difficoltà nota del tiro, mostrata nell'etichetta. */
+  difficulty?: number
+  /** È un tiro di reazione. */
+  reaction?: boolean
+  /** Danni da tirare dopo il tiro. */
   damage?: CardDamage
-  /** Danni facoltativi in più, ciascuno con il suo pulsante (es. contro i Vulnerabili). */
+  /** Danni facoltativi in più, ciascuno con il suo pulsante. */
   extras?: { label: string; dice: string; type: 'mag' | 'phy' }[]
-  /** Effetto su di sé appena pagato il costo. */
-  self?: Partial<Pick<Character, 'hp_marked' | 'stress_marked' | 'armor_marked' | 'hope'>>
+  /** Dadi liberi da tirare (non danni), es. "riducete il danno di 1d8". */
+  dice?: { dice: string; label: string; count?: Source | 'scale' | 'tokens'; perUnit?: boolean }
+  /** Se nei dadi liberi esce questo numero, la carta si esaurisce fino al prossimo riposo. */
+  exhaustOn?: number
+  /** Le unità scelte si aggiungono ai segnalini della carta. */
+  addTokens?: boolean
+  /** Bonus calcolato al momento (es. il doppio della Forza). */
+  bonusFn?: (c: Character, n: number) => Omit<PendingBonus, 'src'>
+  /** Effetto su di sé appena pagato il costo (valori positivi = segna, negativi = libera). */
+  self?: { hp?: number; stress?: number; armor?: number; hope?: number }
+  /** Mette segnalini sulla carta (sostituisce quelli presenti). */
+  fill?: Source
   /** Bonus al prossimo tiro. */
   bonus?: Omit<PendingBonus, 'src'>
-  /** Promemoria mostrato dopo l'uso: ciò che va gestito al tavolo. */
+  /** Dopo l'uso la carta va nel Rifugio. */
+  toVault?: boolean
+  /** Promemoria: ciò che va gestito al tavolo (effetti su alleati, condizioni, narrazione). */
   note?: string
 }
 
-export const CARD_EFFECTS: Record<string, CardAction[]> = {
-  'midnight-rain-of-blades': [{
-    id: 'cast',
-    label: 'Lancia',
-    hope: 1,
-    roll: 'spellcast',
-    damage: { dice: 'd8+2', prof: true, type: 'mag', to: 'a tutti i bersagli colpiti entro distanza Prossima' },
-    extras: [{ label: 'Bersaglio Vulnerabile: +1d8', dice: '1d8', type: 'mag' }],
-    note: 'Il master ti dice contro quali bersagli il tiro ha successo: tira i danni una volta e applicali a tutti.',
-  }],
+export interface CardDef {
+  actions: CardAction[]
+  /** La carta tiene segnalini: mostro il contatore. */
+  tokens?: boolean
 }
 
-export const cardActions = (id: string) => CARD_EFFECTS[id] ?? []
+const RAW: Record<string, CardAction[] | CardDef> = { ...CARDS_A, ...CARDS_B, ...CARDS_C }
 
-/** Dadi effettivi di un danno di carta, con la Competenza già contata. */
-export function cardDamageSpec(dmg: string, proficiency: number, prof?: boolean) {
-  const m = dmg.replace(/\s+/g, '').match(/^(\d*)d(\d+)([+-]\d+)?$/i)
-  if (!m) return null
-  const n = prof ? Math.max(1, proficiency) : (parseInt(m[1] || '1', 10))
-  return { groups: [{ n, sides: parseInt(m[2], 10) }], bonus: m[3] ? parseInt(m[3], 10) : 0 }
+export function cardDef(id: string): CardDef | null {
+  const r = RAW[id]
+  if (!r) return null
+  return Array.isArray(r) ? { actions: r, tokens: r.some(a => a.fill !== undefined || a.tokens || a.scale?.by === 'tokens') } : r
+}
+export const cardActions = (id: string) => cardDef(id)?.actions ?? []
+export const playableCount = () => Object.keys(RAW).length
+
+/** Valore numerico di una sorgente per questo PG. */
+export function sourceValue(src: Source | 'scale' | 'tokens', c: Character, fear = 0, n = 1, cardId = ''): number {
+  if (typeof src === 'number') return src
+  if (src === 'scale') return n
+  if (src === 'tokens') return cardState(c, cardId).tokens ?? 0
+  const d = c.data as SheetData
+  if (src === 'prof') return Math.max(1, d.proficiency ?? 1)
+  if (src === 'level') return c.level ?? 1
+  if (src === 'fear') return fear
+  const t = src === 'spellcast' ? spellcastTrait(d) : src
+  return t ? traitValue(d, t as TraitKey) : 0
+}
+export const SOURCE_IT: Record<string, string> = {
+  prof: 'Competenza', level: 'livello', fear: 'Paura del GM', spellcast: 'tratto da incantatore',
+  agility: 'Agilità', strength: 'Forza', finesse: 'Finezza', instinct: 'Istinto', presence: 'Presenza', knowledge: 'Conoscenza',
 }
 
-/** Testo leggibile del danno, es. "2d8+2 magici". */
-export function cardDamageText(dmg: string, proficiency: number, prof: boolean | undefined, type: 'mag' | 'phy') {
-  const s = cardDamageSpec(dmg, proficiency, prof)
-  if (!s) return dmg
-  return `${s.groups[0].n}d${s.groups[0].sides}${s.bonus ? (s.bonus > 0 ? '+' : '') + s.bonus : ''} ${type === 'mag' ? 'magici' : 'fisici'}`
+/** Dadi effettivi di un danno o di un tiro libero. `times` moltiplica tutto (costo scelto). */
+export function diceSpec(formula: string, opts: { count?: number; times?: number } = {}) {
+  const m = formula.replace(/\s+/g, '').match(/^(\d*)d(\d+)([+-]\d+)?$/i)
+  if (!m) {
+    const flat = parseInt(formula, 10)
+    return Number.isFinite(flat) ? { groups: [], bonus: flat * (opts.times ?? 1) } : null
+  }
+  const t = Math.max(1, opts.times ?? 1)
+  const n = (opts.count !== undefined ? Math.max(1, opts.count) : parseInt(m[1] || '1', 10)) * t
+  return { groups: [{ n, sides: parseInt(m[2], 10) }], bonus: (m[3] ? parseInt(m[3], 10) : 0) * t }
+}
+
+export function specText(s: { groups: { n: number; sides: number }[]; bonus: number } | null) {
+  if (!s) return ''
+  const g = s.groups.map(x => `${x.n}d${x.sides}`).join('+')
+  return `${g}${s.bonus ? (s.bonus > 0 && g ? '+' : '') + s.bonus : ''}` || '0'
+}
+
+/** Stato di una carta salvato nella scheda: segnalini e usi già fatti. */
+export function cardState(c: Character, id: string) {
+  return c.data.card_state?.[id] ?? {}
 }
 
 /** Perché un'azione non si può usare ora (null se si può). */
-export function cannotUse(a: CardAction, c: Character): string | null {
+export function cannotUse(a: CardAction, c: Character, cardId: string): string | null {
+  const st = cardState(c, cardId)
+  if (a.per && st.used?.includes(a.id)) return a.per === 'rest' ? 'Già usata: torna al prossimo riposo' : 'Già usata: torna al prossimo riposo lungo'
   if (a.hope && c.hope < a.hope) return `Servono ${a.hope} Speranza`
   if (a.stress && c.stress_marked + a.stress > c.stress_max) return 'Non hai abbastanza Stress libero'
+  if (a.armor && c.armor_marked + a.armor > c.armor_max) return 'Non hai slot Armatura liberi'
+  if (a.tokens && (st.tokens ?? 0) < a.tokens) return 'Non ci sono abbastanza segnalini'
+  if (a.scale?.by === 'tokens' && !(st.tokens ?? 0)) return 'Non ci sono segnalini'
+  if (a.scale?.by === 'hope' && c.hope < 1) return 'Serve almeno una Speranza'
+  if (a.scale?.by === 'stress' && c.stress_marked >= c.stress_max) return 'Non hai Stress libero'
   return null
+}
+
+/** Quante unità al massimo si possono scegliere per un costo variabile. */
+export function scaleMax(a: CardAction, c: Character, cardId: string) {
+  if (!a.scale) return 1
+  const cap = a.scale.max !== undefined ? sourceValue(a.scale.max, c) : 99
+  const have = a.scale.by === 'hope' ? c.hope - (a.hope ?? 0)
+    : a.scale.by === 'stress' ? c.stress_max - c.stress_marked - (a.stress ?? 0)
+    : a.scale.by === 'tokens' ? (cardState(c, cardId).tokens ?? 0)
+    : 99
+  return Math.max(0, Math.min(cap, have))
 }
 
 /** Etichetta del pulsante con il costo. */
@@ -80,5 +165,52 @@ export function actionCost(a: CardAction) {
   const parts: string[] = []
   if (a.hope) parts.push(`${a.hope} Speranza`)
   if (a.stress) parts.push(`${a.stress} Stress`)
+  if (a.armor) parts.push(`${a.armor} Armatura`)
+  if (a.tokens) parts.push(`${a.tokens} segnalin${a.tokens === 1 ? 'o' : 'i'}`)
+  if (a.scale && a.scale.by !== 'free') parts.push(`${a.scale.by === 'hope' ? 'Speranza' : a.scale.by === 'stress' ? 'Stress' : 'segnalini'} a scelta`)
   return parts.join(' e ')
+}
+
+/** Reset degli usi a fine riposo. */
+export function resetUses(d: SheetData, kind: 'short' | 'long'): SheetData['card_state'] {
+  const out: NonNullable<SheetData['card_state']> = {}
+  for (const [id, st] of Object.entries(d.card_state ?? {})) {
+    const defs = cardActions(id)
+    const used = (st.used ?? []).filter(u => {
+      const a = defs.find(x => x.id === u)
+      if (!a) return false
+      return kind === 'short' ? a.per === 'longRest' : false
+    })
+    out[id] = { ...st, used }
+  }
+  return out
+}
+
+/** Cosa cambia sulla scheda quando si paga un'azione: risorse, effetti su di sé, segnalini, usi. */
+export function cardPatch(c: Character, cardId: string, a: CardAction, n: number): Partial<Character> {
+  const by = a.scale?.by
+  const clamp = (v: number, max: number) => Math.max(0, Math.min(max, v))
+  const hope = c.hope - (a.hope ?? 0) - (by === 'hope' ? n : 0) + (a.self?.hope ?? 0)
+  const stress = c.stress_marked + (a.stress ?? 0) + (by === 'stress' ? n : 0) + (a.self?.stress ?? 0)
+  const hp = c.hp_marked + (a.self?.hp ?? 0)
+  const armor = c.armor_marked + (a.armor ?? 0) + (a.self?.armor ?? 0)
+
+  const states = c.data.card_state ?? {}
+  const st = { ...(states[cardId] ?? {}) }
+  let tokens = st.tokens ?? 0
+  if (a.fill !== undefined) tokens = Math.max(0, sourceValue(a.fill, c, 0, n, cardId))
+  tokens -= (a.tokens ?? 0) + (by === 'tokens' ? n : 0)
+  if (a.addTokens) {
+    const cap = a.scale?.max !== undefined ? sourceValue(a.scale.max, c, 0, n, cardId) : 99
+    tokens = Math.min(cap, tokens + n)
+  }
+  st.tokens = Math.max(0, tokens)
+  if (a.per && !a.exhaustOn) st.used = [...new Set([...(st.used ?? []), a.id])]
+
+  const out: Partial<Character> = { data: { ...c.data, card_state: { ...states, [cardId]: st } } }
+  if (hope !== c.hope) out.hope = Math.max(0, hope)
+  if (stress !== c.stress_marked) out.stress_marked = clamp(stress, c.stress_max)
+  if (hp !== c.hp_marked) out.hp_marked = clamp(hp, c.hp_max)
+  if (armor !== c.armor_marked) out.armor_marked = clamp(armor, c.armor_max)
+  return out
 }
