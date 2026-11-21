@@ -56,6 +56,18 @@ export function cardMods(d: SheetData) {
   if (lo.has('splendor-splendor-touched') && count('splendor') >= 4) m.severe += 3
   if (lo.has('valor-valor-touched') && count('valor') >= 4) m.armor += 1
   if (lo.has('valor-bare-bones') && !worn) m.bareBones = true
+
+  // privilegi di sottoclasse passivi (si sommano salendo di grado)
+  const order = ['foundation', 'specialization', 'mastery']
+  const has = (id: string, min: string) => [[d.subclass_id, d.subclass_tier], [d.multiclass?.subclass_id, 'foundation']]
+    .some(([sid, t]) => sid === id && order.indexOf(t ?? 'foundation') >= order.indexOf(min))
+  if (has('stalwart', 'foundation')) m.thresholds += 1
+  if (has('stalwart', 'specialization')) m.thresholds += 2
+  if (has('stalwart', 'mastery')) m.thresholds += 3
+  if (has('juggernaut', 'foundation')) m.severe += 3
+  if (has('winged-sentinel', 'mastery')) m.severe += 4
+  if (has('nightwalker', 'mastery')) m.evasion += 1
+  if (d.class_id === 'brawler' && !d.primary_weapon_id && !d.secondary_weapon_id) m.evasion += 1
   return m
 }
 

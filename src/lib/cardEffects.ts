@@ -12,6 +12,7 @@ import { traitValue, spellcastTrait } from './rules'
 import { CARDS_A } from './cards/a'
 import { CARDS_B } from './cards/b'
 import { CARDS_C } from './cards/c'
+import { CLASS_FEATURES } from './cards/classes'
 
 /** Da dove si prende un numero: un tratto, il tratto da incantatore, la Competenza, il livello, la Paura del GM, o un numero fisso. */
 export type Source = TraitKey | 'spellcast' | 'prof' | 'level' | 'fear' | number
@@ -42,6 +43,8 @@ export interface CardAction {
   armor?: number
   /** Segnalini della carta da spendere. */
   tokens?: number
+  /** I segnalini stanno su un altro privilegio (es. i Favori del warlock). */
+  tokensFrom?: string
   /** Una volta per riposo / per riposo lungo. */
   per?: 'rest' | 'longRest'
   /**
@@ -85,14 +88,16 @@ export interface CardDef {
   tokens?: boolean
 }
 
-const RAW: Record<string, CardAction[] | CardDef> = { ...CARDS_A, ...CARDS_B, ...CARDS_C }
+const RAW: Record<string, CardAction[] | CardDef> = { ...CARDS_A, ...CARDS_B, ...CARDS_C, ...CLASS_FEATURES }
 
 export function cardDef(id: string): CardDef | null {
   const r = RAW[id]
   if (!r) return null
-  return Array.isArray(r) ? { actions: r, tokens: r.some(a => a.fill !== undefined || a.tokens || a.scale?.by === 'tokens') } : r
+  return Array.isArray(r) ? { actions: r, tokens: r.some(a => !a.tokensFrom && (a.fill !== undefined || a.tokens || a.scale?.by === 'tokens' || a.addTokens)) } : r
 }
 export const cardActions = (id: string) => cardDef(id)?.actions ?? []
+/** Chiave di un privilegio di classe/sottoclasse. */
+export const featureKey = (name: string) => `cls:${name}`
 export const playableCount = () => Object.keys(RAW).length
 
 /** Valore numerico di una sorgente per questo PG. */
@@ -142,8 +147,9 @@ export function cannotUse(a: CardAction, c: Character, cardId: string): string |
   if (a.hope && c.hope < a.hope) return `Servono ${a.hope} Speranza`
   if (a.stress && c.stress_marked + a.stress > c.stress_max) return 'Non hai abbastanza Stress libero'
   if (a.armor && c.armor_marked + a.armor > c.armor_max) return 'Non hai slot Armatura liberi'
-  if (a.tokens && (st.tokens ?? 0) < a.tokens) return 'Non ci sono abbastanza segnalini'
-  if (a.scale?.by === 'tokens' && !(st.tokens ?? 0)) return 'Non ci sono segnalini'
+  const tk = a.tokensFrom ? (cardState(c, a.tokensFrom).tokens ?? 0) : (st.tokens ?? 0)
+  if (a.tokens && tk < a.tokens) return a.tokensFrom ? `Servono ${a.tokens} segnalini su «${a.tokensFrom.replace(/^cls:/, '')}»` : 'Non ci sono abbastanza segnalini'
+  if (a.scale?.by === 'tokens' && !tk) return a.tokensFrom ? `Nessun segnalino su «${a.tokensFrom.replace(/^cls:/, '')}»` : 'Non ci sono segnalini'
   if (a.scale?.by === 'hope' && c.hope < 1) return 'Serve almeno una Speranza'
   if (a.scale?.by === 'stress' && c.stress_marked >= c.stress_max) return 'Non hai Stress libero'
   return null
@@ -155,7 +161,7 @@ export function scaleMax(a: CardAction, c: Character, cardId: string) {
   const cap = a.scale.max !== undefined ? sourceValue(a.scale.max, c) : 99
   const have = a.scale.by === 'hope' ? c.hope - (a.hope ?? 0)
     : a.scale.by === 'stress' ? c.stress_max - c.stress_marked - (a.stress ?? 0)
-    : a.scale.by === 'tokens' ? (cardState(c, cardId).tokens ?? 0)
+    : a.scale.by === 'tokens' ? (cardState(c, a.tokensFrom ?? cardId).tokens ?? 0)
     : 99
   return Math.max(0, Math.min(cap, have))
 }
@@ -204,10 +210,17 @@ export function cardPatch(c: Character, cardId: string, a: CardAction, n: number
     const cap = a.scale?.max !== undefined ? sourceValue(a.scale.max, c, 0, n, cardId) : 99
     tokens = Math.min(cap, tokens + n)
   }
+  const spent = (a.tokens ?? 0) + (by === 'tokens' ? n : 0)
+  let other: Record<string, { tokens?: number; used?: string[] }> = {}
+  if (a.tokensFrom) {
+    tokens += spent // i segnalini non si tolgono da questo privilegio…
+    const o = states[a.tokensFrom] ?? {}
+    other = { [a.tokensFrom]: { ...o, tokens: Math.max(0, (o.tokens ?? 0) - spent) } } // …ma da quello che li tiene
+  }
   st.tokens = Math.max(0, tokens)
   if (a.per && !a.exhaustOn) st.used = [...new Set([...(st.used ?? []), a.id])]
 
-  const out: Partial<Character> = { data: { ...c.data, card_state: { ...states, [cardId]: st } } }
+  const out: Partial<Character> = { data: { ...c.data, card_state: { ...states, ...other, [cardId]: st } } }
   if (hope !== c.hope) out.hope = Math.max(0, hope)
   if (stress !== c.stress_marked) out.stress_marked = clamp(stress, c.stress_max)
   if (hp !== c.hp_marked) out.hp_marked = clamp(hp, c.hp_max)

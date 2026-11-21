@@ -6,7 +6,7 @@ import { DomainCardView } from './CardView'
 import { Sheet, useToast } from './ui'
 import { StressButtons } from './StressUse'
 import { CardActionButtons } from './CardPlay'
-import type { CardAction } from '../lib/cardEffects'
+import { cardDef, type CardAction } from '../lib/cardEffects'
 import type { StressUse } from '../lib/costs'
 
 export function CardsTab({ c, canEdit, patch, onStress, onPlayCard, onCardTokens }: { c: Character; canEdit: boolean; patch: (p: Partial<Character>) => void; onStress?: (u: StressUse, src: string) => void; onPlayCard?: (card: { id: string; name: string }, a: CardAction) => void; onCardTokens?: (cardId: string, n: number) => void }) {
@@ -43,7 +43,7 @@ export function CardsTab({ c, canEdit, patch, onStress, onPlayCard, onCardTokens
           <DomainCardView key={card.id} card={card}
             action={canEdit && <>
               <CardActionButtons cardId={card.id} cardName={cardName(card)} c={c} canEdit={canEdit} onPlay={onPlayCard} onTokens={onCardTokens} />
-              <StressButtons text={cardText(card)} src={cardName(card)} c={c} canEdit={canEdit} onUse={onStress} />
+              {!cardDef(card.id) && <StressButtons text={cardText(card)} src={cardName(card)} c={c} canEdit={canEdit} onUse={onStress} />}
               <button className="btn btn-ghost small" onClick={() => toVault(card.id)}>Metti nel Rifugio</button>
             </>} />
         ))}

@@ -296,7 +296,7 @@ export function CharacterPage({ id }: { id: string }) {
       </nav>
 
       <main className="page tab-page">
-        {tab === 'scheda' && <SheetTab c={c} canEdit={canEdit} patch={patch} onRoll={openRoll} onDamage={openDice} allies={allies} onStress={markStress}
+        {tab === 'scheda' && <SheetTab c={c} canEdit={canEdit} patch={patch} onRoll={openRoll} onDamage={openDice} allies={allies} onStress={markStress} onPlayCard={playCard} onCardTokens={cardTokens}
           afterGear={canEdit && <GroupMoves c={c} allies={allies} onHelp={help} onTagTeam={proposeTagTeam}
             onGroupAction={(m, l) => { setPreset(null); setRollPreset({ extra: m, label: l }); setRollOpen(true) }} />} />}
         {tab === 'carte' && <CardsTab c={c} canEdit={canEdit} patch={patch} onStress={markStress} onPlayCard={playCard} onCardTokens={cardTokens} />}

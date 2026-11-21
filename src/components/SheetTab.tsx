@@ -9,13 +9,16 @@ import { FeatureList } from './CardView'
 import { ErrorLine, Sheet, Stepper, useAsync, useToast } from './ui'
 import { StressButtons } from './StressUse'
 import type { StressUse } from '../lib/costs'
+import { cardDef, featureKey, type CardAction } from '../lib/cardEffects'
+import { CardActionButtons } from './CardPlay'
 import { useApp } from '../App'
 
 const CONDITIONS = ['Vulnerabile', 'Trattenuto', 'Nascosto', 'Distratto', 'Avvelenato', 'In fiamme']
 
-export function SheetTab({ c, canEdit, patch, onRoll, onDamage, allies = [], afterGear, onStress }: {
+export function SheetTab({ c, canEdit, patch, onRoll, onDamage, allies = [], afterGear, onStress, onPlayCard, onCardTokens }: {
   c: Character; canEdit: boolean; patch: (p: Partial<Character>) => void; onRoll: (t: TraitKey | null) => void; onDamage?: (p: DicePreset) => void
   allies?: Character[]; afterGear?: ReactNode; onStress?: (u: StressUse, src: string) => void
+  onPlayCard?: (card: { id: string; name: string }, a: CardAction) => void; onCardTokens?: (cardId: string, n: number) => void
 }) {
   const toast = useToast()
   const [allyPick, setAllyPick] = useState(false)
@@ -35,7 +38,10 @@ export function SheetTab({ c, canEdit, patch, onRoll, onDamage, allies = [], aft
 
   const weapons = [getWeapon(d.primary_weapon_id, d), getWeapon(d.secondary_weapon_id, d)].filter(Boolean)
   const armor = getArmor(d.armor_id, d)
-  const sb = (f: { name: string; text: string }) => <StressButtons text={f.text} src={f.name} c={c} canEdit={canEdit} onUse={onStress} />
+  // privilegio giocabile: i suoi pulsanti; altrimenti i soli usi di Stress letti dal testo
+  const sb = (f: { name: string; text: string }) => cardDef(featureKey(f.name))
+    ? <CardActionButtons cardId={featureKey(f.name)} cardName={f.name} c={c} canEdit={canEdit} onPlay={onPlayCard} onTokens={onCardTokens} />
+    : <StressButtons text={f.text} src={f.name} c={c} canEdit={canEdit} onUse={onStress} />
 
   return (
     <div className="sheet-tab">
