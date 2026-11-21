@@ -4,7 +4,11 @@ import { cast, mag, magP, N, phy, phyP, use } from './h'
 
 export const CARDS_B: Record<string, CardAction[] | CardDef> = {
   // ── Terrore ─────────────────────────────────────────────────────────
-  'dread-blighting-strike': [cast({ damage: magP('d6+1', { onFear: 'd10+1' }), note: 'Il prossimo attacco riuscito del bersaglio fa metà danni. Se fallisci devi spendere una Speranza o segnare uno Stress.' })],
+  'dread-blighting-strike': [
+    cast({ damage: magP('d6+1', { onFear: 'd10+1' }), note: 'Il prossimo attacco riuscito del bersaglio fa metà danni. Se fallisci devi spendere una Speranza o segnare uno Stress.' }),
+    use({ label: 'Fallito', hope: 1 }, 'missHope'),
+    use({ label: 'Fallito', stress: 1 }, 'missStress'),
+  ],
   'dread-umbral-veil': {
     tokens: true,
     actions: [
@@ -39,7 +43,10 @@ export const CARDS_B: Record<string, CardAction[] | CardDef> = {
   'dread-eldritch-flesh': [use({ label: 'Libera 1 Armatura', hope: 2, self: { armor: -1 }, note: 'Dopo un tiro con Paura. Ricorda: +1 alle soglie per ogni Stress segnato.' })],
   'dread-damnation': [cast({ scale: { by: 'stress', what: 'Stress (un d20 ciascuno)' }, damage: mag('d20', { count: 'scale' }), note: 'Se sconfiggi il bersaglio, gli avversari entro distanza Lontana da lui segnano uno Stress.' })],
   'dread-savor-the-anguish': [use({ label: '−1 Stress', self: { stress: -1 }, note: 'Quando un avversario entro distanza Ravvicinata subisce un danno Grave.' })],
-  'dread-avatar-of-terror': [use({ label: 'Trasformati', stress: 1, note: '+1d6 ai danni per ogni Paura del GM. Prima di ogni tiro azione spendi una Speranza.' })],
+  'dread-avatar-of-terror': [
+    use({ label: 'Trasformati', stress: 1, note: '+1d6 ai danni per ogni Paura del GM. Prima di ogni tiro azione spendi una Speranza.' }),
+    use({ label: 'Resta in forma', hope: 1, note: 'Da pagare prima di ogni tiro azione; se non puoi, torni normale.' }, 'keep'),
+  ],
   'dread-invoke-torment': [use({ label: 'Promemoria', note: 'Danni doppi ai bersagli con tutto lo Stress segnato; ne sconfiggi uno così entro Ravvicinata: +1 Speranza.' })],
 
   // ── Grazia ──────────────────────────────────────────────────────────
@@ -155,6 +162,7 @@ export const CARDS_B: Record<string, CardAction[] | CardDef> = {
     use({ label: 'Evoca', hope: 1 }, 'summon'),
     use({ label: 'Famiglio volante', hope: 1 }, 'fly'),
     use({ label: '+1d6 ai danni', bonus: { dmg: '1d6' }, note: 'Contro un avversario in mischia con il famiglio.' }, 'dmg'),
+    use({ label: 'Guarda con i suoi occhi', stress: 1 }, 'eyes'),
   ],
   'sage-corrosive-projectile': [cast({ damage: magP('d6+4') }), use({ label: 'Corrodi', stress: 2, note: 'Il bersaglio ha −1 alla Difficoltà ogni 2 Stress spesi.' }, 'corrode')],
   'sage-towering-stalk': [use({ label: 'Evoca lo stelo', per: 'rest' }, 'stalk'), cast({ stress: 1, damage: phyP('d8') }, 'attack', 'Attacca')],
@@ -185,7 +193,11 @@ export const CARDS_B: Record<string, CardAction[] | CardDef> = {
     ],
   },
   'sage-plant-dominion': [cast({ difficulty: 18, per: 'longRest' })],
-  'sage-force-of-nature': [use({ label: 'Trasformati', stress: 1, note: '+10 ai danni; prima di ogni tiro azione spendi una Speranza.' }), use({ label: '+10 ai danni', bonus: { dmg: '10' } }, 'dmg')],
+  'sage-force-of-nature': [
+    use({ label: 'Trasformati', stress: 1, note: '+10 ai danni; prima di ogni tiro azione spendi una Speranza.' }),
+    use({ label: '+10 ai danni', bonus: { dmg: '10' } }, 'dmg'),
+    use({ label: 'Resta in forma', hope: 1, note: 'Da pagare prima di ogni tiro azione; se non puoi, torni normale.' }, 'keep'),
+  ],
   'sage-tempest': [
     cast({ damage: mag('2d20+8'), note: 'I bersagli sono Vulnerabili.' }, 'blizzard', 'Tormenta'),
     cast({ damage: mag('3d10+10'), note: 'Scegli la direzione del vento.' }, 'hurricane', 'Uragano'),

@@ -90,9 +90,13 @@ export const CARDS_A: Record<string, CardAction[] | CardDef> = {
   'bone-brace': [use({ label: 'Slot extra', stress: 1, self: { armor: 1 }, note: 'Segni uno slot Armatura in più per ridurre il danno.' })],
   'bone-tactician': [use({ label: 'Promemoria', note: 'Quando aiuti, l’alleato può spendere una Speranza per aggiungere una tua Esperienza. Nei Tiri di Squadra puoi usare un d20 come Dado Speranza.' })],
   'bone-boost': [strike({ stress: 1, bonus: undefined, extras: [{ label: '+1d10 (Lanciami!)', dice: '1d10', type: 'phy' }], note: 'Attacchi con vantaggio un bersaglio entro distanza Lontana e finisci in mischia con lui. Attiva il vantaggio nel tiro.' })],
-  'bone-redirect': [use({ label: 'Devia', dice: { dice: '1d6', label: 'Devia', count: 'prof' }, note: 'Se esce almeno un 6 puoi segnare uno Stress per deviare l’attacco su un avversario entro distanza Prossima.' })],
+  'bone-redirect': [
+    use({ label: 'Tira i d6', dice: { dice: '1d6', label: 'Devia', count: 'prof' }, note: 'Se esce almeno un 6 puoi segnare uno Stress per deviare l’attacco su un avversario entro distanza Prossima.' }),
+    use({ label: 'Devia l’attacco', stress: 1, note: 'L’attacco colpisce invece un avversario entro distanza Prossima.' }, 'redirect'),
+  ],
   'bone-know-thy-enemy': [
-    { id: 'roll', label: 'Osserva', roll: 'instinct', note: 'Se riesci, spendi una Speranza e chiedi un gruppo di informazioni al master.' },
+    { id: 'roll', label: 'Osserva', roll: 'instinct', note: 'Se riesci, spendi una Speranza (tasto Chiedi informazioni) e chiedi un gruppo di informazioni al master.' },
+    use({ label: 'Chiedi informazioni', hope: 1, note: 'PF e Stress liberi, Difficoltà e soglie, tattiche e danni, oppure privilegi ed Esperienze.' }, 'ask'),
     use({ label: 'Togli una Paura al GM', stress: 1 }, 'fear'),
   ],
   'bone-signature-move': [use({ label: 'Mossa distintiva', per: 'rest', note: 'Nel tiro puoi usare un d20 come Dado Speranza; se riesci togli uno Stress.' })],
