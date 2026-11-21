@@ -2,7 +2,7 @@ import { useState, type ReactNode } from 'react'
 import type { Character, TraitKey } from '../lib/types'
 import { TRAITS } from '../lib/types'
 import { className, fname, ftext, getAncestry, getClass, getCommunity, getSubclass, IT, type Feature } from '../data'
-import { ancestryFeatures, fmt, getArmor, getWeapon, spellcastTrait, traitValue, weaponDamage, weaponDamageSpec } from '../lib/rules'
+import { ancestryFeatures, fmt, getArmor, getWeapon, spellcastTrait, traitValue, weaponDamage, weaponDamageSpec, weaponModes } from '../lib/rules'
 import type { DicePreset } from './DiceSheet'
 import { HomebrewSection } from './Homebrew'
 import { FeatureList } from './CardView'
@@ -16,7 +16,7 @@ import { useApp } from '../App'
 const CONDITIONS = ['Vulnerabile', 'Trattenuto', 'Nascosto', 'Distratto', 'Avvelenato', 'In fiamme']
 
 export function SheetTab({ c, canEdit, patch, onRoll, onDamage, allies = [], afterGear, onStress, onPlayCard, onCardTokens }: {
-  c: Character; canEdit: boolean; patch: (p: Partial<Character>) => void; onRoll: (t: TraitKey | null) => void; onDamage?: (p: DicePreset) => void
+  c: Character; canEdit: boolean; patch: (p: Partial<Character>) => void; onRoll: (t: TraitKey | null, o?: { label?: string; adv?: -1 | 0 | 1 }) => void; onDamage?: (p: DicePreset) => void
   allies?: Character[]; afterGear?: ReactNode; onStress?: (u: StressUse, src: string) => void
   onPlayCard?: (card: { id: string; name: string }, a: CardAction) => void; onCardTokens?: (cardId: string, n: number) => void
 }) {
@@ -67,16 +67,31 @@ export function SheetTab({ c, canEdit, patch, onRoll, onDamage, allies = [], aft
             <div key={w.id} className="gear-item">
               <div className="gear-top">
                 <b>{w.name}</b>
-                {canEdit && (
+                {canEdit && !w.alt && (
                   <span className="gear-btns">
-                    <button className="btn btn-ghost small" onClick={() => onRoll(w.trait === 'spellcast' ? spell : (w.trait as TraitKey))}>Attacca</button>
+                    <button className="btn btn-ghost small" onClick={() => onRoll(w.trait === 'spellcast' ? spell : (w.trait as TraitKey), { label: w.name })}>Attacca</button>
                     {onDamage && weaponDamageSpec(w.damage, d.proficiency) && (
                       <button className="btn btn-ghost small btn-dmg" onClick={() => onDamage({ label: w.name, ...weaponDamageSpec(w.damage, d.proficiency)! })}>Danno</button>
                     )}
                   </span>
                 )}
               </div>
-              <span className="gear-stats">{IT.traits[w.trait]}, {IT.range[w.range] ?? w.range}, <b>{weaponDamage(w.damage, d.proficiency)}</b>, {IT.burden[w.burden]}</span>
+              {weaponModes(w).map(m => (
+                <div key={m.key} className={`gear-mode ${w.alt ? 'multi' : ''}`}>
+                  <span className="gear-stats">
+                    {w.alt && <b className="mode-name">{m.key === 'main' ? (IT.range[m.range] ?? m.range) : m.name}: </b>}
+                    {IT.traits[m.trait]}, {IT.range[m.range] ?? m.range}, <b>{weaponDamage(m.damage, d.proficiency)}</b>{m.key === 'main' ? `, ${IT.burden[w.burden]}` : ''}{m.adv === -1 ? ', con svantaggio' : ''}
+                  </span>
+                  {canEdit && w.alt && (
+                    <span className="gear-btns">
+                      <button className="btn btn-ghost small" onClick={() => onRoll(m.trait === 'spellcast' ? spell : (m.trait as TraitKey), { label: m.key === 'main' ? w.name : `${w.name}, ${m.name.toLowerCase()}`, adv: m.adv })}>Attacca</button>
+                      {onDamage && weaponDamageSpec(m.damage, d.proficiency) && (
+                        <button className="btn btn-ghost small btn-dmg" onClick={() => onDamage({ label: m.key === 'main' ? w.name : `${w.name}, ${m.name.toLowerCase()}`, ...weaponDamageSpec(m.damage, d.proficiency)! })}>Danno</button>
+                      )}
+                    </span>
+                  )}
+                </div>
+              ))}
               {(w.feature_it || w.feature) && <span className="gear-feat">{w.feature_it || w.feature}</span>}
               {sb({ name: w.name, text: w.feature_it || w.feature || '' })}
             </div>

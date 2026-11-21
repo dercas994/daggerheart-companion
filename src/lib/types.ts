@@ -33,6 +33,8 @@ export interface Homebrew {
   damageType?: 'phy' | 'mag'
   burden?: 'One-Handed' | 'Two-Handed'
   category?: 'primary' | 'secondary'
+  /** Secondo modo d'uso dell'arma: i campi vuoti valgono come il primo. */
+  alt?: { name: string; trait?: TraitKey; range?: Homebrew['range']; dice?: string; damageType?: 'phy' | 'mag' }
   // armatura
   thresholds?: [number, number]
   score?: number

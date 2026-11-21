@@ -3,7 +3,8 @@ import type { Character, Roll } from '../lib/types'
 import {
   actionCost, cannotUse, cardDef, cardState, diceSpec, scaleMax, sourceValue, specText, type CardAction,
 } from '../lib/cardEffects'
-import { getWeapon, weaponDamageSpec } from '../lib/rules'
+import { getWeapon, weaponDamage, weaponDamageSpec, weaponModes } from '../lib/rules'
+import { IT } from '../data'
 import { Sheet, Stepper } from './ui'
 
 export interface CardFlow {
@@ -14,6 +15,8 @@ export interface CardFlow {
   /** Il tiro fatto per la carta, quando arriva. */
   roll?: Roll
   paid: boolean
+  /** Modo d'uso dell'arma scelto (armi con due portate). */
+  mode?: 'main' | 'alt'
 }
 
 /** Pulsanti delle azioni giocabili di una carta, con il contatore dei segnalini. */
@@ -80,7 +83,7 @@ export function flowDamage(flow: CardFlow, c: Character) {
     if (!w) return null
     const base = Math.max(1, c.data.proficiency ?? 1)
     const prof = dmg.halfProf ? Math.max(1, Math.ceil(base / 2)) : base + (dmg.profDelta ?? 0)
-    return weaponDamageSpec(w.damage, prof)
+    return weaponDamageSpec(flow.mode === 'alt' && w.alt ? w.alt.damage : w.damage, prof)
   }
   const formula = flow.roll?.outcome === 'fear' && dmg.onFear ? dmg.onFear : dmg.dice
   const count = dmg.count !== undefined ? sourceValue(dmg.count, c, 0, flow.n, flow.card.id) : undefined
@@ -138,5 +141,27 @@ export function CardFlowDock({ flow, c, onDamage, onDice, onVault, onClose }: {
       {!waiting && ok && a.damage?.to && <p className="hint">Danni {a.damage.to}.{roll?.outcome === 'crit' ? ' Critico: attiva «Critico» nel tiro dei danni.' : ''}</p>}
       {!waiting && a.note && <p className="hint">{a.note}</p>}
     </aside>
+  )
+}
+
+/** Scelta del modo d'uso dell'arma primaria quando ne ha due. */
+export function ModeSheet({ ask, c, onPick, onClose }: {
+  ask: { card: { id: string; name: string } } | null; c: Character
+  onPick: (m: 'main' | 'alt') => void; onClose: () => void
+}) {
+  const w = getWeapon(c.data.primary_weapon_id, c.data)
+  if (!ask || !w) return null
+  return (
+    <Sheet open onClose={onClose} title={ask.card.name}>
+      <p className="hint">Con quale modo della tua arma ({w.name})?</p>
+      <div className="mode-pick">
+        {weaponModes(w).map(m => (
+          <button key={m.key} className="btn btn-ghost" onClick={() => onPick(m.key)}>
+            <b>{m.key === 'main' ? (IT.range[m.range] ?? m.range) : m.name}</b>
+            <span className="hint">{IT.traits[m.trait as keyof typeof IT.traits] ?? m.trait}, {IT.range[m.range] ?? m.range}, {weaponDamage(m.damage, c.data.proficiency ?? 1)}{m.adv === -1 ? ', con svantaggio' : ''}</span>
+          </button>
+        ))}
+      </div>
+    </Sheet>
   )
 }

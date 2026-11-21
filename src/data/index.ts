@@ -23,6 +23,22 @@ export interface Heritage { id: string; name: string; description: string; featu
 export interface Weapon {
   id: string; name: string; trait: TraitKey | 'spellcast'; range: string; damage: string
   burden: 'One-Handed' | 'Two-Handed'; feature: string; feature_it?: string; name_en?: string; tier: number; category: 'primary' | 'secondary'
+  /** Secondo modo d'uso (es. lanciata): portata, tratto e danno propri. */
+  alt?: WeaponMode
+}
+export interface WeaponMode {
+  name: string; trait: TraitKey | 'spellcast'; range: string; damage: string
+  /** Tiro con svantaggio (-1) o vantaggio (+1) in questo modo. */
+  adv?: -1 | 0 | 1
+}
+/** Armi del manuale che il privilegio rende utilizzabili in due modi. */
+const ALT: Record<string, (w: Weapon) => WeaponMode> = {
+  javelins: w => ({ name: 'Lanciata', trait: 'agility', range: 'Far', damage: w.damage }),
+  'throwing-knives': w => ({ name: 'Lanciata', trait: 'finesse', range: 'Close', damage: w.damage }),
+  'improved-throwing-knives': w => ({ name: 'Lanciata', trait: 'finesse', range: 'Close', damage: w.damage }),
+  'advanced-throwing-knives': w => ({ name: 'Lanciata', trait: 'finesse', range: 'Close', damage: w.damage }),
+  'legendary-throwing-knives': w => ({ name: 'Lanciata', trait: 'finesse', range: 'Close', damage: w.damage }),
+  'displacement-razor': w => ({ name: 'A distanza', trait: w.trait, range: 'Very Far', damage: w.damage, adv: -1 }),
 }
 export interface Armor { id: string; name: string; name_en?: string; thresholds: [number, number]; score: number; feature: string; feature_it?: string; tier: number }
 export interface DomainCard {
@@ -55,7 +71,10 @@ export const getClass = (id?: string) => (id ? classMap.get(id) : undefined)
 export const getSubclass = (cls?: string, sub?: string) => getClass(cls)?.subclasses.find(s => s.id === sub)
 export const getAncestry = (id?: string) => (id ? ancMap.get(id) : undefined)
 export const getCommunity = (id?: string) => (id ? comMap.get(id) : undefined)
-export const getWeapon = (id?: string) => (id ? weapMap.get(id) : undefined)
+export const getWeapon = (id?: string): Weapon | undefined => {
+  const w = id ? weapMap.get(id) : undefined
+  return w && ALT[w.id] ? { ...w, alt: ALT[w.id](w) } : w
+}
 export const getArmor = (id?: string) => (id ? armMap.get(id) : undefined)
 export const getCard = (id?: string) => (id ? cardMap.get(id) : undefined)
 

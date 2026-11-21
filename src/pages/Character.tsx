@@ -3,7 +3,7 @@ import { useApp } from '../App'
 import type { Character, Roll, TraitKey } from '../lib/types'
 import { useCampaignLive } from '../lib/live'
 import { className, getAncestry, getCommunity, getSubclass } from '../data'
-import { evasion, hopeMax, thresholds, massiveThreshold, spellcastTrait, getWeapon } from '../lib/rules'
+import { evasion, hopeMax, thresholds, massiveThreshold, spellcastTrait, getWeapon, weaponModes } from '../lib/rules'
 import { ErrorLine, Pips, Spinner, useToast } from '../components/ui'
 import { TopBar } from '../components/TopBar'
 import { DiceOverlay, outcomeText, rollTone } from '../components/Dice'
@@ -17,7 +17,7 @@ import { TagTeamFlow } from '../components/TagTeam'
 import { Countdowns } from '../components/Countdowns'
 import { FearAura, HopeAura } from '../components/FearAura'
 import { DeathCrack, LongRestSky, useRise } from '../components/Effects'
-import { CardFlowDock, ScaleSheet, type CardFlow } from '../components/CardPlay'
+import { CardFlowDock, ModeSheet, ScaleSheet, type CardFlow } from '../components/CardPlay'
 import { cannotUse, cardPatch, unstoppable, UNSTOPPABLE, type CardAction } from '../lib/cardEffects'
 import { FearTrack, ownerName, PartyCard, RollLog } from '../components/Party'
 import { SheetTab } from '../components/SheetTab'
@@ -47,6 +47,7 @@ export function CharacterPage({ id }: { id: string }) {
   const [restRun, setRestRun] = useState(0)
   const [cardFlow, setCardFlow] = useState<CardFlow | null>(null)
   const [scaleAsk, setScaleAsk] = useState<{ card: { id: string; name: string }; action: CardAction } | null>(null)
+  const [modeAsk, setModeAsk] = useState<{ card: { id: string; name: string }; action: CardAction; n: number } | null>(null)
   const diceForCard = useRef<CardFlow | null>(null)
   const [dawn, setDawn] = useState(false)
 
@@ -85,10 +86,11 @@ export function CharacterPage({ id }: { id: string }) {
   const ownPortrait = c.data.portrait_url
   const portrait = ownPortrait || getAncestry(c.data.ancestry_id === 'mixed' ? c.data.mixed?.[0] : c.data.ancestry_id)?.image
 
-  function openRoll(t: TraitKey | null) {
+  function openRoll(t: TraitKey | null, o: { label?: string; adv?: -1 | 0 | 1 } = {}) {
     setPreset(t)
     const p = pending && (pending.roll || pending.adv) ? pending : null
-    setRollPreset(p ? { extra: p.roll ?? 0, label: '', note: `${bonusText({ roll: p.roll, adv: p.adv })} da ${p.src}`, adv: p.adv ? 1 : 0 } : { extra: 0, label: '' })
+    const adv = ((p?.adv ? 1 : 0) + (o.adv ?? 0)) as -1 | 0 | 1
+    setRollPreset(p ? { extra: p.roll ?? 0, label: o.label ?? '', note: `${bonusText({ roll: p.roll, adv: p.adv })} da ${p.src}`, adv } : { extra: 0, label: o.label ?? '', adv })
     setRollOpen(true)
   }
   /** Usa una carta dominio: costo variabile (se serve), tiro, costo, poi il pannello con danni e promemoria. */
@@ -99,23 +101,28 @@ export function CharacterPage({ id }: { id: string }) {
     if (a.scale) { setScaleAsk({ card, action: a }); return }
     runCard(card, a, 1)
   }
-  function runCard(card: { id: string; name: string }, a: CardAction, n: number) {
+  function runCard(card: { id: string; name: string }, a: CardAction, n: number, mode?: 'main' | 'alt') {
     if (!c) return
     setScaleAsk(null)
+    const w = getWeapon(c.data.primary_weapon_id, c.data)
+    // arma con due modi d'uso: prima si sceglie quale
+    const usesWeapon = a.roll === 'weapon' || a.damage?.dice === 'weapon'
+    if (usesWeapon && w?.alt && !mode) { setModeAsk({ card, action: a, n }); return }
+    setModeAsk(null)
+    const m = w ? weaponModes(w).find(x => x.key === (mode ?? 'main')) : undefined
     if (a.roll) {
-      const w = getWeapon(c.data.primary_weapon_id, c.data)
       const trait = a.roll === 'spellcast' ? spellcastTrait(c.data)
-        : a.roll === 'weapon' ? (w?.trait === 'spellcast' ? spellcastTrait(c.data) : (w?.trait as TraitKey | undefined) ?? null)
+        : a.roll === 'weapon' ? (m?.trait === 'spellcast' ? spellcastTrait(c.data) : (m?.trait as TraitKey | undefined) ?? null)
         : a.roll
-      setCardFlow({ card, action: a, n, paid: false })
+      setCardFlow({ card, action: a, n, paid: false, mode })
       setPreset(trait)
-      setRollPreset({ extra: 0, label: `${card.name}${a.difficulty ? ` (${a.difficulty})` : ''}${n > 1 ? ` ×${n}` : ''}` })
+      setRollPreset({ extra: 0, label: `${card.name}${a.difficulty ? ` (${a.difficulty})` : ''}${n > 1 ? ` ×${n}` : ''}${mode === 'alt' && m ? `, ${m.name.toLowerCase()}` : ''}`, adv: a.roll === 'weapon' ? m?.adv ?? 0 : 0 })
       setRollOpen(true)
       return
     }
     patch(cardPatch(c, card.id, a, n))
     afterPay(card, a, n)
-    if (a.damage || a.dice || a.note || a.extras || a.toVault) setCardFlow({ card, action: a, n, paid: true })
+    if (a.damage || a.dice || a.note || a.extras || a.toVault) setCardFlow({ card, action: a, n, paid: true, mode })
     else toast({ text: `${card.name}: ${a.label.toLowerCase()}`, tone: 'hope' })
   }
   /** Bonus e messaggi dopo aver pagato. */
@@ -335,6 +342,7 @@ export function CharacterPage({ id }: { id: string }) {
 
       <RollSheet open={rollOpen} onClose={() => { setRollOpen(false); setCardFlow(f => (f && !f.paid ? null : f)) }} character={c} presetTrait={preset} presetExtra={rollPreset.extra} presetLabel={rollPreset.label} presetNote={rollPreset.note} presetAdv={rollPreset.adv ?? 0} onRoll={doRoll} onOtherDice={() => openDice(null)} />
       {cardFlow && !rollOpen && !diceOpen && <CardFlowDock flow={cardFlow} c={c} onDamage={cardDamage} onDice={cardDice} onVault={() => cardToVault(cardFlow.card.id)} onClose={() => setCardFlow(null)} />}
+      <ModeSheet ask={modeAsk} c={c} onPick={m => modeAsk && runCard(modeAsk.card, modeAsk.action, modeAsk.n, m)} onClose={() => setModeAsk(null)} />
       <ScaleSheet key={scaleAsk ? scaleAsk.card.id + scaleAsk.action.id : 'none'} ask={scaleAsk} c={c} onPick={n => scaleAsk && runCard(scaleAsk.card, scaleAsk.action, n)} onClose={() => setScaleAsk(null)} />
       <FearAura fear={live.campaign.fear} enabled />
       <HopeAura hope={c.hope} enabled={c.owner_id === user.id} wait={!!overlay} />

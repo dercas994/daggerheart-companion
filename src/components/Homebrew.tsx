@@ -122,6 +122,7 @@ function HomebrewEditor({ item, onClose, onSave, onDelete }: { item: Homebrew; o
   function submit() {
     if (!h.name.trim()) return setErr('Dai un nome.')
     if (h.kind === 'weapon' && !/^\d*d\d+(\s*[+-]\s*\d+)?$/i.test((h.dice ?? '').replace(/\s/g, ''))) return setErr('Il danno va scritto come d8, d10+3, 2d6+1…')
+    if (h.kind === 'weapon' && h.alt?.dice && !/^\d*d\d+(\s*[+-]\s*\d+)?$/i.test(h.alt.dice.replace(/\s/g, ''))) return setErr('Il danno del secondo modo va scritto come d8, d10+3…')
     onSave({ ...h, name: h.name.trim(), text: h.text.trim(), dice: h.dice?.replace(/\s/g, '').toLowerCase() })
   }
 
@@ -160,6 +161,38 @@ function HomebrewEditor({ item, onClose, onSave, onDelete }: { item: Homebrew; o
             <button type="button" className={h.burden === 'Two-Handed' ? 'sel' : ''} disabled={h.category === 'secondary'} onClick={() => set({ burden: 'Two-Handed' })}>Due mani</button>
           </div>
           <p className="hint">Il danno si moltiplica per la Competenza come le armi del manuale.</p>
+          <label className="toggle">
+            <input type="checkbox" checked={!!h.alt} onChange={e => set({ alt: e.target.checked ? { name: 'Lanciata', range: 'Close' } : undefined })} />
+            Ha un secondo modo d’uso (es. lanciata, a distanza)
+          </label>
+          {h.alt && (
+            <div className="alt-mode">
+              <label className="field"><span>Nome del secondo modo</span>
+                <input value={h.alt.name} maxLength={30} onChange={e => set({ alt: { ...h.alt!, name: e.target.value } })} placeholder="Lanciata" />
+              </label>
+              <div className="two-col">
+                <label className="field"><span>Tratto</span>
+                  <select value={h.alt.trait ?? h.trait} onChange={e => set({ alt: { ...h.alt!, trait: e.target.value as TraitKey } })}>
+                    {TRAITS.map(t => <option key={t} value={t}>{IT.traits[t]}</option>)}
+                  </select>
+                </label>
+                <label className="field"><span>Portata</span>
+                  <select value={h.alt.range ?? h.range} onChange={e => set({ alt: { ...h.alt!, range: e.target.value as Homebrew['range'] } })}>
+                    {RANGES.map(r => <option key={r} value={r}>{IT.range[r]}</option>)}
+                  </select>
+                </label>
+                <label className="field"><span>Dado di danno</span>
+                  <input value={h.alt.dice ?? ''} onChange={e => set({ alt: { ...h.alt!, dice: e.target.value || undefined } })} placeholder={h.dice || 'd8'} />
+                </label>
+                <label className="field"><span>Tipo di danno</span>
+                  <select value={h.alt.damageType ?? h.damageType} onChange={e => set({ alt: { ...h.alt!, damageType: e.target.value as 'phy' | 'mag' } })}>
+                    <option value="phy">Fisico</option><option value="mag">Magico</option>
+                  </select>
+                </label>
+              </div>
+              <p className="hint">Se lasci vuoto il dado di danno, vale quello del primo modo.</p>
+            </div>
+          )}
         </>
       )}
 

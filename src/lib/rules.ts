@@ -1,5 +1,6 @@
 import type { Character, Homebrew, SheetData, TraitKey } from './types'
 import { getAncestry, getArmor as srdArmor, getClass, getWeapon as srdWeapon, getSubclass, type Armor, type Feature, type FeatureMods, type Weapon } from '../data'
+export type { WeaponMode } from '../data'
 
 export const HB = 'hb:'
 const hbFind = (d: SheetData | undefined, id?: string) => (id?.startsWith(HB) ? d?.homebrew?.find(h => HB + h.id === id) : undefined)
@@ -10,7 +11,17 @@ export function homebrewWeapon(h: Homebrew): Weapon {
     id: HB + h.id, name: h.name, trait: h.trait ?? 'strength', range: h.range ?? 'Melee',
     damage: `${(h.dice || 'd6').trim()} ${h.damageType ?? 'phy'}`, burden: h.burden ?? 'One-Handed',
     feature: '', feature_it: h.text, tier: 1, category: h.category ?? 'primary',
+    ...(h.alt ? { alt: {
+      name: h.alt.name || 'Secondo modo', trait: h.alt.trait ?? h.trait ?? 'strength', range: h.alt.range ?? h.range ?? 'Melee',
+      damage: `${(h.alt.dice || h.dice || 'd6').trim()} ${h.alt.damageType ?? h.damageType ?? 'phy'}`,
+    } } : {}),
   }
+}
+
+/** I modi d'uso di un'arma: il principale e, se c'è, il secondo. */
+export function weaponModes(w: Weapon): { key: 'main' | 'alt'; name: string; trait: Weapon['trait']; range: string; damage: string; adv: -1 | 0 | 1 }[] {
+  const main = { key: 'main' as const, name: '', trait: w.trait, range: w.range, damage: w.damage, adv: 0 as const }
+  return w.alt ? [main, { key: 'alt' as const, ...w.alt, adv: w.alt.adv ?? 0 }] : [main]
 }
 export function homebrewArmor(h: Homebrew): Armor {
   return { id: HB + h.id, name: h.name, thresholds: h.thresholds ?? [5, 11], score: h.score ?? 3, feature: '', feature_it: h.text, tier: 1 }
