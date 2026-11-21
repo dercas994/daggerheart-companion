@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { resetUses } from '../lib/cardEffects'
+import { resetUses, unstoppable } from '../lib/cardEffects'
 import type { Character } from '../lib/types'
 import { hopeMax, thresholds, tierOf, damageMarks, massiveThreshold } from '../lib/rules'
 import { Sheet, useToast } from './ui'
@@ -7,10 +7,14 @@ import { Sheet, useToast } from './ui'
 export function DamageSheet({ open, onClose, c, patch }: { open: boolean; onClose: () => void; c: Character; patch: (p: Partial<Character>) => void }) {
   const [dmg, setDmg] = useState('')
   const [armorUse, setArmorUse] = useState(0)
-  useEffect(() => { if (open) { setDmg(''); setArmorUse(0) } }, [open])
+  const [physical, setPhysical] = useState(true)
+  useEffect(() => { if (open) { setDmg(''); setArmorUse(0); setPhysical(true) } }, [open])
+  const un = unstoppable(c)
   const [maj, sev] = thresholds(c.data, c.level)
   const n = parseInt(dmg, 10) || 0
-  const base = damageMarks(n, maj, sev)
+  // Inarrestabile: i danni fisici scendono di una soglia
+  const raw = damageMarks(n, maj, sev)
+  const base = un && physical ? Math.max(0, raw - 1) : raw
   const armorLeft = c.armor_max - c.armor_marked
   // Valoroso (Guardiano), "Volontà di Ferro": contro i danni fisici si può marcare uno slot Armatura in più
   const ironWill = c.data.subclass_id === 'stalwart' || c.data.multiclass?.subclass_id === 'stalwart'
@@ -25,6 +29,9 @@ export function DamageSheet({ open, onClose, c, patch }: { open: boolean; onClos
         <input type="number" inputMode="numeric" min={0} value={dmg} onChange={e => setDmg(e.target.value)} autoFocus className="big-input" />
       </label>
       <p className="hint">Soglie: Maggiore da {maj}, Grave da {sev}, Massiccio da {massiveThreshold(sev)} (4 PF).</p>
+      {un && (
+        <label className="toggle"><input type="checkbox" checked={physical} onChange={e => setPhysical(e.target.checked)} /> Danno fisico: sei Inarrestabile, scende di una soglia</label>
+      )}
       {maxSlots === 1 && (
         <label className="toggle"><input type="checkbox" checked={used === 1} onChange={e => setArmorUse(e.target.checked ? 1 : 0)} /> Marca uno slot Armatura per ridurre di una soglia ({armorLeft} disponibili)</label>
       )}

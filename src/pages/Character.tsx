@@ -18,7 +18,7 @@ import { Countdowns } from '../components/Countdowns'
 import { FearAura, HopeAura } from '../components/FearAura'
 import { DeathCrack, LongRestSky, useRise } from '../components/Effects'
 import { CardFlowDock, ScaleSheet, type CardFlow } from '../components/CardPlay'
-import { cannotUse, cardPatch, type CardAction } from '../lib/cardEffects'
+import { cannotUse, cardPatch, unstoppable, UNSTOPPABLE, type CardAction } from '../lib/cardEffects'
 import { FearTrack, ownerName, PartyCard, RollLog } from '../components/Party'
 import { SheetTab } from '../components/SheetTab'
 import { CardsTab } from '../components/CardsTab'
@@ -180,6 +180,14 @@ export function CharacterPage({ id }: { id: string }) {
     setDiceOpen(false); setRolling(true)
     try {
       const r = await be.rollDice(campaignId, c.id, req)
+      // dopo un tiro di danno il Dado Inarrestabile sale; oltre il massimo si esaurisce
+      const un = req.kind === 'damage' ? unstoppable(c) : null
+      if (un) {
+        const next = un.value + 1 > un.max ? 0 : un.value + 1
+        const st = c.data.card_state ?? {}
+        await live.patchCharacter(c.id, { data: { ...c.data, card_state: { ...st, [UNSTOPPABLE]: { ...st[UNSTOPPABLE], tokens: next } } } })
+        toast({ text: next ? `Dado Inarrestabile: ${next}` : 'Il Dado Inarrestabile si esaurisce: non sei più Inarrestabile' })
+      }
       const fl = diceForCard.current
       diceForCard.current = null
       if (fl?.action.exhaustOn && r.dice?.groups.some(g => g.rolls.includes(fl.action.exhaustOn!))) {
@@ -196,6 +204,9 @@ export function CharacterPage({ id }: { id: string }) {
     } finally { setRolling(false) }
   }
   function openDice(p: DicePreset | null) {
+    // Guardiano Inarrestabile: il valore del dado si aggiunge ai danni
+    const un = c ? unstoppable(c) : null
+    if (p && un) p = { ...p, bonus: p.bonus + un.value, label: `${p.label}, +${un.value} Inarrestabile` }
     const b = p && pending && (pending.dmg || pending.prof) ? pending : null
     if (p && b) {
       const groups = p.groups.map((g, i) => (i === 0 && b.prof ? { ...g, n: g.n + b.prof } : g))
@@ -280,6 +291,11 @@ export function CharacterPage({ id }: { id: string }) {
         )}
       </section>
 
+      {unstoppable(c) && (
+        <p className="pending-bonus panel unstoppable">
+          <span><b>Inarrestabile</b>: dado a {unstoppable(c)!.value} su d{unstoppable(c)!.max}. +{unstoppable(c)!.value} ai danni, danni fisici subiti −1 soglia.</span>
+        </p>
+      )}
       {pending && (
         <p className="pending-bonus panel">
           <span>Prossimo tiro: <b>{bonusText(pending)}</b> da {pending.src}</span>

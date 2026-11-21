@@ -86,6 +86,18 @@ export interface CardDef {
   actions: CardAction[]
   /** La carta tiene segnalini: mostro il contatore. */
   tokens?: boolean
+  /** Nome del contatore (es. "Dado Inarrestabile") e suo massimo. */
+  tokensLabel?: string
+  tokensMax?: (c: Character) => number
+  /** Effetto passivo già applicato dalla scheda: lo dico accanto al privilegio. */
+  passive?: string
+}
+
+/** Dado Inarrestabile del Guardiano: valore attuale (0 = non attivo) e faccia massima. */
+export const UNSTOPPABLE = 'cls:Inarrestabile'
+export function unstoppable(c: Character) {
+  const v = c.data.card_state?.[UNSTOPPABLE]?.tokens ?? 0
+  return v > 0 ? { value: v, max: c.level >= 5 ? 6 : 4 } : null
 }
 
 const RAW: Record<string, CardAction[] | CardDef> = { ...CARDS_A, ...CARDS_B, ...CARDS_C, ...CLASS_FEATURES }

@@ -23,17 +23,19 @@ export function CardActionButtons({ cardId, cardName, c, canEdit, onPlay, onToke
   onTokens?: (cardId: string, n: number) => void
 }) {
   const def = cardDef(cardId)
-  if (!def || !canEdit || !onPlay) return null
+  if (!def || (!canEdit && !def.passive) || (!onPlay && !def.passive)) return null
   const st = cardState(c, cardId)
+  const max = def.tokensMax?.(c)
   return (
     <div className="card-play">
-      {def.tokens && (
-        <span className="card-tokens" aria-label="Segnalini sulla carta">
-          <span>Segnalini</span>
-          <Stepper value={st.tokens ?? 0} min={0} max={20} onChange={n => onTokens?.(cardId, n)} />
+      {def.passive && <p className="card-passive">{def.passive}</p>}
+      {def.tokens && canEdit && (
+        <span className={`card-tokens ${def.tokensLabel && (st.tokens ?? 0) > 0 ? 'live' : ''}`} aria-label={def.tokensLabel ?? 'Segnalini sulla carta'}>
+          <span>{def.tokensLabel ?? 'Segnalini'}{max ? ` (d${max})` : ''}</span>
+          <Stepper value={st.tokens ?? 0} min={0} max={max ?? 20} onChange={n => onTokens?.(cardId, n)} />
         </span>
       )}
-      {def.actions.map(a => {
+      {canEdit && onPlay && def.actions.map(a => {
         const why = cannotUse(a, c, cardId)
         const cost = actionCost(a)
         const used = a.per && st.used?.includes(a.id)

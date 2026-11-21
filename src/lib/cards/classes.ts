@@ -79,7 +79,31 @@ export const CLASS_FEATURES: Record<string, CardAction[] | CardDef> = {
   'cls:Difensore': [use({ label: 'Riduci di 1 PF', stress: 1, note: 'L’alleato segna un PF in meno.' })],
 
   // ── Guardiano ──
-  'cls:Inarrestabile': [use({ label: 'Diventa Inarrestabile', per: 'longRest', note: 'Il Dado Inarrestabile parte da 1 e sale dopo ogni danno che fa segnare PF. Danni fisici ridotti di una soglia; aggiungi il dado ai danni.' })],
+  'cls:Inarrestabile': {
+    tokens: true,
+    tokensLabel: 'Dado Inarrestabile',
+    tokensMax: c => (c.level >= 5 ? 6 : 4),
+    actions: [
+      use({ label: 'Diventa Inarrestabile', per: 'longRest', fill: 1, note: 'Il dado parte da 1: si aggiunge da solo ai tuoi tiri di danno e sale di uno dopo ogni danno. I danni fisici che subisci scendono di una soglia (nella finestra «Subisci danno»). Non puoi essere Trattenuto né Vulnerabile.' }),
+      use({ label: 'Fine scena', fill: 0 }, 'end'),
+    ],
+  },
+  // carte dominio passive già applicate alla scheda
+  'bone-untouchable': { actions: [], passive: '+½ Agilità all’Evasione, già nella scheda.' },
+  'blade-fortified-armor': { actions: [], passive: '+2 alle soglie con l’armatura, già nella scheda.' },
+  'valor-armorer': { actions: [], passive: '+1 al Punteggio Armatura con l’armatura, già nella scheda.' },
+  'valor-bare-bones': { actions: [], passive: 'Senza armatura: Punteggio 3 + Forza e soglie del rango, già nella scheda.' },
+  'blade-vitality': { actions: [], passive: 'Scegli i due benefici in Modifica, poi mettila nel Rifugio.' },
+  'grace-master-of-the-craft': { actions: [], passive: 'Aggiungi il bonus alle Esperienze in Modifica, poi mettila nel Rifugio.' },
+  'midnight-pick-and-pull': [use({ label: 'Vantaggio', bonus: { adv: true }, note: 'Serrature, trappole non magiche, borseggio.' })],
+  'bone-on-the-brink': { actions: [], passive: 'Con 2 PF liberi o meno non subisci danni Minori.' },
+  'cls:Volontà di Ferro': { actions: [], passive: 'Nella finestra «Subisci danno» puoi segnare 2 slot Armatura contro i danni fisici.' },
+  'cls:Saldo': { actions: [], passive: '+1 alle soglie, già nella scheda.' },
+  'cls:Implacabile': { actions: [], passive: '+2 alle soglie, già nella scheda.' },
+  'cls:Imperturbabile': { actions: [], passive: '+3 alle soglie, già nella scheda.' },
+  'cls:Rude': { actions: [], passive: '+3 alla soglia Grave, già nella scheda.' },
+  'cls:Ascendente': { actions: [], passive: '+4 alla soglia Grave, già nella scheda.' },
+  'cls:Ombra Sfuggente': { actions: [], passive: '+1 all’Evasione, già nella scheda.' },
   "cls:Compagni d'Arme": [use({ label: 'Proteggi l’alleato', armor: 1, note: 'Il danno all’alleato scende di una soglia.' })],
   'cls:Protettore Fedele': [use({ label: 'Subisci al suo posto', stress: 1 })],
   'cls:Vendetta': [use({ label: 'Vendicati', stress: 2, note: 'L’attaccante segna un PF.' })],

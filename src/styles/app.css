@@ -1229,3 +1229,7 @@ button.dcard:hover { transform: translateY(-2px); }
 .cf-actions { display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center; }
 .card-tokens { display: inline-flex; align-items: center; gap: 0.45rem; font-size: 0.85rem; color: var(--muted); margin-right: 0.3rem; }
 .scale-pick { display: flex; align-items: center; gap: 0.8rem; margin: 0.6rem 0 1rem; }
+.card-passive { margin: 0.2rem 0; font-size: 0.85rem; color: var(--hope-glow); }
+.card-passive::before { content: '✓ '; }
+.card-tokens.live { color: var(--hope-glow); font-weight: 600; }
+.card-tokens.live .stepper { box-shadow: 0 0 0 1px var(--hope), 0 0 14px rgba(233, 185, 73, 0.35); border-radius: 999px; }
