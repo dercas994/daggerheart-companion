@@ -6,7 +6,7 @@ import { ErrorLine, Sheet, Spinner, useAsync, useToast } from '../components/ui'
 import { TopBar } from '../components/TopBar'
 import { FearTrack, ownerName, PartyCard, RollLog, UndoRollSheet } from '../components/Party'
 import { DiceOverlay, outcomeText, rollTone } from '../components/Dice'
-import { Avatar } from '../components/Portrait'
+import { Avatar, accentVars } from '../components/Portrait'
 import type { Roll } from '../lib/types'
 import type { CampaignTab } from '../lib/router'
 import { useLiveList } from '../lib/liveList'
@@ -95,8 +95,8 @@ export function CampaignPage({ id, tab }: { id: string; tab: CampaignTab }) {
               {mine.length === 0 && <p className="empty">Non hai ancora un personaggio in questa campagna.</p>}
               <div className="mine-list">
                 {mine.map(c => (
-                  <a key={c.id} className="mine-item" href={`#/pg/${c.id}`} style={{ ['--accent' as any]: c.data.accent }}>
-                    <Avatar url={c.data.portrait_url} name={c.name} accent={c.data.accent} size={40} />
+                  <a key={c.id} className="mine-item" href={`#/pg/${c.id}`} style={accentVars(c.data)}>
+                    <Avatar url={c.data.portrait_url} name={c.name} accent={c.data.accent} accent2={c.data.accent2} size={40} />
                     <span className="mine-name">{c.name}</span>
                     <span className="mine-go">Apri la scheda</span>
                   </a>

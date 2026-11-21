@@ -4,7 +4,7 @@ import { TRAITS } from '../lib/types'
 import { ARMOR, IT, WEAPONS } from '../data'
 import { armorScore, evasion, getArmor, getWeapon, HB, thresholds, tierOf, weaponDamage } from '../lib/rules'
 import { ErrorLine, Sheet, Stepper, useAsync } from './ui'
-import { PortraitPicker } from './Portrait'
+import { AccentPicker, PortraitPicker } from './Portrait'
 import { useApp } from '../App'
 
 /** Modifica libera della scheda: per correzioni, oggetti trovati, regole della casa. */
@@ -70,8 +70,10 @@ export function EditSheet({ open, onClose, c, patch, onDelete }: {
   return (
     <Sheet open={open} onClose={onClose} title="Modifica scheda" wide>
       <p className="field-title">Ritratto</p>
-      <PortraitPicker current={d.portrait_url} name={name} accent={d.accent} busy={up.busy} onPick={pickPortrait} onRemove={removePortrait} />
+      <PortraitPicker current={d.portrait_url} name={name} accent={d.accent} accent2={d.accent2} busy={up.busy} onPick={pickPortrait} onRemove={removePortrait} />
       <ErrorLine error={up.error} />
+      <p className="field-title">Colori del personaggio</p>
+      <AccentPicker accent={d.accent} accent2={d.accent2} onChange={(accent, accent2) => set({ accent, accent2 })} />
       <div className="two-col">
         <label className="field"><span>Nome</span><input value={name} onChange={e => setName(e.target.value)} /></label>
         <label className="field"><span>Pronomi</span><input value={d.pronouns} onChange={e => set({ pronouns: e.target.value })} /></label>

@@ -11,10 +11,9 @@ import { go } from '../lib/router'
 import { ErrorLine, useAsync } from '../components/ui'
 import { TopBar } from '../components/TopBar'
 import { DomainCardView, FeatureList } from '../components/CardView'
-import { PortraitPicker } from '../components/Portrait'
+import { AccentPicker, PortraitPicker } from '../components/Portrait'
 
 const STEPS = ['Classe', 'Sottoclasse', 'Retaggio', 'Comunità', 'Tratti', 'Equipaggiamento', 'Esperienze', 'Carte dominio', 'Dettagli'] as const
-const ACCENTS = ['#E9B949', '#D9774B', '#C8553D', '#C9579A', '#9A6BE0', '#5B7BD6', '#4FA3A5', '#5E9A57', '#B9AE96']
 
 export function WizardPage({ campaignId }: { campaignId: string }) {
   const { be } = useApp()
@@ -343,11 +342,9 @@ function StepDetails({ d, set, name, setName, portrait, setPortrait }: StepProps
         <label className="field"><span>Pronomi</span><input value={d.pronouns} onChange={e => set({ pronouns: e.target.value })} placeholder="lei/la" /></label>
       </div>
       <p className="field-title">Ritratto</p>
-      <PortraitPicker current={portrait} name={name} accent={d.accent} onPick={(b, url) => setPortrait(b, url)} onRemove={() => setPortrait(null, '')} />
+      <PortraitPicker current={portrait} name={name} accent={d.accent} accent2={d.accent2} onPick={(b, url) => setPortrait(b, url)} onRemove={() => setPortrait(null, '')} />
       <p className="field-title">Colore del personaggio</p>
-      <div className="accent-row">
-        {ACCENTS.map(a => <button key={a} type="button" className={`swatch ${d.accent === a ? 'sel' : ''}`} style={{ background: a }} onClick={() => set({ accent: a })} aria-label={`Colore ${a}`} />)}
-      </div>
+      <AccentPicker accent={d.accent} accent2={d.accent2} onChange={(accent, accent2) => set({ accent, accent2 })} />
       <label className="field"><span>Aspetto</span>
         <textarea rows={2} value={d.description} onChange={e => set({ description: e.target.value })} placeholder="Abiti, occhi, corporatura, atteggiamento" />
       </label>

@@ -4,7 +4,7 @@ import { className, getSubclass } from '../data'
 import { evasion, hopeMax, MAX_FEAR, thresholds } from '../lib/rules'
 import { useState } from 'react'
 import { ErrorLine, Pips, Sheet, useAsync } from './ui'
-import { Avatar } from './Portrait'
+import { Avatar, accentVars } from './Portrait'
 
 export function PartyCard({ c, owner, editable, onPatch, isMe, compact }: {
   c: Character; owner?: string; editable?: boolean; isMe?: boolean; compact?: boolean
@@ -16,9 +16,9 @@ export function PartyCard({ c, owner, editable, onPatch, isMe, compact }: {
   const critical = !down && c.hp_max > 0 && (c.hp_max - c.hp_marked) / c.hp_max <= 0.25
   const [maj, sev] = thresholds(c.data, c.level)
   return (
-    <article className={`party-card ${down ? 'down' : ''} ${critical ? 'critical' : ''} ${c.stress_max > 0 && c.stress_marked >= c.stress_max ? 'stress-full' : ''} ${isMe ? 'me' : ''}`} title={critical ? `${c.name} è gravemente ferito` : undefined} style={{ ['--accent' as any]: c.data.accent || 'var(--hope)' }}>
+    <article className={`party-card ${down ? 'down' : ''} ${critical ? 'critical' : ''} ${c.stress_max > 0 && c.stress_marked >= c.stress_max ? 'stress-full' : ''} ${isMe ? 'me' : ''}`} title={critical ? `${c.name} è gravemente ferito` : undefined} style={accentVars(c.data)}>
       <header>
-        <Avatar url={c.data.portrait_url} name={c.name} accent={c.data.accent} size={46} />
+        <Avatar url={c.data.portrait_url} name={c.name} accent={c.data.accent} accent2={c.data.accent2} size={46} />
         <div>
           <a href={`#/pg/${c.id}`} className="party-name">{c.name}</a>
           <span className="party-sub">{className(c.data.class_id)}{sub ? `, ${sub.name}` : ''}, liv. {c.level}{owner ? ` (${owner})` : ''}</span>

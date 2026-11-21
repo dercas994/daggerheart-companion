@@ -109,6 +109,8 @@ export interface SheetData {
   connections: string
   notes: string
   accent: string
+  /** secondo colore facoltativo del PG */
+  accent2?: string
   advancements: { level: number; picks: string[] }[]
   homebrew?: Homebrew[]
   /** URL pubblico del ritratto del PG (Supabase Storage) */

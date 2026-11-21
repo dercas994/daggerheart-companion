@@ -1,3 +1,4 @@
+import { accentVars } from '../components/Portrait'
 import { useEffect, useState, useRef, useLayoutEffect } from 'react'
 import { useApp } from '../App'
 import type { Character, Roll, TraitKey } from '../lib/types'
@@ -248,7 +249,7 @@ export function CharacterPage({ id }: { id: string }) {
   const others = live.characters.filter(x => x.id !== c.id)
 
   return (
-    <div className="char-page" style={{ ['--accent' as any]: c.data.accent || 'var(--hope)' }}>
+    <div className="char-page" style={accentVars(c.data)}>
       <TopBar title={live.campaign.name} back={`#/c/${live.campaign.id}`}
         right={canEdit && <button className="btn btn-ghost small" onClick={() => setSheet('edit')}>Modifica</button>} />
 
