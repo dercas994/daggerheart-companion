@@ -2,7 +2,7 @@ import { useState, type ReactNode } from 'react'
 import type { Character, TraitKey } from '../lib/types'
 import { TRAITS } from '../lib/types'
 import { className, fname, ftext, getAncestry, getClass, getCommunity, getSubclass, IT, type Feature } from '../data'
-import { ancestryFeatures, fmt, getArmor, getWeapon, spellcastTrait, traitValue, weaponDamage, weaponDamageSpec, weaponModes } from '../lib/rules'
+import { ancestryFeatures, fmt, getArmor, getWeapon, spellcastTrait, traitValue, weaponDamage, weaponDamageSpec, weaponModes, modeDamageSpec } from '../lib/rules'
 import type { DicePreset } from './DiceSheet'
 import { HomebrewSection } from './Homebrew'
 import { FeatureList } from './CardView'
@@ -11,12 +11,13 @@ import { StressButtons } from './StressUse'
 import type { StressUse } from '../lib/costs'
 import { cardDef, featureKey, type CardAction } from '../lib/cardEffects'
 import { CardActionButtons } from './CardPlay'
+import { HbAbilities } from './Homebrew'
 import { useApp } from '../App'
 
 const CONDITIONS = ['Vulnerabile', 'Trattenuto', 'Nascosto', 'Distratto', 'Avvelenato', 'In fiamme']
 
 export function SheetTab({ c, canEdit, patch, onRoll, onDamage, allies = [], afterGear, onStress, onPlayCard, onCardTokens }: {
-  c: Character; canEdit: boolean; patch: (p: Partial<Character>) => void; onRoll: (t: TraitKey | null, o?: { label?: string; adv?: -1 | 0 | 1 }) => void; onDamage?: (p: DicePreset) => void
+  c: Character; canEdit: boolean; patch: (p: Partial<Character>) => void; onRoll: (t: TraitKey | null, o?: { label?: string; adv?: -1 | 0 | 1; cost?: { stress?: number; hope?: number } }) => void; onDamage?: (p: DicePreset) => void
   allies?: Character[]; afterGear?: ReactNode; onStress?: (u: StressUse, src: string) => void
   onPlayCard?: (card: { id: string; name: string }, a: CardAction) => void; onCardTokens?: (cardId: string, n: number) => void
 }) {
@@ -42,6 +43,12 @@ export function SheetTab({ c, canEdit, patch, onRoll, onDamage, allies = [], aft
   const sb = (f: { name: string; text: string }) => cardDef(featureKey(f.name))
     ? <CardActionButtons cardId={featureKey(f.name)} cardName={f.name} c={c} canEdit={canEdit} onPlay={onPlayCard} onTokens={onCardTokens} />
     : <StressButtons text={f.text} src={f.name} c={c} canEdit={canEdit} onUse={onStress} />
+  // privilegio dell'arma o armatura: per l'homebrew con abilità separate, i loro pulsanti
+  const gearFeature = (id: string, name: string, text: string) => {
+    const h = id.startsWith('hb:') ? d.homebrew?.find(x => 'hb:' + x.id === id) : undefined
+    if (h?.abilities?.length) return <HbAbilities h={h} c={c} canEdit={canEdit} onStress={onStress} onPlayCard={onPlayCard} onCardTokens={onCardTokens} compact />
+    return <>{text && <span className="gear-feat">{text}</span>}{sb({ name, text })}</>
+  }
 
   return (
     <div className="sheet-tab">
@@ -67,7 +74,7 @@ export function SheetTab({ c, canEdit, patch, onRoll, onDamage, allies = [], aft
             <div key={w.id} className="gear-item">
               <div className="gear-top">
                 <b>{w.name}</b>
-                {canEdit && !w.alt && (
+                {canEdit && !w.alts?.length && (
                   <span className="gear-btns">
                     <button className="btn btn-ghost small" onClick={() => onRoll(w.trait === 'spellcast' ? spell : (w.trait as TraitKey), { label: w.name })}>Attacca</button>
                     {onDamage && weaponDamageSpec(w.damage, d.proficiency) && (
@@ -76,32 +83,39 @@ export function SheetTab({ c, canEdit, patch, onRoll, onDamage, allies = [], aft
                   </span>
                 )}
               </div>
-              {weaponModes(w).map(m => (
-                <div key={m.key} className={`gear-mode ${w.alt ? 'multi' : ''}`}>
-                  <span className="gear-stats">
-                    {w.alt && <b className="mode-name">{m.key === 'main' ? (IT.range[m.range] ?? m.range) : m.name}: </b>}
-                    {IT.traits[m.trait]}, {IT.range[m.range] ?? m.range}, <b>{weaponDamage(m.damage, d.proficiency)}</b>{m.key === 'main' ? `, ${IT.burden[w.burden]}` : ''}{m.adv === -1 ? ', con svantaggio' : ''}
-                  </span>
-                  {canEdit && w.alt && (
-                    <span className="gear-btns">
-                      <button className="btn btn-ghost small" onClick={() => onRoll(m.trait === 'spellcast' ? spell : (m.trait as TraitKey), { label: m.key === 'main' ? w.name : `${w.name}, ${m.name.toLowerCase()}`, adv: m.adv })}>Attacca</button>
-                      {onDamage && weaponDamageSpec(m.damage, d.proficiency) && (
-                        <button className="btn btn-ghost small btn-dmg" onClick={() => onDamage({ label: m.key === 'main' ? w.name : `${w.name}, ${m.name.toLowerCase()}`, ...weaponDamageSpec(m.damage, d.proficiency)! })}>Danno</button>
-                      )}
+              {weaponModes(w).map(m => {
+                const multi = (w.alts?.length ?? 0) > 0
+                const label = m.key === 'main' ? w.name : `${w.name}, ${m.name.toLowerCase()}`
+                const cost = [m.hope ? `${m.hope} Speranza` : '', m.stress ? `${m.stress} Stress` : ''].filter(Boolean).join(' e ')
+                const blocked = (m.hope ?? 0) > c.hope ? 'Speranza insufficiente' : c.stress_marked + (m.stress ?? 0) > c.stress_max ? 'Stress esaurito' : null
+                const spec = modeDamageSpec(m, d.proficiency)
+                return (
+                  <div key={m.key} className={`gear-mode ${multi ? 'multi' : ''}`}>
+                    <span className="gear-stats">
+                      {multi && <b className="mode-name">{m.key === 'main' ? (IT.range[m.range] ?? m.range) : m.name}: </b>}
+                      {IT.traits[m.trait]}, {IT.range[m.range] ?? m.range}, <b>{weaponDamage(m.damage, d.proficiency)}{m.extra ? ` +${m.extra.replace(/^\+/, '')}` : ''}</b>
+                      {m.key === 'main' ? `, ${IT.burden[w.burden]}` : ''}{m.adv === -1 ? ', con svantaggio' : ''}{cost ? `, costa ${cost}` : ''}
                     </span>
-                  )}
-                </div>
-              ))}
-              {(w.feature_it || w.feature) && <span className="gear-feat">{w.feature_it || w.feature}</span>}
-              {sb({ name: w.name, text: w.feature_it || w.feature || '' })}
+                    {canEdit && multi && (
+                      <span className="gear-btns">
+                        <button className="btn btn-ghost small" disabled={!!blocked} title={blocked ?? undefined}
+                          onClick={() => onRoll(m.trait === 'spellcast' ? spell : (m.trait as TraitKey), { label, adv: m.adv, cost: { stress: m.stress, hope: m.hope } })}>
+                          Attacca{cost ? `, ${cost}` : ''}
+                        </button>
+                        {onDamage && spec && <button className="btn btn-ghost small btn-dmg" onClick={() => onDamage({ label, ...spec })}>Danno</button>}
+                      </span>
+                    )}
+                  </div>
+                )
+              })}
+              {gearFeature(w.id, w.name, w.feature_it || w.feature || '')}
             </div>
           ))}
           {armor && (
             <div className="gear-item">
               <div className="gear-top"><b>{armor.name}</b></div>
               <span className="gear-stats">Soglie base {armor.thresholds[0]}/{armor.thresholds[1]}, punteggio {armor.score}</span>
-              {(armor.feature_it || armor.feature) && <span className="gear-feat">{armor.feature_it || armor.feature}</span>}
-              {sb({ name: armor.name, text: armor.feature_it || armor.feature || '' })}
+              {gearFeature(armor.id, armor.name, armor.feature_it || armor.feature || '')}
             </div>
           )}
         </div>
@@ -151,7 +165,7 @@ export function SheetTab({ c, canEdit, patch, onRoll, onDamage, allies = [], aft
         </section>
       )}
 
-      <HomebrewSection c={c} canEdit={canEdit} patch={patch} onStress={onStress} />
+      <HomebrewSection c={c} canEdit={canEdit} patch={patch} onStress={onStress} onPlayCard={onPlayCard} onCardTokens={onCardTokens} />
 
       <section>
         <h2>Condizioni</h2>

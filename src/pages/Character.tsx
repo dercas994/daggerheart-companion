@@ -3,7 +3,7 @@ import { useApp } from '../App'
 import type { Character, Roll, TraitKey } from '../lib/types'
 import { useCampaignLive } from '../lib/live'
 import { className, getAncestry, getCommunity, getSubclass } from '../data'
-import { evasion, hopeMax, thresholds, massiveThreshold, spellcastTrait, getWeapon, weaponModes } from '../lib/rules'
+import { evasion, hopeMax, thresholds, massiveThreshold, spellcastTrait, getWeapon, weaponModes, type WeaponModeKey } from '../lib/rules'
 import { ErrorLine, Pips, Spinner, useToast } from '../components/ui'
 import { TopBar } from '../components/TopBar'
 import { DiceOverlay, outcomeText, rollTone } from '../components/Dice'
@@ -41,7 +41,7 @@ export function CharacterPage({ id }: { id: string }) {
   const [rolling, setRolling] = useState(false)
   const [diceOpen, setDiceOpen] = useState(false)
   const [dicePreset, setDicePreset] = useState<DicePreset | null>(null)
-  const [rollPreset, setRollPreset] = useState<{ extra: number; label: string; note?: string; adv?: -1 | 0 | 1 }>({ extra: 0, label: '' })
+  const [rollPreset, setRollPreset] = useState<{ extra: number; label: string; note?: string; adv?: -1 | 0 | 1; cost?: { stress?: number; hope?: number } }>({ extra: 0, label: '' })
   const [pending, setPending] = useState<PendingBonus | null>(null)
   const [diceNote, setDiceNote] = useState(false)
   const [restRun, setRestRun] = useState(0)
@@ -86,11 +86,12 @@ export function CharacterPage({ id }: { id: string }) {
   const ownPortrait = c.data.portrait_url
   const portrait = ownPortrait || getAncestry(c.data.ancestry_id === 'mixed' ? c.data.mixed?.[0] : c.data.ancestry_id)?.image
 
-  function openRoll(t: TraitKey | null, o: { label?: string; adv?: -1 | 0 | 1 } = {}) {
+  function openRoll(t: TraitKey | null, o: { label?: string; adv?: -1 | 0 | 1; cost?: { stress?: number; hope?: number } } = {}) {
     setPreset(t)
     const p = pending && (pending.roll || pending.adv) ? pending : null
     const adv = ((p?.adv ? 1 : 0) + (o.adv ?? 0)) as -1 | 0 | 1
-    setRollPreset(p ? { extra: p.roll ?? 0, label: o.label ?? '', note: `${bonusText({ roll: p.roll, adv: p.adv })} da ${p.src}`, adv } : { extra: 0, label: o.label ?? '', adv })
+    const cost = o.cost?.stress || o.cost?.hope ? o.cost : undefined
+    setRollPreset(p ? { extra: p.roll ?? 0, label: o.label ?? '', note: `${bonusText({ roll: p.roll, adv: p.adv })} da ${p.src}`, adv, cost } : { extra: 0, label: o.label ?? '', adv, cost })
     setRollOpen(true)
   }
   /** Usa una carta dominio: costo variabile (se serve), tiro, costo, poi il pannello con danni e promemoria. */
@@ -101,13 +102,13 @@ export function CharacterPage({ id }: { id: string }) {
     if (a.scale) { setScaleAsk({ card, action: a }); return }
     runCard(card, a, 1)
   }
-  function runCard(card: { id: string; name: string }, a: CardAction, n: number, mode?: 'main' | 'alt') {
+  function runCard(card: { id: string; name: string }, a: CardAction, n: number, mode?: WeaponModeKey) {
     if (!c) return
     setScaleAsk(null)
     const w = getWeapon(c.data.primary_weapon_id, c.data)
     // arma con due modi d'uso: prima si sceglie quale
     const usesWeapon = a.roll === 'weapon' || a.damage?.dice === 'weapon'
-    if (usesWeapon && w?.alt && !mode) { setModeAsk({ card, action: a, n }); return }
+    if (usesWeapon && w?.alts?.length && !mode) { setModeAsk({ card, action: a, n }); return }
     setModeAsk(null)
     const m = w ? weaponModes(w).find(x => x.key === (mode ?? 'main')) : undefined
     if (a.roll) {
@@ -116,7 +117,7 @@ export function CharacterPage({ id }: { id: string }) {
         : a.roll
       setCardFlow({ card, action: a, n, paid: false, mode })
       setPreset(trait)
-      setRollPreset({ extra: 0, label: `${card.name}${a.difficulty ? ` (${a.difficulty})` : ''}${n > 1 ? ` ×${n}` : ''}${mode === 'alt' && m ? `, ${m.name.toLowerCase()}` : ''}`, adv: a.roll === 'weapon' ? m?.adv ?? 0 : 0 })
+      setRollPreset({ extra: 0, label: `${card.name}${a.difficulty ? ` (${a.difficulty})` : ''}${n > 1 ? ` ×${n}` : ''}${mode && mode !== 'main' && m ? `, ${m.name.toLowerCase()}` : ''}`, adv: a.roll === 'weapon' ? m?.adv ?? 0 : 0, cost: a.roll === 'weapon' && m && (m.stress || m.hope) ? { stress: m.stress, hope: m.hope } : undefined })
       setRollOpen(true)
       return
     }
@@ -165,9 +166,12 @@ export function CharacterPage({ id }: { id: string }) {
     try {
       // il costo di una carta si paga quando si tira davvero
       const flow = cardFlow && !cardFlow.paid ? cardFlow : null
-      const cp = flow ? cardPatch(c, flow.card.id, flow.action, flow.n) : {}
-      const hope = (cp.hope ?? c.hope) - choice.hopeSpent
-      if (flow || choice.hopeSpent > 0) await live.patchCharacter(c.id, { ...cp, hope: Math.max(0, hope) })
+      const cp: Partial<Character> = flow ? cardPatch(c, flow.card.id, flow.action, flow.n) : {}
+      // costo del modo d'uso dell'arma (es. 1 Stress per sparare)
+      const mc = rollPreset.cost
+      if (mc?.stress) cp.stress_marked = Math.min(c.stress_max, (cp.stress_marked ?? c.stress_marked) + mc.stress)
+      const hope = (cp.hope ?? c.hope) - choice.hopeSpent - (mc?.hope ?? 0)
+      if (flow || mc || choice.hopeSpent > 0) await live.patchCharacter(c.id, { ...cp, hope: Math.max(0, hope) })
       if (flow) afterPay(flow.card, flow.action, flow.n)
       const cost = flow
       const r = await be.roll(campaignId, c.id, { modifier: choice.modifier, label: choice.label, advantage: choice.advantage, manual: choice.manual, reaction: choice.reaction })

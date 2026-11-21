@@ -23,13 +23,15 @@ export interface Heritage { id: string; name: string; description: string; featu
 export interface Weapon {
   id: string; name: string; trait: TraitKey | 'spellcast'; range: string; damage: string
   burden: 'One-Handed' | 'Two-Handed'; feature: string; feature_it?: string; name_en?: string; tier: number; category: 'primary' | 'secondary'
-  /** Secondo modo d'uso (es. lanciata): portata, tratto e danno propri. */
-  alt?: WeaponMode
+  /** Altri modi d'uso (es. lanciata): portata, tratto, danno e costo propri. */
+  alts?: WeaponMode[]
 }
 export interface WeaponMode {
   name: string; trait: TraitKey | 'spellcast'; range: string; damage: string
   /** Tiro con svantaggio (-1) o vantaggio (+1) in questo modo. */
   adv?: -1 | 0 | 1
+  /** Danni in più (es. "1d6") e costo per usare questo modo. */
+  extra?: string; stress?: number; hope?: number
 }
 /** Armi del manuale che il privilegio rende utilizzabili in due modi. */
 const ALT: Record<string, (w: Weapon) => WeaponMode> = {
@@ -73,7 +75,7 @@ export const getAncestry = (id?: string) => (id ? ancMap.get(id) : undefined)
 export const getCommunity = (id?: string) => (id ? comMap.get(id) : undefined)
 export const getWeapon = (id?: string): Weapon | undefined => {
   const w = id ? weapMap.get(id) : undefined
-  return w && ALT[w.id] ? { ...w, alt: ALT[w.id](w) } : w
+  return w && ALT[w.id] ? { ...w, alts: [ALT[w.id](w)] } : w
 }
 export const getArmor = (id?: string) => (id ? armMap.get(id) : undefined)
 export const getCard = (id?: string) => (id ? cardMap.get(id) : undefined)

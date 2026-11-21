@@ -13,6 +13,7 @@ import { CARDS_A } from './cards/a'
 import { CARDS_B } from './cards/b'
 import { CARDS_C } from './cards/c'
 import { CLASS_FEATURES } from './cards/classes'
+import { hbCardDef } from './hbAbilities'
 
 /** Da dove si prende un numero: un tratto, il tratto da incantatore, la Competenza, il livello, la Paura del GM, o un numero fisso. */
 export type Source = TraitKey | 'spellcast' | 'prof' | 'level' | 'fear' | number
@@ -102,12 +103,13 @@ export function unstoppable(c: Character) {
 
 const RAW: Record<string, CardAction[] | CardDef> = { ...CARDS_A, ...CARDS_B, ...CARDS_C, ...CLASS_FEATURES }
 
-export function cardDef(id: string): CardDef | null {
+export function cardDef(id: string, d?: SheetData): CardDef | null {
+  if (id.startsWith('hbab:')) return hbCardDef(d, id)
   const r = RAW[id]
   if (!r) return null
   return Array.isArray(r) ? { actions: r, tokens: r.some(a => !a.tokensFrom && (a.fill !== undefined || a.tokens || a.scale?.by === 'tokens' || a.addTokens)) } : r
 }
-export const cardActions = (id: string) => cardDef(id)?.actions ?? []
+export const cardActions = (id: string, d?: SheetData) => cardDef(id, d)?.actions ?? []
 /** Chiave di un privilegio di classe/sottoclasse. */
 export const featureKey = (name: string) => `cls:${name}`
 export const playableCount = () => Object.keys(RAW).length
@@ -193,7 +195,7 @@ export function actionCost(a: CardAction) {
 export function resetUses(d: SheetData, kind: 'short' | 'long'): SheetData['card_state'] {
   const out: NonNullable<SheetData['card_state']> = {}
   for (const [id, st] of Object.entries(d.card_state ?? {})) {
-    const defs = cardActions(id)
+    const defs = cardActions(id, d)
     const used = (st.used ?? []).filter(u => {
       const a = defs.find(x => x.id === u)
       if (!a) return false

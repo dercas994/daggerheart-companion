@@ -35,6 +35,7 @@ export function parseBonus(t: string): Omit<PendingBonus, 'src'> | null {
   let m: RegExpMatchArray | null
   if ((m = t.match(/bonus \+(\d+) (?:al risultato|ai tiri d'attacco|ai tiri attacco|al tiro attacco|al tiro)/i))) b.roll = +m[1]
   else if ((m = t.match(/(?:ottiene|ottenete|ottenere|con) \+(\d+) (?:al|ai) tir[oi] (?:d')?attacco/i))) b.roll = +m[1]
+  else if ((m = t.match(/(?:^|[\s(])\+(\d+) (?:al|ai) tir[oi]\b/i))) b.roll = +m[1]
   if (/(?:attacco|attacca|attaccare)[^.]*con vantaggio|con vantaggio[^.]*attacc/i.test(t)) b.adv = true
   if ((m = t.match(/\+1 alla Competenza/i))) b.prof = 1
   if ((m = t.match(/aggiungere (?:un |il )?(\d*d\d+) al tiro( di danno)?/i)) && (m[2] || /dann/i.test(t))) b.dmg = dice(m[1])
@@ -48,7 +49,7 @@ export function parseBonus(t: string): Omit<PendingBonus, 'src'> | null {
 /** Usi volontari di Stress in un testo da PG ("potete marcare uno Stress per…"). */
 export function stressUses(text: string): StressUse[] {
   const out: StressUse[] = []
-  const re = /potete (?:anche )?(?:marcare|segnare) (un|uno|due|tre|\d+) Stress([^.\n]*)/gi
+  const re = /(?:potete|puoi) (?:anche )?(?:marcare|segnare) (un|uno|due|tre|\d+) Stress([^.\n]*)/gi
   let m: RegExpExecArray | null
   while ((m = re.exec(text))) {
     // la frase intera, per leggere anche il "quando…" che precede

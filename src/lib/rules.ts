@@ -11,17 +11,32 @@ export function homebrewWeapon(h: Homebrew): Weapon {
     id: HB + h.id, name: h.name, trait: h.trait ?? 'strength', range: h.range ?? 'Melee',
     damage: `${(h.dice || 'd6').trim()} ${h.damageType ?? 'phy'}`, burden: h.burden ?? 'One-Handed',
     feature: '', feature_it: h.text, tier: 1, category: h.category ?? 'primary',
-    ...(h.alt ? { alt: {
-      name: h.alt.name || 'Secondo modo', trait: h.alt.trait ?? h.trait ?? 'strength', range: h.alt.range ?? h.range ?? 'Melee',
-      damage: `${(h.alt.dice || h.dice || 'd6').trim()} ${h.alt.damageType ?? h.damageType ?? 'phy'}`,
-    } } : {}),
+    alts: [...(h.modes ?? (h.alt ? [h.alt] : []))].slice(0, 2).map(m => ({
+      name: m.name || 'Altro modo', trait: m.trait ?? h.trait ?? 'strength', range: m.range ?? h.range ?? 'Melee',
+      damage: `${(m.dice || h.dice || 'd6').trim()} ${m.damageType ?? h.damageType ?? 'phy'}`,
+      extra: m.extra, stress: m.stress, hope: m.hope,
+    })),
   }
 }
 
-/** I modi d'uso di un'arma: il principale e, se c'è, il secondo. */
-export function weaponModes(w: Weapon): { key: 'main' | 'alt'; name: string; trait: Weapon['trait']; range: string; damage: string; adv: -1 | 0 | 1 }[] {
-  const main = { key: 'main' as const, name: '', trait: w.trait, range: w.range, damage: w.damage, adv: 0 as const }
-  return w.alt ? [main, { key: 'alt' as const, ...w.alt, adv: w.alt.adv ?? 0 }] : [main]
+export type WeaponModeKey = 'main' | 'm1' | 'm2'
+export interface WeaponModeView {
+  key: WeaponModeKey; name: string; trait: Weapon['trait']; range: string; damage: string; adv: -1 | 0 | 1
+  extra?: string; stress?: number; hope?: number
+}
+/** I modi d'uso di un'arma: il principale e gli eventuali altri (fino a 3 in tutto). */
+export function weaponModes(w: Weapon): WeaponModeView[] {
+  const main: WeaponModeView = { key: 'main', name: '', trait: w.trait, range: w.range, damage: w.damage, adv: 0 }
+  return [main, ...(w.alts ?? []).slice(0, 2).map((m, i) => ({ ...m, key: (i === 0 ? 'm1' : 'm2') as WeaponModeKey, adv: m.adv ?? 0 }))]
+}
+/** Dadi del danno di un modo, con la Competenza e i danni in più. */
+export function modeDamageSpec(m: WeaponModeView, proficiency: number) {
+  const s = weaponDamageSpec(m.damage, proficiency)
+  if (!s || !m.extra) return s
+  const e = m.extra.replace(/\s/g, '').match(/^\+?(\d*)d(\d+)([+-]\d+)?$/i)
+  if (e) return { ...s, groups: [...s.groups, { n: parseInt(e[1] || '1', 10), sides: parseInt(e[2], 10) }], bonus: s.bonus + (e[3] ? parseInt(e[3], 10) : 0) }
+  const flat = parseInt(m.extra, 10)
+  return Number.isFinite(flat) ? { ...s, bonus: s.bonus + flat } : s
 }
 export function homebrewArmor(h: Homebrew): Armor {
   return { id: HB + h.id, name: h.name, thresholds: h.thresholds ?? [5, 11], score: h.score ?? 3, feature: '', feature_it: h.text, tier: 1 }

@@ -1239,3 +1239,12 @@ button.dcard:hover { transform: translateY(-2px); }
 .alt-mode { padding: 0.6rem 0.7rem; border: 1px dashed var(--line); border-radius: var(--r-m); margin-bottom: 0.6rem; }
 .mode-pick { display: grid; gap: 0.5rem; }
 .mode-pick .btn { display: grid; justify-items: start; text-align: left; gap: 0.15rem; }
+.hb-abilities { display: grid; gap: 0.55rem; margin: 0.4rem 0; }
+.hb-ab { padding-left: 0.6rem; border-left: 2px solid color-mix(in srgb, var(--hope) 45%, transparent); }
+.hb-ab-name { display: block; font-family: var(--f-display); color: var(--hope-glow); margin-bottom: 0.15rem; }
+.hb-ab .hb-text { margin: 0 0 0.3rem; }
+.ab-editor { margin: 0.6rem 0; }
+.ab-edit { display: grid; gap: 0.4rem; padding: 0.6rem; margin-bottom: 0.6rem; border: 1px solid var(--line); border-radius: var(--r-m); }
+.ab-edit-head { display: flex; gap: 0.5rem; align-items: center; }
+.ab-edit-head input { flex: 1; }
+.ab-edit textarea { width: 100%; }

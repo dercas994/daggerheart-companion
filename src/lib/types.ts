@@ -21,6 +21,35 @@ export interface Experience { name: string; bonus: number }
 export type HomebrewKind = 'weapon' | 'armor' | 'ability' | 'item'
 export interface HomebrewMods { evasion?: number; armor?: number; thresholds?: number; traits?: Partial<Record<TraitKey, number>> }
 /** Contenuto homebrew creato dal giocatore, salvato dentro la scheda. */
+/** Modo d'uso alternativo di un'arma homebrew, con il suo eventuale costo. */
+export interface HbMode {
+  name: string
+  trait?: TraitKey
+  range?: 'Melee' | 'Very Close' | 'Close' | 'Far' | 'Very Far'
+  dice?: string
+  damageType?: 'phy' | 'mag'
+  /** Danni in più rispetto al dado (es. "1d6"). */
+  extra?: string
+  stress?: number
+  hope?: number
+}
+
+/** Abilità di un elemento homebrew, giocabile come le carte. */
+export interface HbAbility {
+  id: string
+  name: string
+  text: string
+  hope?: number
+  stress?: number
+  /** Bonus al prossimo tiro: attacco, danno (es. "1d6", "3"), vantaggio. */
+  bonusRoll?: number
+  bonusDmg?: string
+  adv?: boolean
+  /** Dadi da tirare (es. riduzione del danno). */
+  dice?: string
+  per?: 'rest' | 'longRest'
+}
+
 export interface Homebrew {
   id: string
   kind: HomebrewKind
@@ -33,8 +62,10 @@ export interface Homebrew {
   damageType?: 'phy' | 'mag'
   burden?: 'One-Handed' | 'Two-Handed'
   category?: 'primary' | 'secondary'
-  /** Secondo modo d'uso dell'arma: i campi vuoti valgono come il primo. */
-  alt?: { name: string; trait?: TraitKey; range?: Homebrew['range']; dice?: string; damageType?: 'phy' | 'mag' }
+  /** Vecchio formato del secondo modo d'uso (si legge ancora, si salva in `modes`). */
+  alt?: HbMode
+  /** Altri modi d'uso dell'arma (fino a 2, oltre al principale): i campi vuoti valgono come il principale. */
+  modes?: HbMode[]
   // armatura
   thresholds?: [number, number]
   score?: number
@@ -43,6 +74,8 @@ export interface Homebrew {
   uses?: number            // caselle d'uso (0 = nessuna)
   used?: number
   quantity?: number
+  /** Abilità separate, ognuna con i suoi pulsanti. */
+  abilities?: HbAbility[]
 }
 
 export type SubclassTier = 'foundation' | 'specialization' | 'mastery'
